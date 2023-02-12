@@ -9,6 +9,18 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+*.rar
+*.zip
+*.psd
+app2/
+App2.js
+AppFirst.js
+app/components/forms/old/
+app/screen/old/
+
+
+
+
 
 # macOS
 .DS_Store
