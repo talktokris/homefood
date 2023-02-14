@@ -1,5 +1,6 @@
 import React from "react";
-import { useFormikContext } from "formik";
+
+//import { useFormikContext } from "formik";
 import {
   View,
   TextInput,
@@ -16,11 +17,11 @@ function AppTextSearch({
   icon,
   color = "primary",
   lebel,
-  width = "100%",
+  width = "97%",
   onPress,
   ...otherProps
 }) {
-  const { handleSubmit } = useFormikContext();
+  //const { handleSubmit } = useFormikContext();
 
   return (
     <>
@@ -33,12 +34,12 @@ function AppTextSearch({
         />
         <TouchableOpacity
           style={[styles.buttonRight, { backgroundColor: colors[color] }]}
-          onPress={handleSubmit}
+          onPress={() => console.log("Search Click ")}
         >
           {icon && (
             <MaterialCommunityIcons
               name={icon}
-              size={20}
+              size={25}
               style={styles.icon}
               color={colors.white}
             />
@@ -51,17 +52,20 @@ function AppTextSearch({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 20,
+    backgroundColor: colors.light,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: colors.secondary,
     flexDirection: "row",
     padding: 15,
     marginVertical: 10,
+    margin: 6,
+    color: colors.secondary,
   },
   textInput: {
     fontSize: 16,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
-    color: colors.dark,
-    marginLeft: 15,
+    color: colors.secondary,
   },
   icon: {
     marginRight: 10,
@@ -77,11 +81,11 @@ const styles = StyleSheet.create({
   },
   buttonRight: {
     position: "absolute",
-    right: 10,
+    right: -1,
     paddingLeft: 20,
-    width: 70,
-    height: 50,
-    padding: 10,
+    width: 73,
+    height: 55,
+    padding: 12,
     color: "#fff",
 
     alignSelf: "flex-end",

@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import colors from "../config/colors";
 
-function AppCheckBox({ color, onPress }) {
+function AppCheckBox({ color, text, linkText, onPress }) {
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -25,8 +25,8 @@ function AppCheckBox({ color, onPress }) {
             color={colors.color}
           />
         )}
-        <Text style={styles.text}> I accept all the</Text>
-        <Text style={styles.link}> terms and conditions</Text>
+        <Text style={styles.text}> {text} </Text>
+        {linkText && <Text style={styles.link}> {linkText}</Text>}
       </View>
     </TouchableOpacity>
   );

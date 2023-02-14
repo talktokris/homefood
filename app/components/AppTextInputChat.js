@@ -1,14 +1,21 @@
 import React, { useRef } from "react";
-import { View, TextInput, StyleSheet, Platform, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Platform,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import fonts from "../config/fonts";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
+function AppTextInputChat({ icon, lebel, width = "100%", ...otherProps }) {
   const refsFocus = useRef(null);
   return (
-    <>
+    <View>
       <TouchableWithoutFeedback
         onPress={() => {
           refsFocus.current.focus();
@@ -16,14 +23,6 @@ function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
       >
         {lebel && <Text style={styles.lebel}>{lebel} </Text>}
         <View style={[styles.container, { width: width }]}>
-          {icon && (
-            <MaterialCommunityIcons
-              name={icon}
-              size={20}
-              style={styles.icon}
-              color={colors.secondary}
-            />
-          )}
           <TextInput
             placeholderTextColor={colors.secondary}
             style={styles.textInput}
@@ -32,7 +31,19 @@ function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
           />
         </View>
       </TouchableWithoutFeedback>
-    </>
+      {icon && (
+        <View style={styles.btn}>
+          <TouchableOpacity onPress={() => console.log("Click Send Message")}>
+            <MaterialCommunityIcons
+              name={icon}
+              size={60}
+              style={styles.icon}
+              color={colors.secondary}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -45,12 +56,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     marginVertical: 10,
+    height: 70,
+    zIndex: 1,
   },
   textInput: {
     fontSize: 18,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     color: colors.secondary,
-    width: "85%",
+    width: "100%",
   },
   icon: {
     marginRight: 3,
@@ -64,6 +77,13 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: colors.secondary,
   },
+  btn: {
+    position: "absolute",
+    right: 5,
+    width: 65,
+    zIndex: 2,
+    top: 10,
+  },
 });
 
-export default AppTextInput;
+export default AppTextInputChat;

@@ -13,4 +13,5 @@ export default {
   green: "#9ACD32",
   separator: "#CCCCCC",
   light: "#EEEEEE",
+  chatme: "#57606f",
 };

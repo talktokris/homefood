@@ -101,7 +101,11 @@ function RegisterScreen({ navigation }) {
             secureTextEntry={true}
           />
 
-          <AppCheckBox onPress={console.log("I accept")} />
+          <AppCheckBox
+            text="I accept all the"
+            linkText="terms and conditions"
+            onPress={() => console.log("I accept")}
+          />
 
           <SubmitButton title="Login" color="secondary" />
         </AppForm>
