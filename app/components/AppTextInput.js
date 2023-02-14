@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     width: "85fafdasfd%",
   },
   icon: {
-    marginRight: 10,
+    marginRight: 3,
     padding: Platform.OS === "android" ? 7 : 5,
   },
   lebel: {

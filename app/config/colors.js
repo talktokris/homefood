@@ -11,4 +11,6 @@ export default {
   errorColor: "#ff5252",
   orange: "#FFA500",
   green: "#9ACD32",
+  separator: "#CCCCCC",
+  light: "#EEEEEE",
 };

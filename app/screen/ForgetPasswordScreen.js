@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  CheckBox,
   StyleSheet,
   Image,
   View,
@@ -11,25 +10,18 @@ import {
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
-import {
-  AppForm,
-  AppFormField,
-  AppFormPicker,
-  LinkButton,
-  SubmitButton,
-} from "../components/forms";
+import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
-import AppCheckBox from "../components/AppCheckBox";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function LoginMobileOtpScreen({ navigation }) {
+function ForgetPasswordScreen({ navigation }) {
   /*
   const { logIn } = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
@@ -78,53 +70,17 @@ function LoginMobileOtpScreen({ navigation }) {
           onSubmit=""
           validationSchema={validationSchema}
         >
-          <AppText style={styles.msg}>
-            Please enter OTP password send to your number
-          </AppText>
           <AppFormField
-            name="password"
+            name="email"
             autoCapitalize="none"
             autoCorrect={false}
-            icon="cellphone"
-            placeholder="+60123456789"
-            textContentType="password"
-            secureTextEntry={true}
-            maxLength={11}
+            icon="email"
+            keyboardType="email-address"
+            placeholder="Email"
+            textContentType="emailAddress"
           />
-          <View style={styles.otp}>
-            <AppFormField
-              name="password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              icon="cellphone"
-              placeholder=" _  _  _  _  _  _"
-              textContentType="password"
-              secureTextEntry={true}
-              maxLength={6}
-              width="70%"
-            />
-            <TouchableOpacity onPress={() => console.log("Send OTP")}>
-              <AppText style={styles.resend}>Resend OTP</AppText>
-            </TouchableOpacity>
-          </View>
 
-          <SubmitButton title="Confirm" color="secondary" />
-
-          <View style={styles.viewStyleForLine}></View>
-          <View>
-            <LinkButton
-              title=" Login by email"
-              color="secondary"
-              icon="lock"
-              onSubmit={() => console.log("Login")}
-            />
-            <LinkButton
-              title=" Register by email"
-              color="primary"
-              icon="login"
-              onSubmit={() => console.log("register")}
-            />
-          </View>
+          <SubmitButton title="Reset Password" color="secondary" />
         </AppForm>
       </View>
     </Screen>
@@ -141,29 +97,15 @@ const styles = StyleSheet.create({
     margin: 30,
     marginTop: 40,
   },
-
-  viewStyleForLine: {
-    borderBottomColor: colors.secondary,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    alignSelf: "stretch",
-    width: "100%",
-    marginBottom: 30,
-    marginTop: 30,
-  },
-  msg: {
-    color: colors.secondary,
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  otp: {
-    flexDirection: "row",
-    alignItems: "center",
+  forgetBtn: {
+    paddingTop: 10,
+    paddingLeft: 5,
     paddingBottom: 10,
-  },
-  resend: {
     color: colors.primary,
+    fontSize: 16,
     fontWeight: "800",
+    textDecorationLine: "underline",
   },
 });
 
-export default LoginMobileOtpScreen;
+export default ForgetPasswordScreen;

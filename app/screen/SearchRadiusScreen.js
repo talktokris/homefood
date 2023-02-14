@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  CheckBox,
   StyleSheet,
   Image,
   View,
@@ -11,25 +10,18 @@ import {
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
-import {
-  AppForm,
-  AppFormField,
-  AppFormPicker,
-  LinkButton,
-  SubmitButton,
-} from "../components/forms";
+import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
-import AppCheckBox from "../components/AppCheckBox";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function LoginEmailOtpScreen({ navigation }) {
+function SearchRadiusScreen({ navigation }) {
   /*
   const { logIn } = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
@@ -70,7 +62,7 @@ function LoginEmailOtpScreen({ navigation }) {
     <Screen>
       <View style={styles.container}>
         <Image
-          source={require("../assets/images/logo.png")}
+          source={require("../assets/images/target.png")}
           style={styles.image}
         />
         <AppForm
@@ -78,48 +70,12 @@ function LoginEmailOtpScreen({ navigation }) {
           onSubmit=""
           validationSchema={validationSchema}
         >
-          <AppText style={styles.msg}>
-            Please enter OTP password send to your number
-          </AppText>
-
-          <AppFormField
-            name="email"
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="email"
-            keyboardType="email-address"
-            placeholder="test@domain.com"
-            textContentType="emailAddress"
-            editable={false}
-          />
-
-          <View style={styles.otp}>
-            <AppFormField
-              name="password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              icon="email"
-              placeholder=" _  _  _  _  _  _"
-              textContentType="oneTimeCode"
-              maxLength={6}
-              width="70%"
-            />
-            <TouchableOpacity onPress={() => console.log("Send OTP")}>
-              <AppText style={styles.resend}>Resend OTP</AppText>
-            </TouchableOpacity>
+          <AppText style={styles.textRadius}>10 KM Radius</AppText>
+          <View style={styles.slider}>
+            <View style={styles.slideBtn}></View>
           </View>
 
-          <SubmitButton title="Confirm" color="secondary" />
-
-          <View style={styles.viewStyleForLine}></View>
-          <View>
-            <LinkButton
-              title=" Login by Mobile No"
-              color="secondary"
-              icon="cellphone"
-              onSubmit={() => console.log("Login")}
-            />
-          </View>
+          <SubmitButton title="Save" color="secondary" />
         </AppForm>
       </View>
     </Screen>
@@ -130,35 +86,32 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   image: {
-    width: 180,
+    width: 100,
     height: 100,
     alignSelf: "center",
     margin: 30,
     marginTop: 40,
   },
-
-  viewStyleForLine: {
-    borderBottomColor: colors.secondary,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    alignSelf: "stretch",
-    width: "100%",
-    marginBottom: 30,
-    marginTop: 30,
+  slider: {
+    height: 10,
+    backgroundColor: colors.secondary,
+    borderRadius: 5,
+    marginTop: 20,
+    marginBottom: 40,
   },
-  msg: {
-    color: colors.secondary,
-    fontSize: 16,
-    fontWeight: "500",
+  slideBtn: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    backgroundColor: colors.primary,
+    top: -10,
+    left: 50,
   },
-  otp: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingBottom: 10,
-  },
-  resend: {
-    color: colors.primary,
+  textRadius: {
+    fontSize: 18,
+    textAlign: "center",
     fontWeight: "800",
   },
 });
 
-export default LoginEmailOtpScreen;
+export default SearchRadiusScreen;
