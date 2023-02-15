@@ -130,7 +130,9 @@ function FoodListingScreen({ navigation }) {
             price={item.price}
             distance={item.distance}
             distanceUnit={item.distanceUnit}
-            onPress={() => console.log("Message Selected:- " + item.id)}
+            onPress={() => {
+              navigation.navigate(routes.SEARCH_DETAILS);
+            }}
             // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
             renderRightActions={() => (
               <View style={{ backgroundColor: "red", height: 70 }}></View>

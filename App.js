@@ -1,5 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import AppTextSearch from "./app/components/AppTextSearch";
 import FoodItem from "./app/components/FoodItem";
 
@@ -18,20 +21,31 @@ import LoginMobileScreen from "./app/screen/LoginMobileScreen";
 
 import LoginScreen from "./app/screen/LoginScreen";
 import MessagesScreen from "./app/screen/MessagesScreen";
+import OrdersHistoryScreen from "./app/screen/OrdersHistoryScreen";
 import ProfileScreen from "./app/screen/ProfileScreen";
 import RegisterScreen from "./app/screen/RegisterScreen";
 import SearchRadiusScreen from "./app/screen/SearchRadiusScreen";
 import SupportScreen from "./app/screen/SupportScreen";
 
+import navigationTheme from "./app/navigation/NavigationTheme";
+import AppNavigator from "./app/navigation/AppNavigator";
+import AuthNavigator from "./app/navigation/AuthNavigator";
+
+const Stack = createNativeStackNavigator();
+
 export default function App() {
-  return <FoodViewScreen />;
+  return (
+    <NavigationContainer theme={navigationTheme}>
+      <AppNavigator />
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

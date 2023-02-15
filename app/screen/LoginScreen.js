@@ -15,6 +15,7 @@ import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
+import routes from "../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -91,7 +92,7 @@ function LoginScreen({ navigation }) {
           />
 
           <TouchableOpacity
-            onPress={() => navigation.navigate(routes.AUTH_PASSWORD_RESET)}
+            onPress={() => navigation.navigate(routes.AUTH_FORGET_PASSWORD)}
           >
             <AppText style={styles.forgetBtn}>Forget Password</AppText>
           </TouchableOpacity>

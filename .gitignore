@@ -13,10 +13,12 @@ web-build/
 *.zip
 *.psd
 app2/
+app-a.js
 App2.js
 AppFirst.js
 app/components/forms/old/
 app/screen/old/
+app/navigation/old/
 
 
 

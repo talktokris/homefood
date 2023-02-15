@@ -9,6 +9,7 @@ function PickerItem({ item, onPress }) {
     </TouchableOpacity>
   );
 }
+
 const styles = StyleSheet.create({
   text: {
     padding: 15,

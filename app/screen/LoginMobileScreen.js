@@ -23,6 +23,7 @@ import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import AppCheckBox from "../components/AppCheckBox";
+import routes from "../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -100,9 +101,19 @@ function LoginMobileScreen({ navigation }) {
             maxLength={11}
           />
 
-          <AppCheckBox onPress={console.log("I accept")} />
+          <AppCheckBox
+            text="I accept the"
+            linkText="terms and conditions"
+            onPress={console.log("I accept")}
+          />
 
-          <SubmitButton title="Login" color="secondary" />
+          <LinkButton
+            title=" Login"
+            color="secondary"
+            onPress={() => {
+              navigation.navigate(routes.AUTH_MOBILE_OTP);
+            }}
+          />
 
           <View style={styles.viewStyleForLine}></View>
           <View>
@@ -110,13 +121,17 @@ function LoginMobileScreen({ navigation }) {
               title=" Login by email"
               color="secondary"
               icon="lock"
-              onSubmit={console.log("Login")}
+              onPress={() => {
+                navigation.navigate(routes.AUTH_EMAIL_LOGIN);
+              }}
             />
             <LinkButton
               title=" Register by email"
               color="primary"
               icon="login"
-              onSubmit={console.log("register")}
+              onPress={() => {
+                navigation.navigate(routes.AUTH_REGISTER);
+              }}
             />
           </View>
         </AppForm>

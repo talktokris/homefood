@@ -116,7 +116,10 @@ function AddressScreen({ navigation }) {
             title=" Add New Address"
             color="secondary"
             icon="google-maps"
-            onSubmit={() => console.log("register")}
+            onPress={() => {
+              // console.log("Hi");
+              navigation.navigate(routes.ACCOUNT_ADD_ADDRESS);
+            }}
             width="90"
           />
         </View>

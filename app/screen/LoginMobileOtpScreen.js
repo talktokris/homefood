@@ -19,10 +19,13 @@ import {
   SubmitButton,
 } from "../components/forms";
 
+
+
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import AppCheckBox from "../components/AppCheckBox";
+import routes from "../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -108,7 +111,16 @@ function LoginMobileOtpScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <SubmitButton title="Confirm" color="secondary" />
+          <LinkButton
+            title=" Confirm"
+            color="secondary"
+            onPress={() => {
+              console.log("OK ");
+              // navigation.navigate("HomeScreen");
+              // navigation.navigate("HomeScreen");
+              //  navigation.navigate("Root", { screen: "HomeScreen" });
+            }}
+          />
 
           <View style={styles.viewStyleForLine}></View>
           <View>
@@ -116,13 +128,17 @@ function LoginMobileOtpScreen({ navigation }) {
               title=" Login by email"
               color="secondary"
               icon="lock"
-              onSubmit={() => console.log("Login")}
+              onPress={() => {
+                navigation.navigate(routes.AUTH_EMAIL_LOGIN);
+              }}
             />
             <LinkButton
               title=" Register by email"
               color="primary"
               icon="login"
-              onSubmit={() => console.log("register")}
+              onPress={() => {
+                navigation.navigate(routes.AUTH_REGISTER);
+              }}
             />
           </View>
         </AppForm>

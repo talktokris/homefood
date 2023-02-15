@@ -9,6 +9,7 @@ import Separater from "../components/Separater";
 //import routes from "../navigation/routes";
 //import setting from "../config/setting";
 import ListItemProfile from "../components/ListItemProfile";
+import routes from "../navigation/routes";
 
 const menuItems = [
   {
@@ -17,7 +18,7 @@ const menuItems = [
       name: "account-box-outline",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_PROFILE,
   },
   {
     title: "Address",
@@ -25,7 +26,7 @@ const menuItems = [
       name: "map-marker-check-outline",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_ADDRESS,
   },
   {
     title: "Messages",
@@ -33,7 +34,7 @@ const menuItems = [
       name: "email-multiple",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_MESSAGES,
   },
   {
     title: "Search Radius",
@@ -41,7 +42,7 @@ const menuItems = [
       name: "target",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_SEARCH_RADIUS,
   },
   {
     title: "Order History",
@@ -49,7 +50,7 @@ const menuItems = [
       name: "view-list",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_ORDER_HISTORY,
   },
   {
     title: "Support",
@@ -57,7 +58,7 @@ const menuItems = [
       name: "chat",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_SUPPORT,
   },
   {
     title: "Change Password",
@@ -65,7 +66,7 @@ const menuItems = [
       name: "lock",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "",
+    targetScreen: routes.ACCOUNT_CHANGE_PASSWORD,
   },
 ];
 
@@ -95,7 +96,9 @@ function AccountScreen({ route, navigation }) {
                     backgroundColor={item.icon.backgroundColor}
                   />
                 }
-                onPress={() => navigation.navigate(item.targetScreen)}
+                onPress={() => {
+                  navigation.navigate(item.targetScreen);
+                }}
               />
             )}
             ItemSeparatorComponent={Separater}
