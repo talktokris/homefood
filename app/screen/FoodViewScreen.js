@@ -93,6 +93,7 @@ function FoodViewScreen({ route, navigation }) {
   const [eStatus, setEstatus] = useState(false);
   const [menuData, setMenuData] = useState([]);
   const [qnt, setQnt] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -113,6 +114,7 @@ function FoodViewScreen({ route, navigation }) {
           setMenuData(data);
           setLoading(false);
           setMenuData(data.data.results[0]);
+          setTotalPrice(data.data.results[0].customer_price);
 
           //   console.log(data.data.results[0].images);
           //  console.log("Krishna : " + data.data.results[0].id);
@@ -129,11 +131,19 @@ function FoodViewScreen({ route, navigation }) {
       });
   }, []);
   const handlePlus = () => {
-    setQnt(qnt + 1);
+    const newQnt = qnt + 1;
+    setQnt(newQnt);
+    setTotalPrice(roundFunction(menuData.customer_price * newQnt));
   };
   const handleMinus = () => {
-    if (qnt > 1) setQnt(qnt - 1);
+    if (qnt > 1) {
+      setQnt(qnt - 1);
+      setTotalPrice(roundFunction(menuData.customer_price * (qnt - 1)));
+    }
   };
+  function roundFunction(amount) {
+    return parseFloat(amount).toFixed(0);
+  }
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -186,19 +196,50 @@ function FoodViewScreen({ route, navigation }) {
             </View>
             <AppCircleButton icon="plus-circle" onPress={handlePlus} />
           </View>
-          <View style={styles.btnContainer}>
-            <AppButton
-              title=" Add to Cart"
-              color="secondary"
-              icon="cart-plus"
-              onSubmit={handleMinus}
-            />
-            <AppButton
-              title=" Check Out"
-              color="secondary"
-              icon="logout"
-              onSubmit={handlePlus}
-            />
+          <Separater />
+          <View style={styles.bottomArea}>
+            <View style={styles.bottomLeft}>
+              <AppText style={styles.location} numberOfLines={1}>
+                Price
+              </AppText>
+              <AppText style={styles.price} numberOfLines={1}>
+                RM {roundFunction(menuData.customer_price)}
+              </AppText>
+            </View>
+
+            <View style={styles.bottomRight}>
+              <AppText style={styles.price} numberOfLines={1}>
+                RM {roundFunction(totalPrice)}
+              </AppText>
+              <AppText style={styles.location} numberOfLines={1}>
+                Total
+              </AppText>
+            </View>
+          </View>
+          <Separater />
+          <View style={styles.bottomArea}>
+            <View style={styles.bottomLeft}>
+              <AppButton
+                title="  Add to Cart"
+                onPress={() => {
+                  navigation.navigate(routes.MENU_EDIT_FOOD, {
+                    itemData: menuData,
+                  });
+                }}
+                color="secondary"
+                icon="cart-plus"
+              />
+            </View>
+
+            <View style={styles.bottomRight}>
+              <AppButton
+                title="  Check Out"
+                onPress={() => {
+                  handleDelete(menuData.id);
+                }}
+                icon="logout"
+              />
+            </View>
           </View>
         </Screen>
       )}
@@ -216,7 +257,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 250,
+    height: 200,
     alignSelf: "center",
   },
   nav: {
@@ -251,6 +292,19 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     padding: 5,
+  },
+  price: {
+    fontSize: 18,
+    color: colors.primary,
+    fontWeight: "800",
+  },
+  bottomArea: { flexDirection: "row" },
+  bottomLeft: { width: "50%", padding: 10 },
+  bottomRight: {
+    width: "50%",
+    flexDirection: "column-reverse",
+    justifyContent: "center",
+    padding: 10,
   },
 });
 
