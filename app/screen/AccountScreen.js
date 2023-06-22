@@ -5,7 +5,7 @@ import ListItem from "../components/ListItem";
 import Icon from "../components/Icon";
 import colors from "../config/colors";
 import Separater from "../components/Separater";
-//import useAuth from "../auth/useAuth";
+import useAuth from "../auth/useAuth";
 //import routes from "../navigation/routes";
 //import setting from "../config/setting";
 import ListItemProfile from "../components/ListItemProfile";
@@ -71,7 +71,7 @@ const menuItems = [
 ];
 
 function AccountScreen({ route, navigation }) {
-  // const { user, logOut } = useAuth();
+  const { user, logOut } = useAuth();
 
   return (
     <Screen style={styles.screen}>
@@ -115,7 +115,7 @@ function AccountScreen({ route, navigation }) {
               iconColor="white"
             />
           }
-          onPress={() => console.log("Logout")}
+          onPress={() => logOut()}
         />
       </View>
       <Separater />

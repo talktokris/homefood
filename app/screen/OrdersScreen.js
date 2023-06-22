@@ -18,10 +18,10 @@ import AppTextSearch from "../components/AppTextSearch";
 const messages = [
   {
     id: 1,
-    title: "Non Veg Thali",
+    title: "Roti Channai",
     subTitle:
       "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img1.jpg"),
+    image: require("../assets/images/img10.jpg"),
     price: 15,
     currency: "RM",
     distance: 3,
@@ -29,48 +29,13 @@ const messages = [
   },
   {
     id: 2,
-    title: "Mutton Thali",
+    title: "Yami Food Thai",
     subTitle:
       "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img2.jpg"),
+    image: require("../assets/images/img11.jpg"),
     price: 12,
     currency: "RM",
     distance: 0.5,
-    distanceUnit: "KM",
-  },
-  {
-    id: 3,
-    title: "Fish Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img3.jpg"),
-    price: 17,
-    currency: "RM",
-    distance: 1.5,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 4,
-    title: "Special Cheese Dosa",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img4.jpg"),
-    price: 19,
-    currency: "RM",
-    distance: 1.8,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 5,
-    title: "Non Veg Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img5.jpg"),
-    price: 11,
-    currency: "RM",
-    distance: 2.3,
     distanceUnit: "KM",
   },
 ];

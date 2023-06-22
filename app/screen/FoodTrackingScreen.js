@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 import { View, StyleSheet, FlatList, Image } from "react-native";
 
@@ -17,10 +17,6 @@ import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
-import { ErrorMessage, LinkButton } from "../components/forms";
-import menuApi from "../api/menu";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import AppCircleButton from "../components/AppCircleButton";
 
 const messages = [
   {
@@ -82,127 +78,117 @@ const messages = [
   },
 ];
 
-function FoodViewScreen({ route, navigation }) {
-  const fethcID = route.params.id;
+function FoodTrackingScreen({ navigation }) {
+  /*
   const { user, logOut } = useAuth();
-
   const currrentUser = user.id;
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState();
-  const [eStatus, setEstatus] = useState(false);
-  const [menuData, setMenuData] = useState([]);
-  const [qnt, setQnt] = useState(1);
+  const [users, setUsers] = useState(null);
 
-  useEffect(() => {
+
+  React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       getData();
     });
     return unsubscribe;
   }, [navigation]);
 
-  const getData = useCallback((id) => {
+  const getData = useCallback(() => {
     setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
     // useApi(resume.getResumeData, { currrentUser });
-    //console.log(fethcID);
-    menuApi
-      .fetchSingleMenu(fethcID)
+    userUpdate
+      .messageFatch(currrentUser)
       .then((data) => {
-        //   console.log(data.data.results);
-        if (data.ok) {
-          setMenuData(data);
-          setLoading(false);
-          setMenuData(data.data.results[0]);
-
-          //   console.log(data.data.results[0].images);
-          //  console.log("Krishna : " + data.data.results[0].id);
-        } else {
-          setError(
-            "Unable to get the database. Please check your internet connection"
-          );
-          setEstatus(true);
-        }
+        setUsers(data);
+        // console.log(data);
+        setLoading(false);
       })
       .catch((error) => {
         // display error
         setLoading(false); // stop the loader
       });
   }, []);
-  const handlePlus = () => {
-    setQnt(qnt + 1);
-  };
-  const handleMinus = () => {
-    if (qnt > 1) setQnt(qnt - 1);
-  };
+  // console.log(users);
+  var key = 1;
+  */
   return (
-    <>
-      <ActivityIndicator visible={isLoading} />
-      <ErrorMessage error={error} visible={eStatus} />
-      {!isLoading && menuData && (
-        <Screen>
-          <AppText style={styles.heading}>{menuData.food_title}</AppText>
-          <Separater />
-          <View>
-            <Image
-              source={require("../assets/images/img1.jpg")}
-              style={styles.image}
-            />
-            <View style={styles.nav}>
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
+    <Screen>
+      <AppText style={styles.heading}>Non Veg Thali</AppText>
+      <Separater />
+      <View>
+        <Image
+          source={require("../assets/images/img1.jpg")}
+          style={styles.image}
+        />
+        <View style={styles.nav}>
+          <MaterialCommunityIcons
+            style={styles.icon}
+            name="circle"
+            size={20}
+            color={colors.primary}
+          />
 
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
+          <MaterialCommunityIcons
+            style={styles.icon}
+            name="circle"
+            size={20}
+            color={colors.primary}
+          />
 
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
+          <MaterialCommunityIcons
+            style={styles.icon}
+            name="circle"
+            size={20}
+            color={colors.primary}
+          />
 
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
-            </View>
-          </View>
-          <AppText style={styles.text}>{menuData.food_description}</AppText>
-          <Separater />
-          <View style={styles.itemArea}>
-            <AppCircleButton icon="minus-circle" onPress={handleMinus} />
-            <View style={styles.itemInput}>
-              <AppText style={styles.item}> {qnt} </AppText>
-            </View>
-            <AppCircleButton icon="plus-circle" onPress={handlePlus} />
-          </View>
-          <View style={styles.btnContainer}>
-            <AppButton
-              title=" Add to Cart"
-              color="secondary"
-              icon="cart-plus"
-              onSubmit={handleMinus}
-            />
-            <AppButton
-              title=" Check Out"
-              color="secondary"
-              icon="logout"
-              onSubmit={handlePlus}
-            />
-          </View>
-        </Screen>
-      )}
-    </>
+          <MaterialCommunityIcons
+            style={styles.icon}
+            name="circle"
+            size={20}
+            color={colors.primary}
+          />
+        </View>
+      </View>
+      <AppText style={styles.text}>
+        Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green
+        Salad
+      </AppText>
+      <Separater />
+      <View style={styles.itemArea}>
+        <MaterialCommunityIcons
+          style={styles.icon}
+          name="minus-circle"
+          size={40}
+          color={colors.primary}
+        />
+        <View style={styles.itemInput}>
+          <AppText style={styles.item}> 1 </AppText>
+        </View>
+
+        <MaterialCommunityIcons
+          style={styles.icon}
+          name="plus-circle"
+          size={40}
+          color={colors.primary}
+        />
+      </View>
+      <View style={styles.btnContainer}>
+        <AppButton
+          title=" Add to Cart"
+          color="secondary"
+          icon="cart-plus"
+          onSubmit={() => console.log("register")}
+        />
+        <AppButton
+          title=" Check Out"
+          color="secondary"
+          icon="logout"
+          onSubmit={() => console.log("register")}
+        />
+      </View>
+    </Screen>
   );
 }
 const styles = StyleSheet.create({
@@ -254,4 +240,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FoodViewScreen;
+export default FoodTrackingScreen;

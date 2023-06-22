@@ -53,17 +53,17 @@ function AppTextSearch({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.light,
-    borderRadius: 15,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: colors.secondary,
     flexDirection: "row",
-    padding: 15,
+    padding: 10,
     marginVertical: 10,
     margin: 6,
     color: colors.secondary,
   },
   textInput: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     color: colors.secondary,
   },
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     right: -1,
     paddingLeft: 20,
     width: 73,
-    height: 55,
-    padding: 12,
+    height: 43,
+    padding: 5,
     color: "#fff",
 
     alignSelf: "flex-end",

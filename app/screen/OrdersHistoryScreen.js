@@ -49,30 +49,6 @@ const messages = [
     distance: 1.5,
     distanceUnit: "KM",
   },
-
-  {
-    id: 4,
-    title: "Special Cheese Dosa",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img4.jpg"),
-    price: 19,
-    currency: "RM",
-    distance: 1.8,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 5,
-    title: "Non Veg Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img5.jpg"),
-    price: 11,
-    currency: "RM",
-    distance: 2.3,
-    distanceUnit: "KM",
-  },
 ];
 
 function OrdersHistoryScreen({ navigation }) {

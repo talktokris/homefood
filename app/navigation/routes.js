@@ -8,6 +8,8 @@ export default Object.freeze({
 
   HOME_PAGE: "Home",
 
+  ORDER_TRACKING: "Home",
+
   SEARCH_FOOD: "Search",
   SEARCH_DETAILS: "Food Details",
 
