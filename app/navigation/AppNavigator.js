@@ -1,4 +1,4 @@
-import react, { useEffect } from "react";
+import react, { useEffect, useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 //import * as Notifications from "expo-notifications";
@@ -12,6 +12,8 @@ import colors from "../config/colors";
 import Icon from "../components/Icon";
 import TopMenu from "../components/TopMenu";
 import IconBtn from "../components/IconBtn";
+import MessageIconAlert from "../components/MessageIconAlert";
+import CartContext from "../auth/cartContext";
 
 //import userUpdate from "../api/userUpdate";
 //import useAuth from "../auth/useAuth";
@@ -112,14 +114,14 @@ const AppNavigator = (color = "blue") => {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
-          headerRight: () => (
-            <TopMenu
-              name="email"
-              onPress={() => console.log("hi")}
-              title="Update count"
+          headerRight: () => <TopMenu />,
+          headerLeft: () => (
+            <MessageIconAlert
+              onPress={() => console.log("Cart Clicked")}
+              Items="5"
+              ItemData=""
             />
           ),
-          headerLeft: () => <IconBtn />,
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,
@@ -128,20 +130,24 @@ const AppNavigator = (color = "blue") => {
       />
 
       <Tab.Screen
-        name="Search"
+        name="Food"
         component={FoodNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="magnify" color={color} size={size} />
-          ),
-          headerRight: () => (
-            <TopMenu
-              name="email"
-              onPress={() => console.log("hi")}
-              title="Update count"
+            <MaterialCommunityIcons
+              name="food-fork-drink"
+              color={color}
+              size={size}
             />
           ),
-          headerLeft: () => <IconBtn />,
+          headerRight: () => <TopMenu />,
+          headerLeft: () => (
+            <MessageIconAlert
+              onPress={() => console.log("Cart Clicked")}
+              Items="0"
+              ItemData=""
+            />
+          ),
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,
@@ -151,7 +157,7 @@ const AppNavigator = (color = "blue") => {
       />
 
       <Tab.Screen
-        name="Order"
+        name="Orders"
         component={OrderNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -162,14 +168,14 @@ const AppNavigator = (color = "blue") => {
             />
           ),
 
-          headerRight: () => (
-            <TopMenu
-              name="email"
-              onPress={() => console.log("hi")}
-              title="Update count"
+          headerRight: () => <TopMenu />,
+          headerLeft: () => (
+            <MessageIconAlert
+              onPress={() => console.log("Cart Clicked")}
+              Items="5"
+              ItemData=""
             />
           ),
-          headerLeft: () => <IconBtn />,
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,
@@ -184,14 +190,14 @@ const AppNavigator = (color = "blue") => {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
-          headerRight: () => (
-            <TopMenu
-              name="email"
-              onPress={() => console.log("hi")}
-              title="Update count"
+          headerRight: () => <TopMenu />,
+          headerLeft: () => (
+            <MessageIconAlert
+              onPress={() => console.log("Cart Clicked")}
+              Items="5"
+              ItemData=""
             />
           ),
-          headerLeft: () => <IconBtn />,
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,

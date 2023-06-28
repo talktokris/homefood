@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 
-import { View, StyleSheet, FlatList, Image } from "react-native";
+import { View, StyleSheet, FlatList, Image, Alert } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -21,68 +21,11 @@ import { ErrorMessage, LinkButton } from "../components/forms";
 import menuApi from "../api/menu";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AppCircleButton from "../components/AppCircleButton";
-
-const messages = [
-  {
-    id: 1,
-    title: "Non Veg Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img1.jpg"),
-    price: 15,
-    currency: "RM",
-    distance: 3,
-    distanceUnit: "KM",
-  },
-  {
-    id: 2,
-    title: "Mutton Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img2.jpg"),
-    price: 12,
-    currency: "RM",
-    distance: 0.5,
-    distanceUnit: "KM",
-  },
-  {
-    id: 3,
-    title: "Fish Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img3.jpg"),
-    price: 17,
-    currency: "RM",
-    distance: 1.5,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 4,
-    title: "Special Cheese Dosa",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img4.jpg"),
-    price: 19,
-    currency: "RM",
-    distance: 1.8,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 5,
-    title: "Non Veg Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img5.jpg"),
-    price: 11,
-    currency: "RM",
-    distance: 2.3,
-    distanceUnit: "KM",
-  },
-];
+import cartStorage from "../auth/cartStorage";
+import CartContext from "../auth/cartContext";
 
 function FoodViewScreen({ route, navigation }) {
+  const [cart, setCart] = useContext(CartContext);
   const fethcID = route.params.id;
   const { user, logOut } = useAuth();
 
@@ -94,6 +37,12 @@ function FoodViewScreen({ route, navigation }) {
   const [menuData, setMenuData] = useState([]);
   const [qnt, setQnt] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [chanage, SetChange] = useState(false);
+
+  useEffect(() => {
+    SetChange(true);
+    // getData();
+  }, [chanage]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -115,6 +64,15 @@ function FoodViewScreen({ route, navigation }) {
           setLoading(false);
           setMenuData(data.data.results[0]);
           setTotalPrice(data.data.results[0].customer_price);
+          qtyUpdate(); // to update the edit qty.
+
+          // to get the stored cart Info
+          //  cartStorage.removeCart();
+
+          // cartStorage.storeCart("krisdfds");
+          // const fatchCart = cartStorage.getCart();
+          //   console.log(cartStorage.getCart());
+          //  if (fatchCart != null) setCartItems(fatchCart);
 
           //   console.log(data.data.results[0].images);
           //  console.log("Krishna : " + data.data.results[0].id);
@@ -130,6 +88,32 @@ function FoodViewScreen({ route, navigation }) {
         setLoading(false); // stop the loader
       });
   }, []);
+
+  function qtyUpdate() {
+    if (cart.length >= 1) {
+      const viewData = cart.filter((i) => i.data.id == fethcID);
+
+      if (viewData != null) {
+        setQnt(viewData[0].qnt);
+      }
+    }
+  }
+  /*
+  async function getCart() {
+    await cartStorage.storeCart("Raja");
+    const data = await cartStorage.getCart();
+    console.log(data);
+  }
+  */
+
+  const EnterEmail = ({ navigation }) => {
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        headerLeft: () => null,
+      });
+    }, [navigation]);
+  };
+
   const handlePlus = () => {
     const newQnt = qnt + 1;
     setQnt(newQnt);
@@ -144,6 +128,55 @@ function FoodViewScreen({ route, navigation }) {
   function roundFunction(amount) {
     return parseFloat(amount).toFixed(0);
   }
+
+  const handleCart = (item) => {
+    let items = cart;
+
+    const newItem = { data: item, qnt };
+    // console.log(newItem);
+
+    var index = items.findIndex((x) => x.data.id == item.id);
+    // here you can check specific property for an object whether it exist in your array or not
+
+    if (index === -1) {
+      items.push(newItem);
+      setCart(items);
+      Alert.alert("Success", "Item added to cart successfully.", [
+        {
+          text: "Ok",
+          onPress: () => navigation.navigate(routes.SEARCH_FOOD),
+        },
+      ]);
+      //  alert("Item added to cart successfully");
+    } else {
+      var filterData = items.filter((d) => d.data.id !== item.id);
+      filterData.push(newItem);
+
+      setCart(filterData);
+
+      Alert.alert("Success", "Cart updated successfully.", [
+        {
+          text: "Ok",
+          onPress: () => navigation.navigate(routes.FOOD_CART),
+        },
+      ]);
+      // alert("Cart updated successfully");
+    }
+
+    /*
+    const newCartData =
+      items.indexOf(newItem) === -1
+        ? items.push(newItem)
+        : console.log("This item already exists");
+        */
+
+    //  SetChange(false);
+    //  console.log(items);
+
+    // console.log("Cart Id : " + id);
+    // console.log(cartItems);
+  };
+
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -221,11 +254,7 @@ function FoodViewScreen({ route, navigation }) {
             <View style={styles.bottomLeft}>
               <AppButton
                 title="  Add to Cart"
-                onPress={() => {
-                  navigation.navigate(routes.MENU_EDIT_FOOD, {
-                    itemData: menuData,
-                  });
-                }}
+                onPress={() => handleCart(menuData)}
                 color="secondary"
                 icon="cart-plus"
               />
@@ -235,7 +264,7 @@ function FoodViewScreen({ route, navigation }) {
               <AppButton
                 title="  Check Out"
                 onPress={() => {
-                  handleDelete(menuData.id);
+                  navigation.navigate(routes.FOOD_CART);
                 }}
                 icon="logout"
               />

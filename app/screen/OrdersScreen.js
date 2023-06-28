@@ -41,6 +41,7 @@ const messages = [
 ];
 
 function OrdersScreen({ navigation }) {
+  console.log("This is order Screen");
   /*
   const { user, logOut } = useAuth();
   const currrentUser = user.id;

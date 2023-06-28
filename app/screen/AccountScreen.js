@@ -72,13 +72,15 @@ const menuItems = [
 
 function AccountScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
+  const userData = user.results[0];
 
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItemProfile
-          title="Full Name"
-          subTitle="test@domain.com"
+          title={userData.first_name + " " + userData.last_name}
+          subTitle={userData.email}
+          handPhone={userData.country.zip_code + " " + userData.mobile_no}
           image={require("../assets/images/av.png")}
           imgStatus={null}
         />

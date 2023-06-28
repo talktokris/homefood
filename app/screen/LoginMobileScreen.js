@@ -26,6 +26,7 @@ import AppCheckBox from "../components/AppCheckBox";
 import routes from "../navigation/routes";
 import authApi from "../api/auth";
 
+
 const phoneRegex = RegExp(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/);
 
 const validationSchema = Yup.object().shape({

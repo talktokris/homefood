@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function ForgetPasswordScreen({ navigation }) {
+function ForgetPasswordScreen2({ navigation }) {
   /*
   const { logIn } = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgetPasswordScreen;
+export default ForgetPasswordScreen2;

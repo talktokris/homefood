@@ -48,7 +48,9 @@ const validationSchema = Yup.object().shape({
     .label("Postal Code"),
 });
 
-function AddressAddScreen({ route, navigation }) {
+function AddressEditScreen({ route, navigation }) {
+  const items = route.params.item;
+  //console.log(items.postal_code);
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
 
@@ -61,9 +63,10 @@ function AddressAddScreen({ route, navigation }) {
     state,
     postal_code,
   }) => {
-    // console.log(postal_code);
+    setLoading(true);
 
-    const result = await addressApi.storeAddress(
+    const result = await addressApi.editAddress(
+      items.id,
       address,
       street,
       city_name,
@@ -71,7 +74,7 @@ function AddressAddScreen({ route, navigation }) {
       postal_code
     );
     // const tokenSet= result.access_token;
-
+    //  console.log(result.data);
     //console.log("==================");
     setLoading(false);
 
@@ -105,6 +108,8 @@ function AddressAddScreen({ route, navigation }) {
     }
   };
 
+  const stateSelectedItem = stateData.find((c) => c.title == items.state);
+
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -114,11 +119,11 @@ function AddressAddScreen({ route, navigation }) {
           <View style={styles.container}>
             <AppForm
               initialValues={{
-                address: "",
-                street: "",
-                city_name: "",
-                state: "",
-                postal_code: "",
+                address: items.address,
+                street: items.street,
+                city_name: items.city_name,
+                state: stateSelectedItem,
+                postal_code: "" + items.postal_code + "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
@@ -186,7 +191,7 @@ function AddressAddScreen({ route, navigation }) {
                 color="primary"
                 icon="google-maps"
                 width="80%"
-                onSubmit={() => console.log("GPS")}
+                onSubmit={() => console.log("register")}
               />
 
               <View style={styles.imageFrame}>
@@ -266,4 +271,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddressAddScreen;
+export default AddressEditScreen;

@@ -1,47 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
+import AppText from "./AppText";
+import CartAlertIcon from "./CartAlertIcon";
+import CartContext from "../auth/cartContext";
+import routes from "../navigation/routes";
+import { useNavigation } from "@react-navigation/native";
 
-function TopMenu({
-  name,
-  size = 32,
-  backgroundColor = "#000",
-  iconColor = "#fff",
-}) {
+function TopMenu() {
+  const navigation = useNavigation();
+  const [cart, SetCart] = useContext(CartContext);
+
+  const handlePress = () => {
+    navigation.navigate(routes.FOOD_CART, {
+      id: 5,
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      <CartAlertIcon onPress={handlePress} Items={cart.length} />
+      {/* <TouchableOpacity
         style={styles.iconBg}
-        onPress={() => console.log("Send OTP")}
-      >
-        <MaterialCommunityIcons
-          name="cart"
-          size={32}
-          color={colors.secondary}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.iconBg}
-        onPress={() => console.log("Send OTP")}
-      >
-        <MaterialCommunityIcons
-          name="bell"
-          size={32}
-          color={colors.secondary}
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.iconBg}
-        onPress={() => console.log("Send OTP")}
+        onPress={() => console.log("Send OTP Account")}
       >
         <MaterialCommunityIcons
           name="account-circle"
           size={42}
           color={colors.secondary}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }

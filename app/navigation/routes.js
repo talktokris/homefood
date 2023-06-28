@@ -10,12 +10,14 @@ export default Object.freeze({
 
   ORDER_TRACKING: "Home",
 
-  SEARCH_FOOD: "Search",
+  SEARCH_FOOD: "Food Menu",
   SEARCH_DETAILS: "Food Details",
+  FOOD_CART: "Cart Items",
 
   ACCOUNT_PROFILE: "Profile",
   ACCOUNT_ADDRESS: "Address",
   ACCOUNT_ADD_ADDRESS: "New Address",
+  ACCOUNT_EDIT_ADDRESS: "Edit Address",
   ACCOUNT_MESSAGES: "Messages",
   ACCOUNT_SEARCH_RADIUS: "Search Radius",
   ACCOUNT_ORDER_HISTORY: "Order History",

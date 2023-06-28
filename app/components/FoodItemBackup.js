@@ -12,7 +12,7 @@ import AppText from "./AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Stars from "./Stars";
 
-function FoodItem({
+function FoodItemBackup({
   title,
   subTitle,
   price,
@@ -97,7 +97,11 @@ function FoodItem({
                   {currency} {price}
                 </AppText>
               )}
-
+              {price && (
+                <AppText style={styles.price} numberOfLines={1}>
+                  {currency} {price}
+                </AppText>
+              )}
               <View style={styles.bottomArea}>
                 <View style={styles.bottomLeft}>
                   <AppText style={styles.location} numberOfLines={1}>
@@ -123,7 +127,7 @@ function FoodItem({
   );
 }
 
-export default FoodItem;
+export default FoodItemBackup;
 
 const styles = StyleSheet.create({
   container: {

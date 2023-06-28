@@ -90,17 +90,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     flexDirection: "row",
-    padding: 10,
+    padding: 4,
     marginVertical: 5,
   },
   textInput: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     color: colors.dark,
   },
   text: {
     flex: 1,
     color: colors.medium,
+    fontSize: 16,
   },
   placeholder: { color: colors.medium, flex: 1 },
   icon: {
