@@ -92,6 +92,7 @@ function ImageSlideShow({ images, titleStatus }) {
             <TouchableOpacity
               underlayColor={colors.lightGray}
               onPress={() => onNavClick(item)}
+              key={item.id}
             >
               <View key={item.id} style={styles.iconDiv}>
                 <MaterialCommunityIcons

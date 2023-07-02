@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Image,
@@ -14,6 +14,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Stars from "./Stars";
 import AppCircleButton from "./AppCircleButton";
 import AppButtonSmall from "./AppButtonSmall";
+import AuthContext from "../auth/context";
 
 function OrderItem({
   id,
@@ -24,10 +25,20 @@ function OrderItem({
   onTrack,
   trackButton,
   qty,
+  data,
 }) {
+  const [user, setUser] = useContext(AuthContext);
   function totalCount(price, qty) {
     let total = Number(price) * Number(qty);
     return total.toFixed(2);
+  }
+
+  function statusText(statusId) {
+    const stateSelectedItem = user.options.order_status.find(
+      (c) => c.id == statusId
+    );
+    return stateSelectedItem.title;
+    // console.log(stateSelectedItem);
   }
 
   return (
@@ -97,7 +108,7 @@ function OrderItem({
           </AppText>
           <View style={styles.statusBox}>
             <AppText style={styles.statusText} numberOfLines={1}>
-              Pending
+              {statusText(data.order_status)}
             </AppText>
           </View>
         </View>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import { View, StyleSheet, FlatList, Image } from "react-native";
 
@@ -14,62 +14,59 @@ import colors from "../config/colors";
 import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
+import settings from "../config/setting";
 
-function FoodTrackingScreen({ navigation }) {
-  /*
+function FoodTrackingScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
-  const currrentUser = user.id;
+  const item = route.params.data;
+  const [imageName, setImageName] = useState();
 
-  const [isLoading, setLoading] = useState(true);
-  const [users, setUsers] = useState(null);
-
-
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getData();
-    });
-    return unsubscribe;
-  }, [navigation]);
-
-  const getData = useCallback(() => {
-    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
-    // useApi(resume.getResumeData, { currrentUser });
-    userUpdate
-      .messageFatch(currrentUser)
-      .then((data) => {
-        setUsers(data);
-        // console.log(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // display error
-        setLoading(false); // stop the loader
-      });
-  }, []);
-  // console.log(users);
-  var key = 1;
-  */
-  var image =
-    "http://localhost/projects/homefood/backend/homefood-backend/public/vender_images/menu/48/1687450459.jpg";
-  var title = " This is Food Title";
-  var price = 30;
   var currency = "RM";
-  var qty = 2;
 
   function totalCount(price, qty) {
     let total = Number(price) * Number(qty);
     return total.toFixed(2);
+  }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      makeUri(item.menu_id, item.menu.default_image);
+    });
+    return unsubscribe;
+  }, [navigation, item]);
+
+  function makeUri(defID, imaData) {
+    //  console.log(imaData);
+    let imgUri = settings.imageUrl + "/menu/no_image.jpg";
+
+    if (imaData != null)
+      imgUri = settings.imageUrl + "/menu/" + defID + "/" + imaData.image_name;
+    //  console.log(imgUri);
+    // return imgUri;
+    setImageName(imgUri);
+  }
+
+  function statusText(statusId) {
+    const stateSelectedItem = user.options.order_status.find(
+      (c) => c.id == statusId
+    );
+    return stateSelectedItem.title;
+    // console.log(stateSelectedItem);
   }
 
   return (
     <Screen>
       <View style={styles.container}>
         <View style={styles.content}>
-          {image && <Image style={styles.image} source={{ uri: image }} />}
+          <Image
+            style={styles.image}
+            source={{
+              uri: imageName,
+            }}
+          />
 
           <View style={styles.appTextContainer}>
             <AppText style={styles.title} numberOfLines={2}>
-              {title}
+              {item.menu.food_title}
             </AppText>
 
             <View style={styles.bottomArea}>
@@ -78,7 +75,7 @@ function FoodTrackingScreen({ navigation }) {
                   Price
                 </AppText>
                 <AppText style={styles.price} numberOfLines={1}>
-                  {currency} {price}
+                  {currency} {item.customer_price}
                 </AppText>
               </View>
 
@@ -87,7 +84,7 @@ function FoodTrackingScreen({ navigation }) {
                   Qty
                 </AppText>
                 <AppText style={styles.price} numberOfLines={1}>
-                  {qty}
+                  {item.qty}
                 </AppText>
               </View>
             </View>
@@ -98,7 +95,7 @@ function FoodTrackingScreen({ navigation }) {
                   Total
                 </AppText>
                 <AppText style={styles.price} numberOfLines={1}>
-                  {currency} {totalCount(price, qty)}
+                  {currency} {item.total_amount}
                 </AppText>
               </View>
 
@@ -118,7 +115,7 @@ function FoodTrackingScreen({ navigation }) {
           </AppText>
           <View style={styles.statusBox}>
             <AppText style={styles.statusText} numberOfLines={1}>
-              Pending
+              {statusText(item.order_status)}
             </AppText>
           </View>
         </View>
@@ -126,10 +123,7 @@ function FoodTrackingScreen({ navigation }) {
 
       <Separater />
       <View></View>
-      <AppText style={styles.text}>
-        Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green
-        Salad
-      </AppText>
+      <AppText style={styles.text}>{item.menu.food_description}</AppText>
       <Separater />
 
       <View style={styles.imageFrame}>
@@ -208,7 +202,7 @@ const styles = StyleSheet.create({
   image: {
     flexDirection: "row",
     width: 100,
-    height: "100%",
+    height: 100,
     borderRadius: 5,
     margin: 5,
   },

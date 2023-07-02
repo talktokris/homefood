@@ -118,7 +118,7 @@ const AppNavigator = (color = "blue") => {
           headerLeft: () => (
             <MessageIconAlert
               onPress={() => console.log("Cart Clicked")}
-              Items="5"
+              Items="0"
               ItemData=""
             />
           ),
@@ -172,7 +172,7 @@ const AppNavigator = (color = "blue") => {
           headerLeft: () => (
             <MessageIconAlert
               onPress={() => console.log("Cart Clicked")}
-              Items="5"
+              Items="0"
               ItemData=""
             />
           ),
@@ -194,7 +194,7 @@ const AppNavigator = (color = "blue") => {
           headerLeft: () => (
             <MessageIconAlert
               onPress={() => console.log("Cart Clicked")}
-              Items="5"
+              Items="0"
               ItemData=""
             />
           ),

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 
 import { View, StyleSheet, FlatList, Alert } from "react-native";
 //import MessageItem from "../components/MessageItem";
@@ -45,9 +45,43 @@ function OrdersScreen({ navigation }) {
   const [cart, setCart] = useContext(CartContext);
   const [user, setUser] = useContext(AuthContext);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  const [menuData, setMenuData] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getData();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const getData = useCallback(() => {
+    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
+    // useApi(resume.getResumeData, { currrentUser });
+    orderApi
+      .pendingOrders()
+      .then((data) => {
+        if (data.ok) {
+          setMenuData(data);
+          setLoading(false);
+          setMenuData(data.data.data);
+          // console.log(data.data.data);
+        } else {
+          setError(
+            "Unable to get the database. Please check your internet connection"
+          );
+          setEstatus(true);
+        }
+      })
+      .catch((error) => {
+        // display error
+        setLoading(false); // stop the loader
+      });
+  }, []);
+
+  // Delete
 
   const userData = user.results[0];
   //console.log(userData.default_address.id);
@@ -106,56 +140,54 @@ function OrdersScreen({ navigation }) {
   };
 
   function makeUri(defID, imaData) {
-    // console.log(imaData.food_menu_id);
+    //  console.log(imaData);
     let imgUri = (imgUri = settings.imageUrl + "/menu/no_image.jpg");
 
     if (imaData != null)
-      imgUri =
-        settings.imageUrl +
-        "/menu/" +
-        imaData.food_menu_id +
-        "/" +
-        imaData.image_name;
-    //  console.log(imgUri);
+      imgUri = settings.imageUrl + "/menu/" + defID + "/" + imaData.image_name;
 
     return imgUri;
   }
 
   return (
-    <Screen>
-      <FlatList
-        data={cart}
-        keyExtractor={(message) => message.data.id.toString()}
-        renderItem={({ item }) => (
-          <OrderItem
-            id={item.data.id}
-            title={item.data.food_title}
-            //  image={item.id}
-            image={makeUri(
-              item.data.menu_profile_img_id,
-              item.data.default_image
+    <>
+      <ActivityIndicator visible={isLoading} />
+      <ErrorMessage error={error} visible={eStatus} />
+      {!isLoading && menuData && (
+        <Screen>
+          <FlatList
+            data={menuData}
+            keyExtractor={(message) => message.id.toString()}
+            renderItem={({ item }) => (
+              <OrderItem
+                id={item.id}
+                data={item}
+                title={item.menu.user_id}
+                //  image={item.id}
+                image={makeUri(item.menu_id, item.menu.default_image)}
+                price={item.customer_price}
+                qty={item.qty}
+                trackButton={true}
+                onTrack={() =>
+                  navigation.navigate(routes.ORDER_TRACKING, { data: item })
+                }
+                // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
+              />
             )}
-            price={item.data.customer_price}
-            qty={item.qnt}
-            trackButton={true}
-            onTrack={() =>
-              navigation.navigate(routes.ORDER_TRACKING, { id: id })
-            }
-            // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
+            ItemSeparatorComponent={Separater}
           />
-        )}
-        ItemSeparatorComponent={Separater}
-      />
-      <Separater />
-      <AppForm
-        initialValues={{
-          payment_options: "",
-          delivery_address: stateSelectedItem,
-        }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      ></AppForm>
-    </Screen>
+          <Separater />
+          <AppForm
+            initialValues={{
+              payment_options: "",
+              delivery_address: stateSelectedItem,
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          ></AppForm>
+        </Screen>
+      )}
+    </>
   );
 }
 const styles = StyleSheet.create({
