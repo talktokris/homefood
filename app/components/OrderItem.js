@@ -13,15 +13,16 @@ import AppText from "./AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Stars from "./Stars";
 import AppCircleButton from "./AppCircleButton";
+import AppButtonSmall from "./AppButtonSmall";
 
-function CartItem({
+function OrderItem({
   id,
   title,
   price,
   currency = "RM ",
   image,
-  onDelete,
-  onEdit,
+  onTrack,
+  trackButton,
   qty,
 }) {
   function totalCount(price, qty) {
@@ -36,18 +37,6 @@ function CartItem({
           {image && <Image style={styles.image} source={{ uri: image }} />}
 
           <View style={styles.appTextContainer}>
-            <TouchableOpacity
-              underlayColor={colors.lightGray}
-              onPress={() => onDelete(id)}
-            >
-              <View style={styles.close}>
-                <MaterialCommunityIcons
-                  name="trash-can"
-                  size={32}
-                  color={colors.primary}
-                />
-              </View>
-            </TouchableOpacity>
             <AppText style={styles.title} numberOfLines={2}>
               {title}
             </AppText>
@@ -82,21 +71,34 @@ function CartItem({
                 </AppText>
               </View>
 
-              <View style={styles.bottomRight}>
-                <View style={styles.close}>
-                  <TouchableOpacity
-                    underlayColor={colors.lightGray}
-                    onPress={() => onEdit(id)}
-                  >
-                    <MaterialCommunityIcons
-                      name="pencil-circle"
-                      size={32}
-                      color={colors.secondary}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <View style={styles.bottomRight}></View>
             </View>
+          </View>
+        </View>
+      </View>
+      <View style={styles.bottomArea}>
+        <View style={styles.bottomLeft}>
+          {trackButton && (
+            <AppButtonSmall
+              title="  Order Tracking"
+              onPress={() => onTrack()}
+              color="secondary"
+              icon="crosshairs-gps"
+            />
+          )}
+        </View>
+
+        <View style={[styles.bottomRight, { paddingLeft: 20 }]}>
+          <AppText
+            style={[styles.location, { fontSize: 15, marginLeft: 10 }]}
+            numberOfLines={1}
+          >
+            Status
+          </AppText>
+          <View style={styles.statusBox}>
+            <AppText style={styles.statusText} numberOfLines={1}>
+              Pending
+            </AppText>
           </View>
         </View>
       </View>
@@ -104,7 +106,7 @@ function CartItem({
   );
 }
 
-export default CartItem;
+export default OrderItem;
 
 const styles = StyleSheet.create({
   container: {
@@ -146,7 +148,6 @@ const styles = StyleSheet.create({
   },
   bottomArea: {
     flexDirection: "row",
-    paddingTop: 5,
   },
   bottomLeft: {
     width: "50%",
@@ -171,5 +172,16 @@ const styles = StyleSheet.create({
   location: {
     fontSize: 12,
     fontWeight: "600",
+  },
+  statusBox: {
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 7,
+    marginBottom: 3,
+  },
+  statusText: {
+    color: colors.orange,
+    fontWeight: "900",
   },
 });

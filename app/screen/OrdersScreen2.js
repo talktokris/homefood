@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
-import { View, StyleSheet, FlatList, Image } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { View, StyleSheet, FlatList } from "react-native";
+//import MessageItem from "../components/MessageItem";
 
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
@@ -11,16 +11,38 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
-import { ErrorMessage, LinkButton } from "../components/forms";
 
 import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
-import AppText from "../components/AppText";
-import settings from "../config/setting";
-import menuApi from "../api/menu";
-import ImageSlideShow from "../components/ImageSlideShow";
+import orderApi from "../api/order";
+import { ErrorMessage } from "../components/forms";
 
-function HomeScreen({ navigation }) {
+const messages = [
+  {
+    id: 1,
+    title: "Roti Channai",
+    subTitle:
+      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
+    image: require("../assets/images/img10.jpg"),
+    price: 15,
+    currency: "RM",
+    distance: 3,
+    distanceUnit: "KM",
+  },
+  {
+    id: 2,
+    title: "Yami Food Thai",
+    subTitle:
+      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
+    image: require("../assets/images/img11.jpg"),
+    price: 12,
+    currency: "RM",
+    distance: 0.5,
+    distanceUnit: "KM",
+  },
+];
+
+function OrdersScreen2({ navigation }) {
   const { user, logOut } = useAuth();
   const currrentUser = user.id;
 
@@ -28,7 +50,6 @@ function HomeScreen({ navigation }) {
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const [menuData, setMenuData] = useState([]);
-  const [images, setImages] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -38,18 +59,18 @@ function HomeScreen({ navigation }) {
   }, [navigation]);
 
   const getData = useCallback(() => {
-    setLoading(true);
-    setEstatus(false); // Start the loader, So when you start fetching data, you can display loading UI
+    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
     // useApi(resume.getResumeData, { currrentUser });
-    menuApi
-      .fetchAllHome()
+    orderApi
+      .pendingOrders()
       .then((data) => {
         if (data.ok) {
-          setMenuData(data);
+          //  setMenuData(data);
+          //  console.log(data.data.data);
+
           setLoading(false);
-          setMenuData(data.data.results);
-          setImages(data.data.slides);
-          // console.log(data.data.slides);
+          setMenuData(data.data.data);
+          // console.log(data.data.results);
         } else {
           setError(
             "Unable to get the database. Please check your internet connection"
@@ -79,37 +100,28 @@ function HomeScreen({ navigation }) {
     return imgUri;
   }
 
+  if (menuData.length >= 1) {
+    console.log(menuData[0].id);
+  }
+
   return (
     <>
       <ActivityIndicator visible={isLoading} />
       <ErrorMessage error={error} visible={eStatus} />
-      {!isLoading && menuData && (
+      {!isLoading && user && (
         <Screen>
-          {/* <AppText style={styles.heading}> Recommended Foods</AppText> */}
-          <Separater />
-          <View style={styles.slideContainer}>
-            <ImageSlideShow images={images} />
-          </View>
-          <Separater />
-          <AppText style={styles.heading}> Top Foods Nearby</AppText>
-          <Separater />
           <FlatList
-            data={menuData}
+            data={messages}
             keyExtractor={(message) => message.id.toString()}
             renderItem={({ item }) => (
               <FoodItem
-                title={item.food_title}
-                subTitle={item.food_description}
-                //  image={item.id}
-                image={makeUri(item.menu_profile_img_id, item.default_image)}
-                price={item.customer_price}
-                distance="1"
-                distanceUnit="KM"
-                onPress={() => {
-                  navigation.navigate(routes.SEARCH_DETAILS, {
-                    id: item.id,
-                  });
-                }}
+                title={item.title}
+                subTitle={item.subTitle}
+                image={item.image}
+                price={item.price}
+                distance={item.distance}
+                distanceUnit={item.distanceUnit}
+                onPress={() => console.log("Message Selected:- " + item.id)}
                 // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
                 renderRightActions={() => (
                   <View style={{ backgroundColor: "red", height: 70 }}></View>
@@ -123,31 +135,6 @@ function HomeScreen({ navigation }) {
     </>
   );
 }
-const styles = StyleSheet.create({
-  slideContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 250,
-    marginTop: 0,
-  },
-  heading: {
-    fontWeight: "900",
-    fontSize: 19,
-    paddingBottom: 5,
-    color: colors.secondary,
-    paddingTop: 10,
-  },
-  image: {
-    width: "100%",
-    height: 180,
-    alignSelf: "center",
-  },
-  nav: {
-    flexDirection: "row",
-    textAlign: "center",
-    padding: 15,
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});
 
-export default HomeScreen;
+export default OrdersScreen2;

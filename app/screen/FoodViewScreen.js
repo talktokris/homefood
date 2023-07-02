@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
 
+
 import ActivityIndicator from "../components/ActivityIndicator";
 //import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
@@ -23,6 +24,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import AppCircleButton from "../components/AppCircleButton";
 import cartStorage from "../auth/cartStorage";
 import CartContext from "../auth/cartContext";
+import MenuSlideShow from "../components/MenuSlideShow";
+import settings from "../config/setting";
 
 function FoodViewScreen({ route, navigation }) {
   const [cart, setCart] = useContext(CartContext);
@@ -38,6 +41,7 @@ function FoodViewScreen({ route, navigation }) {
   const [qnt, setQnt] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [chanage, SetChange] = useState(false);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     SetChange(true);
@@ -61,8 +65,10 @@ function FoodViewScreen({ route, navigation }) {
         //   console.log(data.data.results);
         if (data.ok) {
           setMenuData(data);
+
           setLoading(false);
           setMenuData(data.data.results[0]);
+          setImages(data.data.results[0].images);
           setTotalPrice(data.data.results[0].customer_price);
           qtyUpdate(); // to update the edit qty.
 
@@ -176,7 +182,22 @@ function FoodViewScreen({ route, navigation }) {
     // console.log("Cart Id : " + id);
     // console.log(cartItems);
   };
+  //console.log(menuData.default_image.food_menu_id);
 
+  function makeUri(defID, imaData) {
+    // console.log(imaData.food_menu_id);
+    let imgUri = settings.imageUrl + "/slider/images/loader.jpg";
+
+    if (imaData != null)
+      imgUri =
+        settings.imageUrl +
+        "/menu/" +
+        imaData.food_menu_id +
+        "/" +
+        imaData.image_name;
+
+    return imgUri;
+  }
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -185,41 +206,13 @@ function FoodViewScreen({ route, navigation }) {
         <Screen>
           <AppText style={styles.heading}>{menuData.food_title}</AppText>
           <Separater />
-          <View>
-            <Image
-              source={require("../assets/images/img1.jpg")}
-              style={styles.image}
-            />
-            <View style={styles.nav}>
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
 
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
-
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
-
-              <MaterialCommunityIcons
-                style={styles.icon}
-                name="circle"
-                size={20}
-                color={colors.primary}
-              />
-            </View>
+          <View style={styles.slideContainer}>
+            {images.length >= 1 && (
+              <MenuSlideShow images={images} defaultImg={makeUri(images[0])} />
+            )}
           </View>
+
           <AppText style={styles.text}>{menuData.food_description}</AppText>
           <Separater />
           <View style={styles.itemArea}>
@@ -276,6 +269,12 @@ function FoodViewScreen({ route, navigation }) {
   );
 }
 const styles = StyleSheet.create({
+  slideContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 250,
+    marginTop: 0,
+  },
   heading: {
     fontWeight: "900",
     fontSize: 20,

@@ -13,50 +13,95 @@ import settings from "../config/setting";
 
 import colors from "../config/colors";
 import Icon from "../components/Icon";
+import * as Yup from "yup";
 
 import CartContext from "../auth/cartContext";
+import AuthContext from "../auth/context";
 import CartItem from "../components/CartItem";
 import AppTextSearch from "../components/AppTextSearch";
-import { LinkButton } from "../components/forms";
+import {
+  AppForm,
+  AppFormField,
+  LinkButton,
+  SubmitButton,
+  AppFormPicker,
+  ErrorMessage,
+  AppFormPickerMultiLine,
+} from "../components/forms";
 import AppText from "../components/AppText";
+import orderApi from "../api/order";
+
+const validationSchema = Yup.object().shape({
+  payment_options: Yup.object().required().nullable().label("Payment Options"),
+  delivery_address: Yup.object()
+    .required()
+    .nullable()
+    .label("Delivery Address"),
+});
 
 function CartScreen({ navigation }) {
   const [cart, setCart] = useContext(CartContext);
+  const [user, setUser] = useContext(AuthContext);
   const [totalAmount, setTotalAmount] = useState(0);
-  // console.log("This is order Screen");
-  /*
-  const { user, logOut } = useAuth();
-  const currrentUser = user.id;
+  const [error, setError] = useState();
+  const [eStatus, setEstatus] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const [isLoading, setLoading] = useState(true);
-  const [users, setUsers] = useState(null);
+  const userData = user.results[0];
+  //console.log(userData.default_address.id);
 
+  function seletedAddress(data) {
+    d.id == userData.default_address.id;
+  }
+  const stateSelectedItem = userData.address_list.find(
+    (c) => c.id == userData.default_address.id
+  );
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getData();
-    });
-    return unsubscribe;
-  }, [navigation]);
+  const handleSubmit = async ({ payment_options, delivery_address }) => {
+    const result = await orderApi.storeOrders(
+      JSON.stringify(cart),
+      payment_options,
+      delivery_address
+    );
+    // const tokenSet= result.access_token;
 
-  const getData = useCallback(() => {
-    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
-    // useApi(resume.getResumeData, { currrentUser });
-    userUpdate
-      .messageFatch(currrentUser)
-      .then((data) => {
-        setUsers(data);
-        // console.log(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // display error
-        setLoading(false); // stop the loader
-      });
-  }, []);
-  // console.log(users);
-  var key = 1;
-  */
+    //console.log("==================");
+    setLoading(false);
+
+    if (!result.ok) return;
+    if (!result.data) {
+      setEstatus(true);
+      setError(
+        "Unable to connect to server. Please check your Internet connection"
+      );
+    } else if (result.data.success == false) {
+      //  console.log("Krishna");
+      setEstatus(true);
+
+      setError(result.data.message);
+    } else if (result.data.success == true) {
+      setCart([]);
+      const { data: id, message: messageSend } = result.data;
+
+      Alert.alert("Success", messageSend, [
+        {
+          text: "Ok",
+          onPress: () => {
+            setCart([]);
+            navigation.navigate(routes.SEARCH_FOOD);
+          },
+        },
+      ]);
+      // navigation.navigate(routes.PRO_DONE, {
+      //   message: messageSend,
+      //   id: id,
+      //   navRoute: routes.ACCOUNT_ADDRESS,
+      // });
+    } else {
+      setEstatus(true);
+      setError("Unknown error");
+    }
+  };
 
   const onDelete = (id) => {
     // console.log(cart);
@@ -138,29 +183,69 @@ function CartScreen({ navigation }) {
         ItemSeparatorComponent={Separater}
       />
       <Separater />
-      <View style={styles.container}>
-        <View style={styles.innterContainer}>
+      <AppForm
+        initialValues={{
+          payment_options: "",
+          delivery_address: stateSelectedItem,
+        }}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        <View style={styles.container}>
           <View style={styles.left}>
-            <AppText style={styles.lebel}>Total Amount</AppText>
+            <AppText style={styles.lebelSm}>Delivery Address</AppText>
           </View>
-          <View style={styles.right}>
-            <AppText style={styles.price}>RM {totalCount()}</AppText>
-          </View>
-        </View>
-      </View>
-      <Separater />
-      <View style={styles.container}>
-        <View style={styles.innterContainer}>
-          <LinkButton
-            title=" Check Out"
-            color="secondary"
-            icon="cart-plus"
-            onPress={() => {
-              navigation.navigate(routes.AUTH_REGISTER);
-            }}
+
+          <AppFormPickerMultiLine
+            items={userData.address_list}
+            name="delivery_address"
+            /* numberOfColumns={2} */
+            /* PickerItemComponent={PickerItem} */
+
+            placeholder=" Select Delivery Address"
+
+            /* width="80%" */
           />
         </View>
-      </View>
+
+        <View style={styles.container}>
+          <View style={styles.left}>
+            <AppText style={styles.lebelSm}>Payment Methods</AppText>
+          </View>
+
+          <AppFormPicker
+            items={user.options.payment_type}
+            name="payment_options"
+            /* numberOfColumns={2} */
+            /* PickerItemComponent={PickerItem} */
+
+            placeholder=" Select Payment Method"
+
+            /* width="80%" */
+          />
+        </View>
+
+        <View style={styles.container}>
+          <View style={styles.innterContainer}>
+            <View style={styles.left}>
+              <AppText style={styles.lebel}>Total Amount</AppText>
+            </View>
+            <View style={styles.right}>
+              <AppText style={styles.price}>RM {totalCount()}</AppText>
+            </View>
+          </View>
+        </View>
+        <Separater />
+        <View style={styles.container}>
+          <View style={styles.innterContainer}>
+            <SubmitButton
+              title=" Place Order"
+              icon="checkbox-marked-circle-outline"
+              color="secondary"
+            />
+          </View>
+        </View>
+      </AppForm>
     </Screen>
   );
 }
@@ -179,6 +264,11 @@ const styles = StyleSheet.create({
   right: { width: "40%" },
   lebel: {
     fontSize: 22,
+    color: colors.secondary,
+    fontWeight: "800",
+  },
+  lebelSm: {
+    fontSize: 14,
     color: colors.secondary,
     fontWeight: "800",
   },

@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Alert } from "react-native";
 //import MessageItem from "../components/MessageItem";
 
 import Screen from "../components/Screen";
@@ -9,97 +9,183 @@ import Separater from "../components/Separater";
 import ActivityIndicator from "../components/ActivityIndicator";
 //import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
+import settings from "../config/setting";
+
 import colors from "../config/colors";
 import Icon from "../components/Icon";
+import * as Yup from "yup";
 
-import FoodItem from "../components/FoodItem";
+import CartContext from "../auth/cartContext";
+import AuthContext from "../auth/context";
+import CartItem from "../components/CartItem";
+import OrderItem from "../components/OrderItem";
 import AppTextSearch from "../components/AppTextSearch";
+import {
+  AppForm,
+  AppFormField,
+  LinkButton,
+  SubmitButton,
+  AppFormPicker,
+  ErrorMessage,
+  AppFormPickerMultiLine,
+} from "../components/forms";
+import AppText from "../components/AppText";
+import orderApi from "../api/order";
+import AppButton from "../components/AppButton";
 
-const messages = [
-  {
-    id: 1,
-    title: "Roti Channai",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img10.jpg"),
-    price: 15,
-    currency: "RM",
-    distance: 3,
-    distanceUnit: "KM",
-  },
-  {
-    id: 2,
-    title: "Yami Food Thai",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img11.jpg"),
-    price: 12,
-    currency: "RM",
-    distance: 0.5,
-    distanceUnit: "KM",
-  },
-];
+const validationSchema = Yup.object().shape({
+  payment_options: Yup.object().required().nullable().label("Payment Options"),
+  delivery_address: Yup.object()
+    .required()
+    .nullable()
+    .label("Delivery Address"),
+});
 
 function OrdersScreen({ navigation }) {
-  console.log("This is order Screen");
-  /*
-  const { user, logOut } = useAuth();
-  const currrentUser = user.id;
+  const [cart, setCart] = useContext(CartContext);
+  const [user, setUser] = useContext(AuthContext);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [error, setError] = useState();
+  const [eStatus, setEstatus] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const [isLoading, setLoading] = useState(true);
-  const [users, setUsers] = useState(null);
+  const userData = user.results[0];
+  //console.log(userData.default_address.id);
 
+  function seletedAddress(data) {
+    d.id == userData.default_address.id;
+  }
+  const stateSelectedItem = userData.address_list.find(
+    (c) => c.id == userData.default_address.id
+  );
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getData();
-    });
-    return unsubscribe;
-  }, [navigation]);
+  const handleSubmit = async ({ payment_options, delivery_address }) => {
+    const result = await orderApi.storeOrders(
+      JSON.stringify(cart),
+      payment_options,
+      delivery_address
+    );
+    // const tokenSet= result.access_token;
 
-  const getData = useCallback(() => {
-    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
-    // useApi(resume.getResumeData, { currrentUser });
-    userUpdate
-      .messageFatch(currrentUser)
-      .then((data) => {
-        setUsers(data);
-        // console.log(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // display error
-        setLoading(false); // stop the loader
-      });
-  }, []);
-  // console.log(users);
-  var key = 1;
-  */
+    //console.log("==================");
+    setLoading(false);
+
+    if (!result.ok) return;
+    if (!result.data) {
+      setEstatus(true);
+      setError(
+        "Unable to connect to server. Please check your Internet connection"
+      );
+    } else if (result.data.success == false) {
+      //  console.log("Krishna");
+      setEstatus(true);
+
+      setError(result.data.message);
+    } else if (result.data.success == true) {
+      setCart([]);
+      const { data: id, message: messageSend } = result.data;
+
+      Alert.alert("Success", messageSend, [
+        {
+          text: "Ok",
+          onPress: () => {
+            setCart([]);
+            navigation.navigate(routes.SEARCH_FOOD);
+          },
+        },
+      ]);
+      // navigation.navigate(routes.PRO_DONE, {
+      //   message: messageSend,
+      //   id: id,
+      //   navRoute: routes.ACCOUNT_ADDRESS,
+      // });
+    } else {
+      setEstatus(true);
+      setError("Unknown error");
+    }
+  };
+
+  function makeUri(defID, imaData) {
+    // console.log(imaData.food_menu_id);
+    let imgUri = (imgUri = settings.imageUrl + "/menu/no_image.jpg");
+
+    if (imaData != null)
+      imgUri =
+        settings.imageUrl +
+        "/menu/" +
+        imaData.food_menu_id +
+        "/" +
+        imaData.image_name;
+    //  console.log(imgUri);
+
+    return imgUri;
+  }
+
   return (
     <Screen>
       <FlatList
-        data={messages}
-        keyExtractor={(message) => message.id.toString()}
+        data={cart}
+        keyExtractor={(message) => message.data.id.toString()}
         renderItem={({ item }) => (
-          <FoodItem
-            title={item.title}
-            subTitle={item.subTitle}
-            image={item.image}
-            price={item.price}
-            distance={item.distance}
-            distanceUnit={item.distanceUnit}
-            onPress={() => console.log("Message Selected:- " + item.id)}
-            // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-            renderRightActions={() => (
-              <View style={{ backgroundColor: "red", height: 70 }}></View>
+          <OrderItem
+            id={item.data.id}
+            title={item.data.food_title}
+            //  image={item.id}
+            image={makeUri(
+              item.data.menu_profile_img_id,
+              item.data.default_image
             )}
+            price={item.data.customer_price}
+            qty={item.qnt}
+            trackButton={true}
+            onTrack={() =>
+              navigation.navigate(routes.ORDER_TRACKING, { id: id })
+            }
+            // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
           />
         )}
         ItemSeparatorComponent={Separater}
       />
+      <Separater />
+      <AppForm
+        initialValues={{
+          payment_options: "",
+          delivery_address: stateSelectedItem,
+        }}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      ></AppForm>
     </Screen>
   );
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    marginVertical: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  innterContainer: {
+    flexDirection: "row",
+    marginVertical: 10,
+  },
+  left: { width: "60%" },
+  right: { width: "40%" },
+  lebel: {
+    fontSize: 22,
+    color: colors.secondary,
+    fontWeight: "800",
+  },
+  lebelSm: {
+    fontSize: 14,
+    color: colors.secondary,
+    fontWeight: "800",
+  },
+  price: {
+    fontSize: 22,
+    color: colors.primary,
+    fontWeight: "800",
+  },
+});
 
 export default OrdersScreen;

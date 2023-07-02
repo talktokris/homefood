@@ -8,11 +8,11 @@ export default Object.freeze({
 
   HOME_PAGE: "Home",
 
-  ORDER_TRACKING: "Home",
-
   SEARCH_FOOD: "Food Menu",
   SEARCH_DETAILS: "Food Details",
   FOOD_CART: "Cart Items",
+
+  ORDER_TRACKING: "Order Tracking",
 
   ACCOUNT_PROFILE: "Profile",
   ACCOUNT_ADDRESS: "Address",

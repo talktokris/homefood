@@ -8,75 +8,12 @@ import Screen from "../components/Screen";
 import Separater from "../components/Separater";
 
 import ActivityIndicator from "../components/ActivityIndicator";
-//import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
-import Icon from "../components/Icon";
 
 import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
-import AppButton from "../components/AppButton";
-
-const messages = [
-  {
-    id: 1,
-    title: "Non Veg Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img1.jpg"),
-    price: 15,
-    currency: "RM",
-    distance: 3,
-    distanceUnit: "KM",
-  },
-  {
-    id: 2,
-    title: "Mutton Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img2.jpg"),
-    price: 12,
-    currency: "RM",
-    distance: 0.5,
-    distanceUnit: "KM",
-  },
-  {
-    id: 3,
-    title: "Fish Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img3.jpg"),
-    price: 17,
-    currency: "RM",
-    distance: 1.5,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 4,
-    title: "Special Cheese Dosa",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img4.jpg"),
-    price: 19,
-    currency: "RM",
-    distance: 1.8,
-    distanceUnit: "KM",
-  },
-
-  {
-    id: 5,
-    title: "Non Veg Thali",
-    subTitle:
-      "Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green Salad",
-    image: require("../assets/images/img5.jpg"),
-    price: 11,
-    currency: "RM",
-    distance: 2.3,
-    distanceUnit: "KM",
-  },
-];
 
 function FoodTrackingScreen({ navigation }) {
   /*
@@ -112,80 +49,93 @@ function FoodTrackingScreen({ navigation }) {
   // console.log(users);
   var key = 1;
   */
+  var image =
+    "http://localhost/projects/homefood/backend/homefood-backend/public/vender_images/menu/48/1687450459.jpg";
+  var title = " This is Food Title";
+  var price = 30;
+  var currency = "RM";
+  var qty = 2;
+
+  function totalCount(price, qty) {
+    let total = Number(price) * Number(qty);
+    return total.toFixed(2);
+  }
+
   return (
     <Screen>
-      <AppText style={styles.heading}>Non Veg Thali</AppText>
-      <Separater />
-      <View>
-        <Image
-          source={require("../assets/images/img1.jpg")}
-          style={styles.image}
-        />
-        <View style={styles.nav}>
-          <MaterialCommunityIcons
-            style={styles.icon}
-            name="circle"
-            size={20}
-            color={colors.primary}
-          />
+      <View style={styles.container}>
+        <View style={styles.content}>
+          {image && <Image style={styles.image} source={{ uri: image }} />}
 
-          <MaterialCommunityIcons
-            style={styles.icon}
-            name="circle"
-            size={20}
-            color={colors.primary}
-          />
+          <View style={styles.appTextContainer}>
+            <AppText style={styles.title} numberOfLines={2}>
+              {title}
+            </AppText>
 
-          <MaterialCommunityIcons
-            style={styles.icon}
-            name="circle"
-            size={20}
-            color={colors.primary}
-          />
+            <View style={styles.bottomArea}>
+              <View style={styles.bottomLeft}>
+                <AppText style={styles.location} numberOfLines={1}>
+                  Price
+                </AppText>
+                <AppText style={styles.price} numberOfLines={1}>
+                  {currency} {price}
+                </AppText>
+              </View>
 
-          <MaterialCommunityIcons
-            style={styles.icon}
-            name="circle"
-            size={20}
-            color={colors.primary}
-          />
+              <View style={styles.bottomRight}>
+                <AppText style={styles.location} numberOfLines={1}>
+                  Qty
+                </AppText>
+                <AppText style={styles.price} numberOfLines={1}>
+                  {qty}
+                </AppText>
+              </View>
+            </View>
+
+            <View style={styles.bottomArea}>
+              <View style={styles.bottomLeft}>
+                <AppText style={styles.location} numberOfLines={1}>
+                  Total
+                </AppText>
+                <AppText style={styles.price} numberOfLines={1}>
+                  {currency} {totalCount(price, qty)}
+                </AppText>
+              </View>
+
+              <View style={styles.bottomRight}></View>
+            </View>
+          </View>
         </View>
       </View>
+      <Separater />
+      <View style={styles.bottomArea}>
+        <View style={[styles.bottomLeft, { fontSize: 15, marginTop: 10 }]}>
+          <AppText
+            style={[styles.location, { fontSize: 15, marginLeft: 10 }]}
+            numberOfLines={1}
+          >
+            Status
+          </AppText>
+          <View style={styles.statusBox}>
+            <AppText style={styles.statusText} numberOfLines={1}>
+              Pending
+            </AppText>
+          </View>
+        </View>
+      </View>
+
+      <Separater />
+      <View></View>
       <AppText style={styles.text}>
         Chopathi Ponni Rice Kootu Chicken Fry, Fish Fry Rasom Curd, Simple Green
         Salad
       </AppText>
       <Separater />
-      <View style={styles.itemArea}>
-        <MaterialCommunityIcons
-          style={styles.icon}
-          name="minus-circle"
-          size={40}
-          color={colors.primary}
-        />
-        <View style={styles.itemInput}>
-          <AppText style={styles.item}> 1 </AppText>
-        </View>
 
-        <MaterialCommunityIcons
-          style={styles.icon}
-          name="plus-circle"
-          size={40}
-          color={colors.primary}
-        />
-      </View>
-      <View style={styles.btnContainer}>
-        <AppButton
-          title=" Add to Cart"
-          color="secondary"
-          icon="cart-plus"
-          onSubmit={() => console.log("register")}
-        />
-        <AppButton
-          title=" Check Out"
-          color="secondary"
-          icon="logout"
-          onSubmit={() => console.log("register")}
+      <View style={styles.imageFrame}>
+        <Image
+          source={require("../assets/images/map.jpg")}
+          style={styles.imageTwo}
         />
       </View>
     </Screen>
@@ -237,6 +187,105 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     padding: 5,
+  },
+
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  content: {
+    flexDirection: "row",
+    width: "100%",
+
+    // backgroundColor: "red",
+  },
+  close: { position: "absolute", right: 1, top: 0 },
+  appTextContainer: {
+    width: "70%",
+    paddingLeft: 5,
+    justifyContent: "center",
+  },
+  image: {
+    flexDirection: "row",
+    width: 100,
+    height: "100%",
+    borderRadius: 5,
+    margin: 5,
+  },
+  title: {
+    fontSize: 13,
+    fontWeight: "900",
+    color: colors.secondary,
+    width: "90%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#cccccc",
+  },
+  subTitle: {
+    fontSize: 13,
+    color: colors.secondary,
+    width: "90%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#cccccc",
+  },
+
+  price: {
+    fontSize: 14,
+    color: colors.primary,
+    fontWeight: "800",
+  },
+  bottomArea: {
+    flexDirection: "row",
+  },
+  bottomLeft: {
+    width: "50%",
+    flexDirection: "center",
+    justifyContent: "center",
+  },
+  bottomRight: {
+    width: "50%",
+    flexDirection: "center",
+    justifyContent: "center",
+  },
+
+  item: {
+    fontSize: 20,
+    fontWeight: "600",
+    backgroundColor: colors.lightGray,
+    padding: 5,
+    height: 35,
+    width: 40,
+    textAlign: "center",
+  },
+  location: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  statusBox: {
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 7,
+    marginBottom: 3,
+  },
+  statusText: {
+    color: colors.orange,
+    fontWeight: "900",
+  },
+  imageFrame: {
+    marginVertical: 100,
+    justifyContent: "center",
+    backgroundColor: colors.secondary,
+    width: 380,
+    height: 209,
+    borderRadius: 5,
+  },
+  imageTwo: {
+    width: 375,
+    height: 305,
+    alignSelf: "center",
+    margin: 0,
+    marginTop: 0,
+    borderRadius: 4,
   },
 });
 
