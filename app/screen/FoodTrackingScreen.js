@@ -211,8 +211,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: colors.secondary,
     width: "90%",
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
   },
   subTitle: {
     fontSize: 13,
@@ -232,12 +230,10 @@ const styles = StyleSheet.create({
   },
   bottomLeft: {
     width: "50%",
-    flexDirection: "center",
     justifyContent: "center",
   },
   bottomRight: {
     width: "50%",
-    flexDirection: "center",
     justifyContent: "center",
   },
 

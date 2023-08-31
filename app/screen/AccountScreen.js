@@ -36,6 +36,7 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_MESSAGES,
   },
+  /*
   {
     title: "Search Radius",
     icon: {
@@ -51,7 +52,7 @@ const menuItems = [
       backgroundColor: colors.secondary,
     },
     targetScreen: routes.ACCOUNT_ORDER_HISTORY,
-  },
+  },*/
   {
     title: "Support",
     icon: {
@@ -60,6 +61,7 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_SUPPORT,
   },
+  /*
   {
     title: "Change Password",
     icon: {
@@ -68,18 +70,34 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_CHANGE_PASSWORD,
   },
+  */
 ];
 
 function AccountScreen({ route, navigation }) {
   const { user, logOut } = useAuth();
   const userData = user.results[0];
+  var firstName = "";
+  var lastName = "";
+  var email = "";
+
+  if (userData.first_name != null) {
+    firstName = userData.first_name;
+  }
+
+  if (userData.last_name != null) {
+    lastName = userData.last_name;
+  }
+
+  if (userData.email != null) {
+    email = userData.email;
+  }
 
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItemProfile
-          title={userData.first_name + " " + userData.last_name}
-          subTitle={userData.email}
+          title={firstName + " " + lastName}
+          subTitle={email}
           handPhone={userData.country.zip_code + " " + userData.mobile_no}
           image={require("../assets/images/av.png")}
           imgStatus={null}

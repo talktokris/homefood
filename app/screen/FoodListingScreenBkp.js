@@ -18,8 +18,7 @@ import AppTextSearch from "../components/AppTextSearch";
 import settings from "../config/setting";
 import menuApi from "../api/menu";
 
-
-function FoodListingScreen({ navigation }) {
+function FoodListingScreenBkp({ navigation }) {
   const { user, logOut } = useAuth();
   const currrentUser = user.id;
 
@@ -130,6 +129,7 @@ function FoodListingScreen({ navigation }) {
                 )}
               />
             )}
+            ItemSeparatorComponent={Separater}
           />
         </Screen>
       )}
@@ -138,4 +138,4 @@ function FoodListingScreen({ navigation }) {
 }
 const styles = StyleSheet.create({});
 
-export default FoodListingScreen;
+export default FoodListingScreenBkp;

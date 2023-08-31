@@ -44,19 +44,19 @@ function AccountPasswordScreen({ navigation }) {
       .userRefresh()
       .then((data) => {
         // console.log(data.data);
-        if (data.ok) {
-          setLoading(false);
-          setUser(data.data);
-          if (data.data.results[0].default_address != null) {
-            setDefaultAddress(data.data.results[0].default_address.id);
-          }
-          getData();
-        } else {
-          setError(
-            "Unable to get the database. Please check your internet connection"
-          );
-          setEstatus(true);
-        }
+         if (data.ok) {
+           setLoading(false);
+           setUser(data.data);
+           if (data.data.results[0].default_address != null) {
+             setDefaultAddress(data.data.results[0].default_address.id);
+           }
+           // getData();
+         } else {
+           setError(
+             "Unable to get the database. Please check your internet connection"
+           );
+           setEstatus(true);
+         }
       })
       .catch((error) => {
         // display error

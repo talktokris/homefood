@@ -14,25 +14,25 @@ function Stars({
       <MaterialCommunityIcons
         style={styles.icon}
         name="star"
-        size={20}
+        size={12}
         color={colors.primary}
       />
       <MaterialCommunityIcons
         style={styles.icon}
         name="star"
-        size={20}
+        size={12}
         color={colors.primary}
       />
       <MaterialCommunityIcons
         style={styles.icon}
         name="star-half-full"
-        size={20}
+        size={12}
         color={colors.primary}
       />
       <MaterialCommunityIcons
         style={styles.icon}
         name="star-outline"
-        size={20}
+        size={12}
         color={colors.primary}
       />
     </View>

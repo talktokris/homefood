@@ -47,6 +47,7 @@ function HomeScreen({ navigation }) {
         if (data.ok) {
           setMenuData(data);
           setLoading(false);
+          setEstatus(false);
           setMenuData(data.data.results);
           setImages(data.data.slides);
           // console.log(data.data.slides);
@@ -65,7 +66,7 @@ function HomeScreen({ navigation }) {
 
   function makeUri(defID, imaData) {
     // console.log(imaData.food_menu_id);
-    let imgUri = (imgUri = settings.imageUrl + "/menu/no_image.jpg");
+    let imgUri = settings.imageUrl + "/menu/no_image.jpg";
 
     if (imaData != null)
       imgUri =

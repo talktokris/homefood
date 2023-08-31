@@ -51,7 +51,7 @@ function ProfileScreen({ navigation }) {
           if (data.data.results[0].default_address != null) {
             setDefaultAddress(data.data.results[0].default_address.id);
           }
-          getData();
+          //  getData();
         } else {
           setError(
             "Unable to get the database. Please check your internet connection"

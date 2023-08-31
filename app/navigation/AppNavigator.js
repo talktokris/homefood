@@ -1,4 +1,3 @@
-import react, { useEffect, useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 //import * as Notifications from "expo-notifications";
@@ -9,11 +8,8 @@ import FoodNavigator from "./FoodNavigator";
 import OrderNavigator from "./OrderNavigator";
 import AccountNavigator from "./AccountNavigator";
 import colors from "../config/colors";
-import Icon from "../components/Icon";
 import TopMenu from "../components/TopMenu";
-import IconBtn from "../components/IconBtn";
 import MessageIconAlert from "../components/MessageIconAlert";
-import CartContext from "../auth/cartContext";
 
 //import userUpdate from "../api/userUpdate";
 //import useAuth from "../auth/useAuth";

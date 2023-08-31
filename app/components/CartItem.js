@@ -150,12 +150,10 @@ const styles = StyleSheet.create({
   },
   bottomLeft: {
     width: "50%",
-    flexDirection: "center",
     justifyContent: "center",
   },
   bottomRight: {
     width: "50%",
-    flexDirection: "center",
     justifyContent: "center",
   },
 

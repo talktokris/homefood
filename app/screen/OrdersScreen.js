@@ -1,50 +1,22 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 
-import { View, StyleSheet, FlatList, Alert } from "react-native";
-//import MessageItem from "../components/MessageItem";
+import { StyleSheet, FlatList, Alert } from "react-native";
 
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
 
 import ActivityIndicator from "../components/ActivityIndicator";
-//import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
 import settings from "../config/setting";
-
 import colors from "../config/colors";
-import Icon from "../components/Icon";
-import * as Yup from "yup";
 
-import CartContext from "../auth/cartContext";
 import AuthContext from "../auth/context";
-import CartItem from "../components/CartItem";
 import OrderItem from "../components/OrderItem";
-import AppTextSearch from "../components/AppTextSearch";
-import {
-  AppForm,
-  AppFormField,
-  LinkButton,
-  SubmitButton,
-  AppFormPicker,
-  ErrorMessage,
-  AppFormPickerMultiLine,
-} from "../components/forms";
-import AppText from "../components/AppText";
+import { ErrorMessage, NormalMessage } from "../components/forms";
 import orderApi from "../api/order";
-import AppButton from "../components/AppButton";
-
-const validationSchema = Yup.object().shape({
-  payment_options: Yup.object().required().nullable().label("Payment Options"),
-  delivery_address: Yup.object()
-    .required()
-    .nullable()
-    .label("Delivery Address"),
-});
 
 function OrdersScreen({ navigation }) {
-  const [cart, setCart] = useContext(CartContext);
   const [user, setUser] = useContext(AuthContext);
-  const [totalAmount, setTotalAmount] = useState(0);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
@@ -66,6 +38,7 @@ function OrdersScreen({ navigation }) {
         if (data.ok) {
           setMenuData(data);
           setLoading(false);
+          setEstatus(false);
           setMenuData(data.data.data);
           // console.log(data.data.data);
         } else {
@@ -78,6 +51,7 @@ function OrdersScreen({ navigation }) {
       .catch((error) => {
         // display error
         setLoading(false); // stop the loader
+        console.log(error);
       });
   }, []);
 
@@ -92,52 +66,6 @@ function OrdersScreen({ navigation }) {
   const stateSelectedItem = userData.address_list.find(
     (c) => c.id == userData.default_address.id
   );
-
-  const handleSubmit = async ({ payment_options, delivery_address }) => {
-    const result = await orderApi.storeOrders(
-      JSON.stringify(cart),
-      payment_options,
-      delivery_address
-    );
-    // const tokenSet= result.access_token;
-
-    //console.log("==================");
-    setLoading(false);
-
-    if (!result.ok) return;
-    if (!result.data) {
-      setEstatus(true);
-      setError(
-        "Unable to connect to server. Please check your Internet connection"
-      );
-    } else if (result.data.success == false) {
-      //  console.log("Krishna");
-      setEstatus(true);
-
-      setError(result.data.message);
-    } else if (result.data.success == true) {
-      setCart([]);
-      const { data: id, message: messageSend } = result.data;
-
-      Alert.alert("Success", messageSend, [
-        {
-          text: "Ok",
-          onPress: () => {
-            setCart([]);
-            navigation.navigate(routes.SEARCH_FOOD);
-          },
-        },
-      ]);
-      // navigation.navigate(routes.PRO_DONE, {
-      //   message: messageSend,
-      //   id: id,
-      //   navRoute: routes.ACCOUNT_ADDRESS,
-      // });
-    } else {
-      setEstatus(true);
-      setError("Unknown error");
-    }
-  };
 
   function makeUri(defID, imaData) {
     //  console.log(imaData);
@@ -155,6 +83,9 @@ function OrdersScreen({ navigation }) {
       <ErrorMessage error={error} visible={eStatus} />
       {!isLoading && menuData && (
         <Screen>
+          {menuData.length <= 0 && (
+            <NormalMessage visible={true} error="No recent order found" />
+          )}
           <FlatList
             data={menuData}
             keyExtractor={(message) => message.id.toString()}
@@ -162,7 +93,7 @@ function OrdersScreen({ navigation }) {
               <OrderItem
                 id={item.id}
                 data={item}
-                title={item.menu.user_id}
+                title={item.menu.food_title}
                 //  image={item.id}
                 image={makeUri(item.menu_id, item.menu.default_image)}
                 price={item.customer_price}
@@ -177,14 +108,6 @@ function OrdersScreen({ navigation }) {
             ItemSeparatorComponent={Separater}
           />
           <Separater />
-          <AppForm
-            initialValues={{
-              payment_options: "",
-              delivery_address: stateSelectedItem,
-            }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          ></AppForm>
         </Screen>
       )}
     </>

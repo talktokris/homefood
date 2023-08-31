@@ -135,7 +135,7 @@ function LoginMobileScreen({ navigation }) {
           /> */}
 
             <View style={styles.viewStyleForLine}></View>
-            <View>
+            {/* <View>
               <LinkButton
                 title=" Login by email"
                 color="secondary"
@@ -152,7 +152,7 @@ function LoginMobileScreen({ navigation }) {
                   navigation.navigate(routes.AUTH_REGISTER);
                 }}
               />
-            </View>
+            </View> */}
           </AppForm>
         </View>
       </Screen>
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 180,
-    height: 130,
+    height: 100,
     alignSelf: "center",
     margin: 30,
     marginTop: 40,

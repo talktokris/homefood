@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "homefood",
-    "slug": "homefood",
+    "name": "Home Food",
+    "slug": "home-food-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -18,9 +18,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.homefoodbykris.homefood",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.homefoodbykris.homefood",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -28,6 +32,12 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9289e509-1608-4adc-ac40-2f09e5c3ac4e"
+      }
+    },
+    "owner": "talktokris"
   }
 }

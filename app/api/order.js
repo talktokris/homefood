@@ -16,7 +16,7 @@ const storeOrders = async (cart, payment_options, delivery_address) => {
 
 const pendingOrders = async (radius) => {
   const result = await client.post("/client-order-pending", { radius });
-  // console.log(result);
+  //console.log(result.data);
   return result;
 };
 

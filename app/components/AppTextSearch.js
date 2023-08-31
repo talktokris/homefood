@@ -84,7 +84,9 @@ const styles = StyleSheet.create({
     right: -1,
     paddingLeft: 20,
     width: 73,
-    height: 43,
+    // height: 43,
+
+    height: Platform.OS === "android" ? 50 : 43,
     padding: 5,
     color: "#fff",
 

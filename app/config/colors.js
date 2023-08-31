@@ -10,8 +10,11 @@ export default {
   lightGray: "#f8f4f4",
   errorColor: "#ff5252",
   orange: "#FFA500",
+  orangeDark: "darkorange",
   green: "#9ACD32",
+  greenDark: "#008000",
   separator: "#CCCCCC",
   light: "#EEEEEE",
   chatme: "#57606f",
+  price: "#888888",
 };

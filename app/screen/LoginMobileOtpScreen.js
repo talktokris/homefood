@@ -101,7 +101,7 @@ function LoginMobileOtpScreen({ route, navigation }) {
               placeholder="Mobile No"
               textContentType="telephoneNumber"
               secureTextEntry={false}
-              maxLength={11}
+              maxLength={15}
               editable={false}
             />
             <View style={styles.otp}>
@@ -123,7 +123,7 @@ function LoginMobileOtpScreen({ route, navigation }) {
             <SubmitButton title="Confirm" color="secondary" />
 
             <View style={styles.viewStyleForLine}></View>
-            <View>
+            {/* <View>
               <LinkButton
                 title=" Login by email"
                 color="secondary"
@@ -140,7 +140,7 @@ function LoginMobileOtpScreen({ route, navigation }) {
                   navigation.navigate(routes.AUTH_REGISTER);
                 }}
               />
-            </View>
+            </View> */}
           </AppForm>
         </View>
       </Screen>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 180,
-    height: 120,
+    height: 100,
     alignSelf: "center",
     margin: 30,
     marginTop: 40,

@@ -1,12 +1,5 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import AppText from "./AppText";
 
@@ -148,8 +141,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: colors.secondary,
     width: "90%",
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
   },
 
   price: {
@@ -162,12 +153,10 @@ const styles = StyleSheet.create({
   },
   bottomLeft: {
     width: "50%",
-    flexDirection: "center",
     justifyContent: "center",
   },
   bottomRight: {
     width: "50%",
-    flexDirection: "center",
     justifyContent: "center",
   },
 

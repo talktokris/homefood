@@ -15,6 +15,8 @@ import colors from "../config/colors";
 import Icon from "../components/Icon";
 import * as Yup from "yup";
 
+
+
 import CartContext from "../auth/cartContext";
 import AuthContext from "../auth/context";
 import CartItem from "../components/CartItem";
@@ -26,6 +28,7 @@ import {
   SubmitButton,
   AppFormPicker,
   ErrorMessage,
+  NormalMessage,
   AppFormPickerMultiLine,
 } from "../components/forms";
 import AppText from "../components/AppText";
@@ -158,94 +161,100 @@ function CartScreen({ navigation }) {
 
   return (
     <Screen>
-      <FlatList
-        data={cart}
-        keyExtractor={(message) => message.data.id.toString()}
-        renderItem={({ item }) => (
-          <CartItem
-            id={item.data.id}
-            title={item.data.food_title}
-            //  image={item.id}
-            image={makeUri(
-              item.data.menu_profile_img_id,
-              item.data.default_image
+      {cart.length <= 0 ? (
+        <NormalMessage visible={true} error="No item found in cart" />
+      ) : (
+        <>
+          <FlatList
+            data={cart}
+            keyExtractor={(message) => message.data.id.toString()}
+            renderItem={({ item }) => (
+              <CartItem
+                id={item.data.id}
+                title={item.data.food_title}
+                //  image={item.id}
+                image={makeUri(
+                  item.data.menu_profile_img_id,
+                  item.data.default_image
+                )}
+                price={item.data.customer_price}
+                qty={item.qnt}
+                onDelete={handlePress}
+                onEdit={onEdit}
+                // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
+                renderRightActions={() => (
+                  <View style={{ backgroundColor: "red", height: 70 }}></View>
+                )}
+              />
             )}
-            price={item.data.customer_price}
-            qty={item.qnt}
-            onDelete={handlePress}
-            onEdit={onEdit}
-            // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-            renderRightActions={() => (
-              <View style={{ backgroundColor: "red", height: 70 }}></View>
-            )}
+            ItemSeparatorComponent={Separater}
           />
-        )}
-        ItemSeparatorComponent={Separater}
-      />
-      <Separater />
-      <AppForm
-        initialValues={{
-          payment_options: "",
-          delivery_address: stateSelectedItem,
-        }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
-        <View style={styles.container}>
-          <View style={styles.left}>
-            <AppText style={styles.lebelSm}>Delivery Address</AppText>
-          </View>
+          <Separater />
+          <AppForm
+            initialValues={{
+              payment_options: "",
+              delivery_address: stateSelectedItem,
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <View style={styles.container}>
+              <View style={styles.left}>
+                <AppText style={styles.lebelSm}>Delivery Address</AppText>
+              </View>
 
-          <AppFormPickerMultiLine
-            items={userData.address_list}
-            name="delivery_address"
-            /* numberOfColumns={2} */
-            /* PickerItemComponent={PickerItem} */
+              <AppFormPickerMultiLine
+                items={userData.address_list}
+                name="delivery_address"
+                /* numberOfColumns={2} */
+                /* PickerItemComponent={PickerItem} */
 
-            placeholder=" Select Delivery Address"
+                placeholder=" Select Delivery Address"
 
-            /* width="80%" */
-          />
-        </View>
-
-        <View style={styles.container}>
-          <View style={styles.left}>
-            <AppText style={styles.lebelSm}>Payment Methods</AppText>
-          </View>
-
-          <AppFormPicker
-            items={user.options.payment_type}
-            name="payment_options"
-            /* numberOfColumns={2} */
-            /* PickerItemComponent={PickerItem} */
-
-            placeholder=" Select Payment Method"
-
-            /* width="80%" */
-          />
-        </View>
-
-        <View style={styles.container}>
-          <View style={styles.innterContainer}>
-            <View style={styles.left}>
-              <AppText style={styles.lebel}>Total Amount</AppText>
+                /* width="80%" */
+              />
             </View>
-            <View style={styles.right}>
-              <AppText style={styles.price}>RM {totalCount()}</AppText>
+
+            <View style={styles.container}>
+              <View style={styles.left}>
+                <AppText style={styles.lebelSm}>Payment Methods</AppText>
+              </View>
+
+              <AppFormPicker
+                items={user.options.payment_type}
+                name="payment_options"
+                /* numberOfColumns={2} */
+                /* PickerItemComponent={PickerItem} */
+
+                placeholder=" Select Payment Method"
+
+                /* width="80%" */
+              />
             </View>
-          </View>
-        </View>
-        <Separater />
-        <View style={styles.container}>
-          <View style={styles.innterContainer}>
-            <SubmitButton
-              title=" Place Order"
-              icon="checkbox-marked-circle-outline"
-              color="secondary"
-            />
-          </View>
-        </View>
-      </AppForm>
+
+            <View style={styles.container}>
+              <View style={styles.innterContainer}>
+                <View style={styles.left}>
+                  <AppText style={styles.lebel}>Total Amount</AppText>
+                </View>
+                <View style={styles.right}>
+                  <AppText style={styles.price}>RM {totalCount()}</AppText>
+                </View>
+              </View>
+            </View>
+            <Separater />
+            <View style={styles.container}>
+              <View style={styles.innterContainer}>
+                <SubmitButton
+                  title=" Place Order"
+                  icon="checkbox-marked-circle-outline"
+                  color="secondary"
+                />
+              </View>
+            </View>
+          </AppForm>
+        </>
+      )}
     </Screen>
   );
 }
