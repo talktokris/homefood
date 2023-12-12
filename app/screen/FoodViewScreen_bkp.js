@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-  useRef,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 
 import { View, StyleSheet, FlatList, Image, Alert } from "react-native";
 
@@ -26,53 +19,33 @@ import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
 import { ErrorMessage, LinkButton } from "../components/forms";
 import menuApi from "../api/menu";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import AppCircleButton from "../components/AppCircleButton";
 import cartStorage from "../auth/cartStorage";
 import CartContext from "../auth/cartContext";
 import MenuSlideShow from "../components/MenuSlideShow";
 import settings from "../config/setting";
 
-import Price from "../components/Price";
-import LocationTime from "../components/LocationTime";
-import Stars from "../components/Stars";
-import RestaurantInfo from "./RestaurantInfo";
-import FoodGridItem from "../components/FoodGridItem";
-
-function FoodViewScreen({ route, navigation }) {
+function FoodViewScreen_bkp({ route, navigation }) {
   const [cart, setCart] = useContext(CartContext);
-  const fethcID = route.params.venderId;
-  const fethcType = route.params.type;
-  const fethcData = route.params.itemData;
-  const foodId = route.params.foodId;
-  // console.log(route.params);
+  const fethcID = route.params.id;
   const { user, logOut } = useAuth();
 
   const currrentUser = user.id;
 
   const [isLoading, setLoading] = useState(true);
-
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const [menuData, setMenuData] = useState([]);
-  const [memuFilttred, setMemuFilttred] = useState([]);
-  const [resultText, setResultText] = useState("");
-  const [restData, setRestData] = useState([]);
+  const [qnt, setQnt] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [chanage, SetChange] = useState(false);
-  const [gHeight, setGHeight] = useState(0);
+  const [images, setImages] = useState([]);
 
-  const onLayout = (event) => {
-    const { x, y, height, width } = event.nativeEvent.layout;
-    if (gHeight <= 50) {
-      setGHeight(height);
-      //  console.log(height);
-    }
-  };
-
-  // useEffect(() => {
-  //   SetChange(true);
-  //   // getData();
-  // }, [chanage]);
+  useEffect(() => {
+    SetChange(true);
+    // getData();
+  }, [chanage]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -90,15 +63,13 @@ function FoodViewScreen({ route, navigation }) {
       .then((data) => {
         //   console.log(data.data.results);
         if (data.ok) {
-          setRestData(data.data.vender);
-          setMenuData(data.data.food);
-          setMemuFilttred(data.data.food);
+          setMenuData(data);
 
           setLoading(false);
-          //    setMenuData(data.data.results[0]);
-          //   setImages(data.data.results[0].images);
-          //   setTotalPrice(data.data.results[0].customer_price);
-          //    qtyUpdate(); // to update the edit qty.
+          setMenuData(data.data.results[0]);
+          setImages(data.data.results[0].images);
+          setTotalPrice(data.data.results[0].customer_price);
+          qtyUpdate(); // to update the edit qty.
 
           // to get the stored cart Info
           //  cartStorage.removeCart();
@@ -148,17 +119,17 @@ function FoodViewScreen({ route, navigation }) {
     }, [navigation]);
   };
 
-  // const handlePlus = () => {
-  //   const newQnt = qnt + 1;
-  //   setQnt(newQnt);
-  //   setTotalPrice(roundFunction(menuData.customer_price * newQnt));
-  // };
-  // const handleMinus = () => {
-  //   if (qnt > 1) {
-  //     setQnt(qnt - 1);
-  //     setTotalPrice(roundFunction(menuData.customer_price * (qnt - 1)));
-  //   }
-  // };
+  const handlePlus = () => {
+    const newQnt = qnt + 1;
+    setQnt(newQnt);
+    setTotalPrice(roundFunction(menuData.customer_price * newQnt));
+  };
+  const handleMinus = () => {
+    if (qnt > 1) {
+      setQnt(qnt - 1);
+      setTotalPrice(roundFunction(menuData.customer_price * (qnt - 1)));
+    }
+  };
   function roundFunction(amount) {
     return parseFloat(amount).toFixed(0);
   }
@@ -212,92 +183,97 @@ function FoodViewScreen({ route, navigation }) {
   };
   //console.log(menuData.default_image.food_menu_id);
 
-  const handleSearch = (searchQuery) => {
-    //let searchQuery = e.nativeEvent.text;
-    // let items = cart;
-    // console.log(searchQuery);
+  function makeUri(defID, imaData) {
+    // console.log(imaData.food_menu_id);
+    let imgUri = settings.imageUrl + "/slider/images/loader.jpg";
 
-    let filtered = menuData.filter((m) =>
-      m.food_title.toLowerCase().startsWith(searchQuery.toLowerCase())
-    );
-    if (searchQuery.length >= 1) {
-      setMemuFilttred(filtered);
-      if (filtered.length == 0) {
-        setResultText("No results found");
-      } else if (filtered.length == 1) {
-        setResultText(memuFilttred.length + " result found");
-      } else if (filtered.length <= 1) {
-        setResultText(filtered.length + " results found");
-      }
-    } else {
-      setResultText("");
-      setMemuFilttred(menuData);
-    }
-  };
+    if (imaData != null)
+      imgUri =
+        settings.imageUrl +
+        "/menu/" +
+        imaData.food_menu_id +
+        "/" +
+        imaData.image_name;
 
+    return imgUri;
+  }
   return (
     <>
       <ActivityIndicator visible={isLoading} />
       <ErrorMessage error={error} visible={eStatus} />
-      {!isLoading && memuFilttred && (
+      {!isLoading && menuData && (
         <Screen>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <RestaurantInfo restData={restData} />
-            <Separater />
-            <AppText style={styles.heading}> For you </AppText>
-            <View style={styles.searchBox}>
-              <AppTextSearch
-                name="words"
-                autoCapitalize="none"
-                autoCorrect={false}
-                icon="magnify"
-                textContentType="jobTitle"
-                placeholder="Search here"
-                onPress={handleSearch}
-                // onChange={(e) => handleSearch(e)}
-                //  onChange={(e) => console.log(e.nativeEvent.text)}
-              />
-              <AppText style={styles.searchHeading}>{resultText}</AppText>
+          <AppText style={styles.heading}>{menuData.food_title}</AppText>
+          <Separater />
+
+          <View style={styles.slideContainer}>
+            {images.length >= 1 && (
+              <MenuSlideShow images={images} defaultImg={makeUri(images[0])} />
+            )}
+          </View>
+
+          <AppText style={styles.text}>{menuData.food_description}</AppText>
+          <Separater />
+          <View style={styles.itemArea}>
+            <AppCircleButton icon="minus-circle" onPress={handleMinus} />
+            <View style={styles.itemInput}>
+              <AppText style={styles.item}> {qnt} </AppText>
+            </View>
+            <AppCircleButton icon="plus-circle" onPress={handlePlus} />
+          </View>
+          <Separater />
+          <View style={styles.bottomArea}>
+            <View style={styles.bottomLeft}>
+              <AppText style={styles.location} numberOfLines={1}>
+                Price
+              </AppText>
+              <AppText style={styles.price} numberOfLines={1}>
+                RM {roundFunction(menuData.customer_price)}
+              </AppText>
             </View>
 
-            <View
-              onLayout={onLayout}
-              style={[styles.gridContainer, { flex: 1, minHeight: gHeight }]}
-            >
-              {memuFilttred.map((item) => (
-                <FoodGridItem
-                  key={item.id.toString()}
-                  id={item.id}
-                  venderId={item.user_id}
-                  category={item.food_category}
-                  title={item.food_title}
-                  price={item.customer_price}
-                  oldPrice={item.vender_price}
-                  //image={item.image}
-                  image={item.image_name}
-                  discount={item.discount_per}
-                  onPress={() => {
-                    navigation.navigate(routes.FOOD_OPTIONS, {
-                      item: item,
-                      vender: restData,
-                    });
-                  }}
-                  // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-                  renderRightActions={() => (
-                    <View style={{ backgroundColor: "red", height: 70 }}></View>
-                  )}
-                />
-              ))}
+            <View style={styles.bottomRight}>
+              <AppText style={styles.price} numberOfLines={1}>
+                RM {roundFunction(totalPrice)}
+              </AppText>
+              <AppText style={styles.location} numberOfLines={1}>
+                Total
+              </AppText>
             </View>
-          </ScrollView>
+          </View>
+          <Separater />
+          <View style={styles.bottomArea}>
+            <View style={styles.bottomLeft}>
+              <AppButton
+                title="  Add to Cart"
+                onPress={() => handleCart(menuData)}
+                color="secondary"
+                icon="cart-plus"
+              />
+            </View>
+
+            <View style={styles.bottomRight}>
+              <AppButton
+                title="  Check Out"
+                onPress={() => {
+                  navigation.navigate(routes.FOOD_CART);
+                }}
+                icon="logout"
+              />
+            </View>
+          </View>
         </Screen>
       )}
     </>
   );
 }
 const styles = StyleSheet.create({
-  logoContainer: { flexDirection: "column", justifyContent: "center" },
-
+  slideContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 250,
+    marginTop: 0,
+  },
   heading: {
     fontWeight: "900",
     fontSize: 20,
@@ -306,51 +282,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     color: colors.secondary,
   },
-
-  searchHeading: {
-    fontWeight: "900",
-    fontSize: 14,
-    paddingLeft: 25,
-    paddingBottom: 5,
-    paddingTop: 5,
-    color: colors.secondary,
-    textAlign: "center",
-  },
-
   image: {
-    alignSelf: "center",
     width: "100%",
-    height: 150,
-    resizeMode: "contain",
-    borderRadius: 5,
-    margin: 5,
-    marginLeft: 10,
-  },
-  restContainer: {
-    flexDirection: "column",
-    marginLeft: 15,
-    marginRight: 15,
-    backgroundColor: "#f7f7f7",
-    shadowColor: "#c4c2c2",
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    marginBottom: 10,
-    borderColor: colors.separator,
-    borderWidth: 1,
-    borderRadius: 10,
-    justifyContent: "center",
-  },
-  restItem: {
-    flexDirection: "row",
-    paddingTop: 10,
-    PaddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.separator,
-  },
-  restItemContainer: { flex: 1 },
-  icon: {
-    marginTop: 10,
+    height: 200,
+    alignSelf: "center",
   },
   nav: {
     flexDirection: "row",
@@ -390,12 +325,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: "800",
   },
-  gridContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-evenly",
-  },
-  searchBox: { marginLeft: 15, marginRight: 15 },
   bottomArea: { flexDirection: "row" },
   bottomLeft: { width: "50%", padding: 10 },
   bottomRight: {
@@ -406,4 +335,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FoodViewScreen;
+export default FoodViewScreen_bkp;

@@ -53,7 +53,7 @@ function LoginMobileScreen({ navigation }) {
     const result = await authApi.otpRequest(country, mobile);
     // const tokenSet= result.access_token;
     setLoading(false);
-    // console.log(result.data);
+    console.log(result);
 
     //console.log("==================");
 
@@ -99,6 +99,7 @@ function LoginMobileScreen({ navigation }) {
           >
             <AppFormField
               name="country"
+              lebel="Username"
               autoCapitalize="none"
               autoCorrect={false}
               icon="earth"
@@ -110,6 +111,7 @@ function LoginMobileScreen({ navigation }) {
 
             <AppFormField
               name="mobile"
+              lebel="Password"
               autoCapitalize="none"
               autoCorrect={false}
               icon="cellphone"

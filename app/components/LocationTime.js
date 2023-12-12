@@ -5,15 +5,15 @@ import AppText from "./AppText";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function LocationTime({ time, distance }) {
+function LocationTime({ time, distance, fSize = 12 }) {
   return (
     <View style={styles.container}>
       {time && (
-        <AppText style={styles.time} numberOfLines={1}>
+        <AppText style={[styles.time, { fontSize: fSize }]} numberOfLines={1}>
           <MaterialCommunityIcons
             style={styles.icon}
             name="clock-outline"
-            size={12}
+            size={fSize}
             color={colors.secondary}
           />{" "}
           {time}
@@ -21,12 +21,12 @@ function LocationTime({ time, distance }) {
       )}
 
       {distance && (
-        <AppText style={styles.location} numberOfLines={1}>
+        <AppText style={[styles.time, { fontSize: fSize }]} numberOfLines={1}>
           {" - "}
           <MaterialCommunityIcons
             style={styles.icon}
             name="map-marker-outline"
-            size={12}
+            size={fSize}
             color={colors.secondary}
           />{" "}
           {distance}

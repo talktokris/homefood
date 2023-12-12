@@ -7,9 +7,11 @@ import HomeNavigator from "./HomeNavigator";
 import FoodNavigator from "./FoodNavigator";
 import OrderNavigator from "./OrderNavigator";
 import AccountNavigator from "./AccountNavigator";
+
 import colors from "../config/colors";
 import TopMenu from "../components/TopMenu";
 import MessageIconAlert from "../components/MessageIconAlert";
+import MessageNavigator from "./MessageNavigator";
 
 //import userUpdate from "../api/userUpdate";
 //import useAuth from "../auth/useAuth";
@@ -126,16 +128,17 @@ const AppNavigator = (color = "blue") => {
       />
 
       <Tab.Screen
-        name="Food"
-        component={FoodNavigator}
+        name="Orders"
+        component={OrderNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="food-fork-drink"
+              name="view-list"
               color={color}
               size={size}
             />
           ),
+
           headerRight: () => <TopMenu />,
           headerLeft: () => (
             <MessageIconAlert
@@ -153,17 +156,16 @@ const AppNavigator = (color = "blue") => {
       />
 
       <Tab.Screen
-        name="Orders"
-        component={OrderNavigator}
+        name="Message"
+        component={MessageNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="view-list"
+              name="message-reply-text-outline"
               color={color}
               size={size}
             />
           ),
-
           headerRight: () => <TopMenu />,
           headerLeft: () => (
             <MessageIconAlert

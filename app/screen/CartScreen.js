@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 
-import { View, StyleSheet, FlatList, Alert } from "react-native";
+import { View, StyleSheet, FlatList, ScrollView, Alert } from "react-native";
 //import MessageItem from "../components/MessageItem";
 
 import Screen from "../components/Screen";
@@ -14,8 +14,6 @@ import settings from "../config/setting";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import * as Yup from "yup";
-
-
 
 import CartContext from "../auth/cartContext";
 import AuthContext from "../auth/context";
@@ -42,6 +40,43 @@ const validationSchema = Yup.object().shape({
     .label("Delivery Address"),
 });
 
+const cartDataSet = [
+  {
+    id: 23,
+    vData: {
+      id: 23,
+      name: "Mandala Restaurant",
+      location: "Bangsar Park",
+      image: "rest_logo.png",
+    },
+    tPrice: 22,
+    mData: [
+      {
+        food: {
+          id: 43,
+          title: "Third Wave Coffee",
+          discription:
+            "Serves 1 | A rich shot of espresso, diluted to create a weakened black coffee.",
+          image: "9.jpg",
+          price: "5.00",
+        },
+        arguments: [7, 10],
+      },
+      {
+        food: {
+          id: 41,
+          title: "Baos & Dimsums-Asian Street Kitchen",
+          discription:
+            "Crispy vegetables tossed with lotus stem in tangy chili sauce",
+          image: "1.jpg",
+          price: "16.00",
+        },
+        arguments: [3, 5, 4],
+      },
+    ],
+  },
+];
+
 function CartScreen({ navigation }) {
   const [cart, setCart] = useContext(CartContext);
   const [user, setUser] = useContext(AuthContext);
@@ -59,6 +94,10 @@ function CartScreen({ navigation }) {
   const stateSelectedItem = userData.address_list.find(
     (c) => c.id == userData.default_address.id
   );
+
+  useEffect(() => {
+    formatCartData();
+  });
 
   const handleSubmit = async ({ payment_options, delivery_address }) => {
     const result = await orderApi.storeOrders(
@@ -159,103 +198,115 @@ function CartScreen({ navigation }) {
     }
   }
 
+  //console.log(cart.food_id);
+  // console.log(cart.length);
+  const formatCartData = () => {
+    let foods = [];
+    let venders = [];
+    let venderDat = [];
+    cart.map((n) => {
+      //  console.log(n.food_id);
+      foods.push(n.food_id);
+      venders.push(n.vender_id);
+      //  venders.push(n.vender_id);
+    });
+    //   console.log("-----foods--------");
+    //   console.log(foods);
+    // console.log("-------------");
+    // console.log(venders);
+    // console.log("-----unique--------");
+
+    let uniqueVandersID = venders.filter(
+      (item, i, ar) => ar.indexOf(item) === i
+    );
+    // console.log(uniqueVandersID);
+
+    let uniqueVandersData = [];
+    let productData = [];
+
+    uniqueVandersID.map((v) => {
+      // console.log(count + " ----------");
+      let venderData = "";
+      let totalPrice = 0;
+      cart.map((n) => {
+        if (n.vender_id === v) {
+          productData.push({ food: n.fData, arguments: n.arguments });
+          venderData = n.vData;
+          totalPrice = n.tPrice;
+        }
+      });
+
+      uniqueVandersData.push({
+        id: v,
+        vData: venderData,
+        tPrice: totalPrice,
+        mData: productData,
+      });
+    });
+
+    //   console.log(uniqueVandersData);
+
+    uniqueVandersData.map((vD) => {
+      // console.log(vD.id);
+      // console.log(vD.vData);
+      // console.log(vD.tPrice);
+      // console.log(vD.mData);
+      // console.log("++++++++++++++");
+    });
+
+    console.log(JSON.stringify(uniqueVandersData));
+  };
+
   return (
-    <Screen>
-      {cart.length <= 0 ? (
-        <NormalMessage visible={true} error="No item found in cart" />
-      ) : (
-        <>
-          <FlatList
-            data={cart}
-            keyExtractor={(message) => message.data.id.toString()}
-            renderItem={({ item }) => (
-              <CartItem
-                id={item.data.id}
-                title={item.data.food_title}
-                //  image={item.id}
-                image={makeUri(
-                  item.data.menu_profile_img_id,
-                  item.data.default_image
-                )}
-                price={item.data.customer_price}
-                qty={item.qnt}
-                onDelete={handlePress}
-                onEdit={onEdit}
-                // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-                renderRightActions={() => (
-                  <View style={{ backgroundColor: "red", height: 70 }}></View>
-                )}
+    <>
+      <ActivityIndicator visible={isLoading} />
+      <ErrorMessage error={error} visible={eStatus} />
+
+      <Screen>
+        {/* <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
+            {item.image_name && (
+              <Image
+                style={styles.image}
+                source={{ uri: makeUri(restData.id, item.image_name) }}
               />
             )}
-            ItemSeparatorComponent={Separater}
-          />
-          <Separater />
-          <AppForm
-            initialValues={{
-              payment_options: "",
-              delivery_address: stateSelectedItem,
-            }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
+          </View>
+
+          <View
+            key={op.id.toString()}
+            style={[styles.container, { flexDirection: "column" }]}
           >
-            <View style={styles.container}>
-              <View style={styles.left}>
-                <AppText style={styles.lebelSm}>Delivery Address</AppText>
-              </View>
-
-              <AppFormPickerMultiLine
-                items={userData.address_list}
-                name="delivery_address"
-                /* numberOfColumns={2} */
-                /* PickerItemComponent={PickerItem} */
-
-                placeholder=" Select Delivery Address"
-
-                /* width="80%" */
-              />
+            <View style={styles.titleContainer}>
+              <AppText style={styles.headingSmall}>{op.title}</AppText>
+              <AppText style={styles.textPd}>Pick 1</AppText>
             </View>
 
-            <View style={styles.container}>
-              <View style={styles.left}>
-                <AppText style={styles.lebelSm}>Payment Methods</AppText>
-              </View>
+            <View style={styles.optionsContainer}>
+              {op.list.map((m) => (
+                <AppRadioCustom
+                  key={m.id.toString()}
+                  text={m.description}
+                  price={m.price}
+                  data={m}
+                  onPress={addItem}
 
-              <AppFormPicker
-                items={user.options.payment_type}
-                name="payment_options"
-                /* numberOfColumns={2} */
-                /* PickerItemComponent={PickerItem} */
-
-                placeholder=" Select Payment Method"
-
-                /* width="80%" */
-              />
-            </View>
-
-            <View style={styles.container}>
-              <View style={styles.innterContainer}>
-                <View style={styles.left}>
-                  <AppText style={styles.lebel}>Total Amount</AppText>
-                </View>
-                <View style={styles.right}>
-                  <AppText style={styles.price}>RM {totalCount()}</AppText>
-                </View>
-              </View>
-            </View>
-            <Separater />
-            <View style={styles.container}>
-              <View style={styles.innterContainer}>
-                <SubmitButton
-                  title=" Place Order"
-                  icon="checkbox-marked-circle-outline"
-                  color="secondary"
+                  // onCheck={onCheck}
                 />
-              </View>
+              ))}
             </View>
-          </AppForm>
-        </>
-      )}
-    </Screen>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <AppButton
+              title={"Add To Basket (RM " + totalPrice + ")"}
+              color="green"
+              onPress={handleAddCart}
+            />
+          </View>
+        </ScrollView> */}
+      </Screen>
+    </>
   );
 }
 const styles = StyleSheet.create({

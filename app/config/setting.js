@@ -1,11 +1,18 @@
 export default {
-  serverUrl: "https://homefood.com.my/backend",
-  apiUrl: "https://homefood.com.my/backend/api",
-  imageUrl: "https://homefood.com.my/backend/vender_images",
+  serverUrl:
+    "http://localhost/projects/homefood/backend/homefood-backend/public",
+  apiUrl:
+    "http://localhost/projects/homefood/backend/homefood-backend/public/api",
+  imageUrl:
+    "http://localhost/projects/homefood/backend/homefood-backend/public/vender_images",
 };
 
 /* Live settings
 
+
+  serverUrl: "https://homefood.com.my/backend",
+  apiUrl: "https://homefood.com.my/backend/api",
+  imageUrl: "https://homefood.com.my/backend/vender_images",
 
   serverUrl: "https://stjobagency.com/",
   apiUrl: "https://stjobagency.com/backend_api/api",

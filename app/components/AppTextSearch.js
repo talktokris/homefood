@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 //import { useFormikContext } from "formik";
 import {
@@ -21,6 +21,17 @@ function AppTextSearch({
   onPress,
   ...otherProps
 }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showClose, setShowChose] = useState(false);
+
+  function onChange(e) {
+    let searchText = e.nativeEvent.text;
+    setSearchQuery(searchText);
+    if (searchText.length >= 1) {
+      setShowChose(true);
+    }
+  }
+
   //const { handleSubmit } = useFormikContext();
 
   return (
@@ -30,21 +41,42 @@ function AppTextSearch({
         <TextInput
           placeholderTextColor={colors.medium}
           style={styles.textInput}
+          onChange={(e) => onChange(e)}
+          value={searchQuery}
           {...otherProps}
         />
-        <TouchableOpacity
-          style={[styles.buttonRight, { backgroundColor: colors[color] }]}
-          onPress={() => console.log("Search Click ")}
-        >
-          {icon && (
-            <MaterialCommunityIcons
-              name={icon}
-              size={25}
-              style={styles.icon}
-              color={colors.white}
-            />
-          )}
-        </TouchableOpacity>
+        <View style={styles.searchButtons}>
+          <TouchableOpacity
+            style={[styles.buttonClose]}
+            onPress={() => {
+              setShowChose(false);
+              onPress("");
+              setSearchQuery("");
+            }}
+          >
+            {showClose && (
+              <MaterialCommunityIcons
+                name="close-circle"
+                size={22}
+                style={styles.icon}
+                color={colors.medium}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.buttonRight, { backgroundColor: colors[color] }]}
+            onPress={() => onPress(searchQuery)}
+          >
+            {icon && (
+              <MaterialCommunityIcons
+                name={icon}
+                size={25}
+                style={styles.icon}
+                color={colors.white}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
@@ -53,46 +85,64 @@ function AppTextSearch({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.light,
-    borderRadius: 10,
+    borderRadius: 15,
     borderWidth: 1,
-    borderColor: colors.secondary,
+    borderColor: colors.lightGray,
     flexDirection: "row",
-    padding: 10,
     marginVertical: 10,
     margin: 6,
     color: colors.secondary,
+    paddingLeft: 10,
   },
   textInput: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     color: colors.secondary,
+    width: "80%",
+    padding: 8,
+    paddingRight: 35,
   },
-  icon: {
-    marginRight: 10,
-    padding: Platform.OS === "android" ? 7 : 5,
-  },
+  searchButtons: { position: "relative", flexDirection: "row-reverse" },
+  icon: { alignSelf: "center" },
   lebel: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     fontWeight: "600",
-    paddingTop: 10,
-    paddingLeft: 10,
+    paddingTop: 5,
+    paddingLeft: 5,
     color: colors.medium,
   },
   buttonRight: {
     position: "absolute",
     right: -1,
-    paddingLeft: 20,
+    top: 0,
     width: 73,
+    height: "100%",
     // height: 43,
 
-    height: Platform.OS === "android" ? 50 : 43,
+    height: Platform.OS === "android" ? 40 : 35,
     padding: 5,
     color: "#fff",
 
     alignSelf: "flex-end",
     borderBottomRightRadius: 10,
     borderTopRightRadius: 10,
+  },
+  buttonClose: {
+    position: "relative",
+    flexDirection: "row-reverse",
+    right: -30,
+    top: 0,
+    width: 25,
+    // // height: 43,
+    height: Platform.OS === "android" ? 40 : 35,
+    // padding: 5,
+    // color: "#fff",
+    alignSelf: "center",
+    justifyContent: "center",
+
+    // borderBottomRightRadius: 10,
+    // borderTopRightRadius: 10,
   },
 });
 

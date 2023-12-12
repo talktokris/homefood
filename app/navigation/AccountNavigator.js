@@ -24,7 +24,6 @@ const AccountNavigator = () => (
     <Stack.Screen name="Edit Address" component={AddressEditScreen} />
 
     <Stack.Screen name="Profile" component={ProfileScreen} />
-    <Stack.Screen name="Messages" component={MessagesScreen} />
     <Stack.Screen name="Search Radius" component={SearchRadiusScreen} />
     <Stack.Screen name="Order History" component={OrdersHistoryScreen} />
     <Stack.Screen name="Support" component={SupportScreen} />

@@ -10,6 +10,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
+import AppText from "../components/AppText";
 
 const messages = [
   {
@@ -50,8 +51,10 @@ const messages = [
   },
 ];
 
-function MessagesScreen({ navigation }) {
-  /*
+function MessagesViewScreen({ navigation, route }) {
+  //const item = route.params.item;
+  console.log(route.params);
+  /*  
   const { user, logOut } = useAuth();
   const currrentUser = user.id;
 
@@ -86,31 +89,32 @@ function MessagesScreen({ navigation }) {
   */
   return (
     <Screen>
-      <FlatList
-        data={messages}
-        keyExtractor={(message) => message.id.toString()}
-        renderItem={({ item }) => (
-          <MessageItem
-            title={item.title}
-            subTitle={item.message}
-            iconComponent={
-              <Icon
-                name={item.icon.name}
-                backgroundColor={item.icon.backgroundColor}
-              />
-            }
-            // onPress={() => console.log("Message Selected:- " + item.id)}
-            onPress={() => navigation.navigate(routes.MESSAGE_VIEW)}
-            renderRightActions={() => (
-              <View style={{ backgroundColor: "red", height: 70 }}></View>
-            )}
-          />
-        )}
-        ItemSeparatorComponent={Separater}
-      />
+      <View>
+        <AppText style={styles.heading}>
+          It is a long established fact that a reader will be distracted
+        </AppText>
+        <AppText style={styles.subHeading}>
+          D1 Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries, but also the leap into electronic typesetting,
+          remaining essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages, and
+          more recently with desktop publishing software like Aldus PageMaker
+          including versions of Lorem Ipsum
+        </AppText>
+      </View>
     </Screen>
   );
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  heading: { padding: 10, fontSize: 16, fontWeight: "800" },
 
-export default MessagesScreen;
+  subHeading: {
+    padding: 10,
+    fontSize: 14,
+  },
+});
+
+export default MessagesViewScreen;

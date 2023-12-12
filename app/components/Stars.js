@@ -5,7 +5,7 @@ import colors from "../config/colors";
 
 function Stars({
   name,
-  size = 32,
+  size = 12,
   backgroundColor = "#000",
   iconColor = "#fff",
 }) {
@@ -14,25 +14,25 @@ function Stars({
       <MaterialCommunityIcons
         style={styles.icon}
         name="star"
-        size={12}
+        size={size}
         color={colors.primary}
       />
       <MaterialCommunityIcons
         style={styles.icon}
         name="star"
-        size={12}
+        size={size}
         color={colors.primary}
       />
       <MaterialCommunityIcons
         style={styles.icon}
         name="star-half-full"
-        size={12}
+        size={size}
         color={colors.primary}
       />
       <MaterialCommunityIcons
         style={styles.icon}
         name="star-outline"
-        size={12}
+        size={size}
         color={colors.primary}
       />
     </View>

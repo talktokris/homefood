@@ -28,6 +28,7 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_ADDRESS,
   },
+  /*
   {
     title: "Messages",
     icon: {
@@ -36,7 +37,7 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_MESSAGES,
   },
-  /*
+*/
   {
     title: "Search Radius",
     icon: {
@@ -52,7 +53,7 @@ const menuItems = [
       backgroundColor: colors.secondary,
     },
     targetScreen: routes.ACCOUNT_ORDER_HISTORY,
-  },*/
+  },
   {
     title: "Support",
     icon: {
@@ -61,7 +62,7 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_SUPPORT,
   },
-  /*
+
   {
     title: "Change Password",
     icon: {
@@ -70,7 +71,6 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_CHANGE_PASSWORD,
   },
-  */
 ];
 
 function AccountScreen({ route, navigation }) {

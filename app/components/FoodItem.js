@@ -16,9 +16,9 @@ import CatHalal from "./CatHalal";
 import LocationTime from "./LocationTime";
 import VegStatus from "./VegStatus";
 import PromoTop from "./PromoTop";
-import LebelGreen from "./LebelGreen";
 
 function FoodItem({
+  id,
   title,
   subTitle,
   price,
@@ -36,7 +36,7 @@ function FoodItem({
             {image && <Image style={styles.image} source={{ uri: image }} />}
 
             <View style={styles.appTextContainer}>
-              <PromoTop lebel="Promo" text="Sponsord" />
+              <PromoTop lebel="PROMO" text="SPONSORED" />
               <AppText style={styles.title} numberOfLines={2}>
                 {title}
               </AppText>
@@ -55,7 +55,6 @@ function FoodItem({
                 <VegStatus status="0" />
                 <CatHalal halalStatus="Non Halal" foodCategory="Asian Food" />
               </View>
-              <LebelGreen text="Saver Delivery Available" />
             </View>
           </View>
         </TouchableHighlight>

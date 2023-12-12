@@ -4,8 +4,10 @@ import client from "./client";
 
 //return register
 
-const fetchAllSearch = async () => {
-  const responce = await client.post("/client-food-search");
+const fetchAllSearch = async (searchQuery) => {
+  const responce = await client.post("/client-food-search", {
+    search: searchQuery,
+  });
   return responce;
   // console.log(responce.ok);
 };

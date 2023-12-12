@@ -7,9 +7,13 @@ export default Object.freeze({
   AUTH_FORGET_PASSWORD: "Password Reset",
 
   HOME_PAGE: "Home",
+  HOME_FOOD_DETAILS: "Food Details",
 
   SEARCH_FOOD: "Food Menu",
   SEARCH_DETAILS: "Food Details",
+  FOOD_OPTIONS: "Food Options",
+  PLACE_ORDER: "Place Order",
+
   FOOD_CART: "Cart Items",
 
   ORDER_TRACKING: "Order Tracking",
@@ -18,9 +22,12 @@ export default Object.freeze({
   ACCOUNT_ADDRESS: "Address",
   ACCOUNT_ADD_ADDRESS: "New Address",
   ACCOUNT_EDIT_ADDRESS: "Edit Address",
-  ACCOUNT_MESSAGES: "Messages",
+
   ACCOUNT_SEARCH_RADIUS: "Search Radius",
   ACCOUNT_ORDER_HISTORY: "Order History",
   ACCOUNT_SUPPORT: "Support",
   ACCOUNT_CHANGE_PASSWORD: "Change Password",
+
+  MESSAGES_LIST: "Messages",
+  MESSAGE_VIEW: "Message View",
 });

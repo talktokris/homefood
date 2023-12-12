@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import { View, StyleSheet, FlatList } from "react-native";
-//import MessageItem from "../components/MessageItem";
+import { View, StyleSheet, FlatList, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
@@ -15,11 +15,12 @@ import { ErrorMessage, LinkButton } from "../components/forms";
 
 import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
+import AppText from "../components/AppText";
 import settings from "../config/setting";
 import menuApi from "../api/menu";
-import FoodGridItem from "../components/FoodGridItem";
+import ImageSlideShow from "../components/ImageSlideShow";
 
-function FoodListingScreen({ navigation }) {
+function HomeScreen_Bkp({ navigation }) {
   const { user, logOut } = useAuth();
   const currrentUser = user.id;
 
@@ -27,7 +28,7 @@ function FoodListingScreen({ navigation }) {
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const [menuData, setMenuData] = useState([]);
-  const [filtterdData, setFiltterdData] = useState([]);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -37,17 +38,19 @@ function FoodListingScreen({ navigation }) {
   }, [navigation]);
 
   const getData = useCallback(() => {
-    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
+    setLoading(true);
+    setEstatus(false); // Start the loader, So when you start fetching data, you can display loading UI
     // useApi(resume.getResumeData, { currrentUser });
     menuApi
-      .fetchAllSearch()
+      .fetchAllHome()
       .then((data) => {
         if (data.ok) {
-          //  setMenuData(data);
+          setMenuData(data);
           setLoading(false);
+          setEstatus(false);
           setMenuData(data.data.results);
-          setFiltterdData(data.data.results);
-          // console.log(data.data.results);
+          setImages(data.data.slides);
+          // console.log(data.data.slides);
         } else {
           setError(
             "Unable to get the database. Please check your internet connection"
@@ -61,24 +64,9 @@ function FoodListingScreen({ navigation }) {
       });
   }, []);
 
-  // Delete
-
-  const handleSearch = (e) => {
-    let searchQuery = e.nativeEvent.text;
-
-    if (searchQuery != "") {
-      const searchResult = menuData.filter((m) =>
-        m.food_title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFiltterdData(searchResult);
-    } else {
-      setFiltterdData(menuData);
-    }
-  };
-
   function makeUri(defID, imaData) {
     // console.log(imaData.food_menu_id);
-    let imgUri = (imgUri = settings.imageUrl + "/menu/no_image.jpg");
+    let imgUri = settings.imageUrl + "/menu/no_image.jpg";
 
     if (imaData != null)
       imgUri =
@@ -96,19 +84,16 @@ function FoodListingScreen({ navigation }) {
     <>
       <ActivityIndicator visible={isLoading} />
       <ErrorMessage error={error} visible={eStatus} />
-      {!isLoading && filtterdData && (
+      {!isLoading && menuData && (
         <Screen>
-          <AppTextSearch
-            name="words"
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="magnify"
-            textContentType="jobTitle"
-            placeholder="Search here"
-            onChange={(e) => handleSearch(e)}
-          />
+          {/* <AppText style={styles.heading}> Recommended Foods</AppText> */}
+          <Separater />
+          <View style={styles.slideContainer}></View>
+          <Separater />
+          <AppText style={styles.heading}> Top Foods Nearby</AppText>
+          <Separater />
           <FlatList
-            data={filtterdData}
+            data={menuData}
             keyExtractor={(message) => message.id.toString()}
             renderItem={({ item }) => (
               <FoodItem
@@ -130,12 +115,38 @@ function FoodListingScreen({ navigation }) {
                 )}
               />
             )}
+            ItemSeparatorComponent={Separater}
           />
         </Screen>
       )}
     </>
   );
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  slideContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 250,
+    marginTop: 0,
+  },
+  heading: {
+    fontWeight: "900",
+    fontSize: 19,
+    paddingBottom: 5,
+    color: colors.secondary,
+    paddingTop: 10,
+  },
+  image: {
+    width: "100%",
+    height: 180,
+    alignSelf: "center",
+  },
+  nav: {
+    flexDirection: "row",
+    textAlign: "center",
+    padding: 15,
+    justifyContent: "center",
+  },
+});
 
-export default FoodListingScreen;
+export default HomeScreen_Bkp;
