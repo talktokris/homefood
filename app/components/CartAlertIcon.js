@@ -12,7 +12,7 @@ function CartAlertIcon({ Items = 0, onPress }) {
           <AppText style={styles.text}>{Items}</AppText>
         </View>
       )}
-      <MaterialCommunityIcons name="cart" size={32} color={colors.secondary} />
+      <MaterialCommunityIcons name="cart" size={30} color={colors.secondary} />
     </TouchableOpacity>
   );
 }

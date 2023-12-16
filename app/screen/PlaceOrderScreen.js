@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 
-import { View, StyleSheet, FlatList, Image, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Image,
+  Alert,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -11,76 +19,132 @@ import ActivityIndicator from "../components/ActivityIndicator";
 //import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
-import Icon from "../components/Icon";
 
-import FoodItem from "../components/FoodItem";
-import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
 
 import AppButton from "../components/AppButton";
 import { ErrorMessage, LinkButton } from "../components/forms";
 import menuApi from "../api/menu";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import AppCircleButton from "../components/AppCircleButton";
-import cartStorage from "../auth/cartStorage";
 import CartContext from "../auth/cartContext";
-import MenuSlideShow from "../components/MenuSlideShow";
 import settings from "../config/setting";
-import AppCheckBoxCustom from "../components/AppCheckBoxCustom";
-import AppRadioCustom from "../components/AppRadioCustom";
+import AppRadioPayment from "../components/AppRadioPayment";
 import OrderItemList from "../components/OrderItemList";
 import OrderItemListTotal from "../components/OrderItemListTotal";
+import PlaceOrderItem from "../components/PlaceOrderItem";
 
-const FoodData = {
-  id: 2,
-  category: "Most ordered",
-  title: "Rice and Sambal Chicken",
-  discription: "Rice and Sambal Chicken with Spicy sweet and sour flavor",
-  price: 8,
-  oldPrice: 10,
-  image: require("../assets/images/img2.jpg"),
+const TestData = {
+  id: 23,
+  vData: {
+    id: 23,
+    name: "Mandala Restaurant",
+    location: "Bangsar Park",
+    image: "rest_logo.png",
+  },
+  tPrice: 31,
+  mData: [
+    {
+      vender_id: 23,
+      vData: {
+        id: 23,
+        name: "Mandala Restaurant",
+        location: "Bangsar Park",
+        image: "rest_logo.png",
+      },
+      food_id: 41,
+      fData: {
+        id: 41,
+        title: "Baos & Dimsums-Asian Street Kitchen",
+        discription:
+          "Crispy vegetables tossed with lotus stem in tangy chili sauce",
+        image: "1.jpg",
+        price: "16.00",
+      },
+      tPrice: 22,
+      arguments: [2, 4, 5],
+    },
+    {
+      vender_id: 23,
+      vData: {
+        id: 23,
+        name: "Mandala Restaurant",
+        location: "Bangsar Park",
+        image: "rest_logo.png",
+      },
+      food_id: 43,
+      fData: {
+        id: 43,
+        title: "Third Wave Coffee",
+        discription:
+          "Serves 1 | A rich shot of espresso, diluted to create a weakened black coffee.",
+        image: "9.jpg",
+        price: "5.00",
+      },
+      tPrice: 9,
+      arguments: [11, 12],
+    },
+  ],
 };
 
-const extraData = [
-  { id: 1, title: "Vegetarian Sambal Belacan", price: 2 },
-  { id: 2, title: "Non-Vegetarian Sambal Belacan", price: 1 },
-  { id: 3, title: "Chili Padi With Soy Sauce", price: 4 },
-  { id: 4, title: "Vegetarian Sambal Belacan", price: 1 },
-];
-
-const choiceData = [
-  { id: 1, title: "Vegetarian" },
-  { id: 2, title: "Non-Vegetarian" },
-];
-
 const dataPayment = [
-  { id: 1, title: "Cash On Delivery" },
-  { id: 2, title: "Card Payment" },
-  { id: 3, title: "eWallet Payment" },
+  { id: 1, title: "Cash On Delivery", status: false },
+  { id: 2, title: "Card Payment", status: false },
+  { id: 3, title: "eWallet Payment", status: false },
 ];
 
 function PlaceOrderScreen({ route, navigation }) {
   const [cart, setCart] = useContext(CartContext);
-  const fethcID = route.params.id;
+  const fethcID = route.params.venderId;
+  const cartData = route.params.data;
+
   const { user, logOut } = useAuth();
 
   // const currrentUser = user.id;
-
+  const [subTotal, setSubTotal] = useState(cartData.tPrice);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
-  const [menuData, setMenuData] = useState([]);
+  const [payOptions, setPayOptions] = useState(dataPayment);
+  const [payMethod, setPayMethod] = useState(null);
+
+  const delivryFee = 5;
+  const TaxPercentage = 6;
+  const taxPrice = (subTotal * TaxPercentage) / 100;
+  const grandTotal = taxPrice + subTotal + delivryFee;
+
+  // console.log(cartData.reduce((n, { tPrice }) => n + tPrice, 0));
+  // const sum = cartData.reduce((accumulator, object) => {
+  //   console.log(accumulator);
+  //   //  return accumulator + object.salary;
+  // }, 0);
+
+  // console.log(cartData.mData);
+  // console.log(JSON.stringify(cartData));
+
+  const onCheckPress = (data) => {
+    const getPaymentData = [...payOptions];
+    getPaymentData.forEach((element, index) => {
+      getPaymentData[index].status = false;
+    });
+    const index = getPaymentData.indexOf(data);
+    getPaymentData[index] = { ...data };
+    getPaymentData[index].status = !getPaymentData[index].status;
+    setPayOptions(getPaymentData);
+    setPayMethod(data);
+
+    // console.log(getPaymentData);
+    // console.log(id + "---" + status);
+  };
 
   return (
     <>
       <ActivityIndicator visible={isLoading} />
       <ErrorMessage error={error} visible={eStatus} />
-      {!isLoading && menuData && (
+      {!isLoading && cartData && (
         <Screen>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.container}>
               <AppText
-                style={[styles.heading, { marginLeft: 15, marginTop: 15 }]}
+                style={[styles.heading, { marginLeft: 10, marginTop: 5 }]}
               >
                 Deliver to
               </AppText>
@@ -102,7 +166,7 @@ function PlaceOrderScreen({ route, navigation }) {
                   </View>
                   <TouchableOpacity onPress={() => console.log("Change Click")}>
                     <AppText
-                      style={[styles.price, { fontSize: 13, right: 15 }]}
+                      style={[styles.priceItem, { fontSize: 13, right: 15 }]}
                     >
                       Change
                     </AppText>
@@ -156,28 +220,28 @@ function PlaceOrderScreen({ route, navigation }) {
             </View>
 
             <View style={styles.container}>
-              <AppText
-                style={[styles.heading, { marginLeft: 15, marginTop: 15 }]}
-              >
-                Order Summary
-              </AppText>
-              <View style={styles.content}>
-                <View style={styles.foodContainer}>
-                  <AppText style={[styles.text, { padding: 10 }]}>1.</AppText>
-
-                  <View style={styles.headContainer}>
-                    <AppText style={styles.heading}>
-                      R3, 1977 Signature Honey BBQ Chicken Rice
-                    </AppText>
-                    <AppText style={styles.text}>
-                      Take Away Packagin (1 X 19.93)
-                    </AppText>
-                  </View>
-                  <AppText style={[styles.price, { fontSize: 13, right: 15 }]}>
-                    RM 19.93
-                  </AppText>
-                </View>
+              <View style={styles.orderItemHeader}>
+                <AppText
+                  style={[styles.heading, { marginLeft: 15, marginTop: 5 }]}
+                >
+                  Order Summary
+                </AppText>
+                <AppText
+                  style={[styles.heading, { marginRight: "5%", marginTop: 5 }]}
+                >
+                  Price
+                </AppText>
               </View>
+
+              {cartData.mData.map((item, index) => (
+                <PlaceOrderItem
+                  sn={index}
+                  title={item.fData.title}
+                  extra={item.fData.title}
+                  price={item.fData.price}
+                  tPrice={item.tPrice}
+                />
+              ))}
               <View style={styles.content}>
                 <View
                   style={[
@@ -185,9 +249,9 @@ function PlaceOrderScreen({ route, navigation }) {
                     { marginLeft: 10, flexDirection: "column" },
                   ]}
                 >
-                  <OrderItemList text="Subtotal" price={10.93} />
-                  <OrderItemList text="Incl. Tax" price={1.13} />
-                  <OrderItemList text="Delivery fee" price={4} />
+                  <OrderItemList text="Subtotal" price={subTotal} />
+                  <OrderItemList text="Incl. Tax" price={taxPrice} />
+                  <OrderItemList text="Delivery fee" price={delivryFee} />
                 </View>
               </View>
             </View>
@@ -195,25 +259,28 @@ function PlaceOrderScreen({ route, navigation }) {
             <View style={[styles.container, { flexDirection: "column" }]}>
               <View style={styles.titleContainer}>
                 <AppText
-                  style={[styles.heading, { marginLeft: 15, marginTop: 15 }]}
+                  style={[styles.heading, { marginLeft: 15, marginTop: 5 }]}
                 >
                   Payment Method
                 </AppText>
               </View>
 
               <View style={styles.optionsContainer}>
-                {dataPayment.map((m) => (
-                  <AppRadioCustom
+                {payOptions.map((m) => (
+                  <AppRadioPayment
                     key={m.id.toString()}
+                    id={m.id}
                     text={m.title}
-                    onPress={() => console.log("I accept")}
+                    status={m.status}
+                    data={m}
+                    onPress={onCheckPress}
                   />
                 ))}
               </View>
             </View>
 
             <View style={styles.buttonContainer}>
-              <OrderItemListTotal text="Total (incl. tax)" price={23.93} />
+              <OrderItemListTotal text="Total (incl. tax)" price={grandTotal} />
               <AppButton title="Place Order" color="green" />
             </View>
           </ScrollView>
@@ -233,16 +300,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     paddingBottom: 5,
   },
-  content: { flexDirection: "row" },
+  content: { flexDirection: "row", paddingVertical: 5 },
   calender: {
     backgroundColor: "#fff4ee",
     borderRadius: 10,
-    margin: 20,
+    marginTop: 5,
+    marginHorizontal: 20,
     borderColor: colors.orange,
     borderWidth: 1,
   },
   foodContainer: { flex: 1, flexDirection: "row" },
-  headContainer: { padding: 10, width: "80%" },
+  headContainer: { paddingLeft: 10, width: "80%" },
   priceContainer: {},
   image: {
     width: "100%",
@@ -251,26 +319,26 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontWeight: "900",
-    fontSize: 18,
-    paddingBottom: 5,
+    fontSize: 14,
     paddingTop: 0,
     color: colors.secondary,
   },
 
   headingSmall: {
     fontWeight: "800",
-    fontSize: 14,
+    fontSize: 12,
     paddingBottom: 5,
     paddingTop: 10,
     paddingLeft: 10,
     color: colors.secondary,
   },
+  orderItemHeader: { flexDirection: "row", justifyContent: "space-between" },
 
   text: {
-    fontSize: 14,
+    fontSize: 12,
   },
   textPd: {
-    fontSize: 12,
+    fontSize: 10,
     paddingBottom: 5,
     paddingTop: 12,
     paddingLeft: 10,
@@ -278,16 +346,32 @@ const styles = StyleSheet.create({
   },
   iconAdd: { marginTop: 12, marginLeft: 10 },
   price: {
-    fontSize: 18,
     color: colors.primary,
     fontWeight: "800",
     textAlign: "center",
   },
-  bPrice: { fontSize: 14, textAlign: "center" },
+  priceItem: {
+    color: colors.primary,
+    fontWeight: "800",
+    textAlign: "right",
+    fontSize: 12,
+  },
+  bPrice: { fontSize: 12, textAlign: "center" },
   titleContainer: { flexDirection: "row" },
   optionsContainer: { flexDirection: "column", paddingLeft: 10 },
   buttonContainer: {
     padding: 10,
+  },
+  itemTextBold: {
+    color: colors.secondary,
+    fontWeight: "800",
+    fontSize: 12,
+  },
+  itemTextNormal: {
+    color: colors.primary,
+    fontWeight: "800",
+    textAlign: "center",
+    fontSize: 12,
   },
 });
 

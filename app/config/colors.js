@@ -17,4 +17,5 @@ export default {
   light: "#EEEEEE",
   chatme: "#57606f",
   price: "#888888",
+  border: "#E2E2E2",
 };

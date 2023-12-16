@@ -3,16 +3,21 @@ import { View, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import AppText from "./AppText";
 
-function Price({ price, size = 12, oldPrice, currency = "RM" }) {
+function Price({ price, lebel, oldPrice, size = 12, currency = "RM" }) {
   return (
     <View style={styles.container}>
+      {lebel && (
+        <AppText style={[styles.lebel, { fontSize: size }]} numberOfLines={1}>
+          {lebel}
+        </AppText>
+      )}
       {price && (
         <AppText style={[styles.price, { fontSize: size }]} numberOfLines={1}>
           {currency} {price}
         </AppText>
       )}
 
-      {oldPrice && (
+      {oldPrice >= 1 && (
         <AppText style={[styles.oPrice, { fontSize: size }]} numberOfLines={1}>
           {currency} {oldPrice}
         </AppText>
@@ -29,6 +34,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 2,
     paddingTop: 2,
+  },
+  lebel: {
+    fontWeight: "800",
+    marginLeft: 3,
   },
 
   price: {

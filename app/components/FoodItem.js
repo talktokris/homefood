@@ -26,8 +26,44 @@ function FoodItem({
   image,
   distance,
   distanceUnit,
+  foodCategory = "Asian Food",
+  halalStatus = 0,
+  vegStatus = 0,
+  starStatus = 0,
+  discount = 0,
   onPress,
 }) {
+  const currentPrice = () => {
+    let disPrice = 0;
+    let newPrice = 0;
+    // console.log(price);
+
+    if (discount == 0) {
+      return price;
+    } else if (discount >= 1) {
+      disPrice = (discount / 100) * price;
+      newPrice = price - disPrice;
+      return newPrice.toFixed(2);
+    }
+  };
+
+  const normalPrice = () => {
+    if (discount == 0) {
+      return 0;
+    } else if (discount >= 1) {
+      return price;
+    }
+  };
+
+  function halalFind(halalStatus) {
+    if (halalStatus == 1) {
+      return "Halal";
+    } else if (halalStatus == 2) {
+      return "Non Halal";
+    } else {
+      return "";
+    }
+  }
   return (
     <>
       <View style={styles.container}>
@@ -47,13 +83,16 @@ function FoodItem({
               )}
               <View style={styles.vListContainer}>
                 <LocationTime time="30 min" distance="2.1 KM" />
-                <Stars />
+                <Stars star={starStatus} />
               </View>
 
               <View style={styles.vListContainer}>
-                <Price price="20" oldPrice="10" />
-                <VegStatus status="0" />
-                <CatHalal halalStatus="Non Halal" foodCategory="Asian Food" />
+                <Price price={currentPrice()} oldPrice={normalPrice()} />
+                <VegStatus status={vegStatus} />
+                <CatHalal
+                  halalStatus={halalFind()}
+                  foodCategory={foodCategory}
+                />
               </View>
             </View>
           </View>

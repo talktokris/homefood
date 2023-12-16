@@ -13,6 +13,7 @@ import {
   Image,
   Alert,
   ScrollView,
+  TouchableHighlight,
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -25,39 +26,21 @@ import Stars from "../components/Stars";
 import RightArrow from "./RightArrow";
 import Price from "../components/Price";
 import settings from "../config/setting";
-/*
-const reviewData = [
-  {
-    id: 1,
-    title: "The food was good. test from old days",
-    auther: "Harry",
-    rate: 5,
-  },
-  {
-    id: 2,
-    title: "So testy. I love it. test from old days. test from old days ",
-    auther: "Jhon Smith",
-    rate: 4,
-  },
-  {
-    id: 3,
-    title: "Very Healthy Food",
-    auther: "Marry",
-    rate: 5,
-  },
-  {
-    id: 4,
-    title: "Traditional test from old days,  we all love it.",
-    auther: "James",
-    rate: 3,
-  },
-];
-*/
-function RestaurantCartInfo({ restData }) {
-  const scrollView = useRef();
+import VegStatus from "../components/VegStatus";
+import CatHalal from "../components/CatHalal";
+import AppButton from "../components/AppButton";
+import CartItem from "../components/CartItem";
 
-  const vender = restData[0];
-  // console.log(vender);
+function RestaurantCartInfo({
+  id,
+  vData,
+  tPrice,
+  mData,
+  onDelete,
+  onAddItem,
+  onChecOut,
+}) {
+  const scrollView = useRef();
 
   function makeUri(defID, imageName) {
     let imgUri = settings.imageUrl + "/venders/no_image.jpg";
@@ -66,114 +49,74 @@ function RestaurantCartInfo({ restData }) {
       imgUri = settings.imageUrl + "/venders/" + defID + "/" + imageName;
     return imgUri;
   }
+  // console.log(mData);
+  // console.log(mData[0].fData.image);
 
   return (
     <>
       <Screen>
-        <View style={styles.logoContainer}>
-          <Image
-            style={styles.image}
-            source={{ uri: makeUri(vender.id, vender.banner_image) }}
-          />
-        </View>
         <View style={styles.restContainer}>
           <View style={styles.restItem}>
             <View style={styles.restItemContainer}>
-              <AppText style={styles.heading}>
-                {vender.name} - {vender.location_lebel}{" "}
+              <Image
+                style={styles.image}
+                source={{ uri: makeUri(vData.id, vData.image) }}
+              />
+              <AppText style={styles.heading}>{vData.name}</AppText>
+              <AppText style={[styles.text, { marginLeft: 0 }]}>
+                {vData.location} <Stars />
               </AppText>
             </View>
-            <RightArrow />
-          </View>
-          <View style={styles.restItem}>
-            <View style={[styles.restItemContainer, { flexDirection: "row" }]}>
-              <View>
-                <Stars size="16" />
-              </View>
-              <AppText style={[styles.text, { marginLeft: 10 }]}>
-                4.3 (2K) . Ratings and reviews
-              </AppText>
-            </View>
-            <RightArrow />
-          </View>
-
-          <View style={styles.restItem}>
-            <View style={styles.vContainer}>
-              <View style={styles.rowContainer}>
-                <AppText style={styles.text}>
+            <View style={styles.addBtnBox}>
+              <TouchableHighlight
+                underlayColor={colors.lightGray}
+                onPress={() => onAddItem(vData.id)}
+              >
+                <View style={styles.addBtn}>
                   <MaterialCommunityIcons
-                    name="shopping-outline"
-                    size={16}
-                    color={colors.primary}
-                  />{" "}
-                  ContactLess delivery
-                </AppText>
-              </View>
-              <View style={styles.rowContainer}>
-                <LocationTime time="30 min" distance="2.1 KM" fSize={14} />
-                <AppText> | </AppText>
-                <View style={styles.icon}>
-                  <MaterialCommunityIcons
-                    name="bike-fast"
+                    style={styles.icon}
+                    name="plus-circle-outline"
                     size={12}
-                    color={colors.primary}
+                    color={colors.dark}
                   />
+                  <AppText style={styles.addBtnText}> Add Item</AppText>
                 </View>
+              </TouchableHighlight>
+            </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View style={styles.vListContainer}>
+                <LocationTime time="30 min" distance="2.1 KM" />
+              </View>
 
-                <Price price={5} size={14} oldPrice={20} />
+              <View style={styles.vListContainer}>
+                <Price price={tPrice} size={14} lebel="Total " />
               </View>
             </View>
-            <RightArrow />
           </View>
 
           <View style={styles.restItem}>
-            <View style={[styles.restItemContainer, { flexDirection: "row" }]}>
-              <AppText style={styles.text}>
-                <MaterialCommunityIcons
-                  name="sale"
-                  size={16}
-                  color={colors.primary}
-                />{" "}
-                Check for available
-              </AppText>
-            </View>
-            <RightArrow />
+            {mData.map((ci, i) => (
+              <CartItem
+                sn={i + 1}
+                id={ci.fData.id}
+                key={ci.fData.id + i.toString()}
+                venderId={vData.id}
+                title={ci.fData.title}
+                price={ci.fData.price}
+                tPrice={ci.tPrice}
+                image={ci.fData.image}
+                onDelete={() => onDelete(ci.fData.id, i)}
+              />
+            ))}
           </View>
-
-          <View style={[styles.restItem, { flexDirection: "column" }]}>
-            <AppText>What people say</AppText>
-
-            <ScrollView
-              ref={scrollView}
-              onContentSizeChange={() => scrollView.current.scrollToEnd()}
-              horizontal={true}
-            >
-              {vender.reviews.map((r) => (
-                <View style={styles.reviewBox} key={r.id.toString()}>
-                  <AppText style={styles.text} numberOfLines={2}>
-                    {r.comments}
-                  </AppText>
-                  <View style={styles.reviewFooter}>
-                    <AppText
-                      style={[styles.text, { fontSize: 12, fontWeight: "600" }]}
-                    >
-                      {" "}
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={12}
-                        color={colors.orange}
-                      />{" "}
-                      {r.rating}
-                    </AppText>
-                    <AppText
-                      style={[styles.text, { fontSize: 12, fontWeight: "600" }]}
-                    >
-                      {"  - " + r.author}
-                    </AppText>
-                  </View>
-                </View>
-              ))}
-            </ScrollView>
+          <View style={styles.restItem}>
+            <AppButton
+              title="Confirm the order"
+              color="secondary"
+              onPress={onChecOut}
+            />
           </View>
         </View>
       </Screen>
@@ -181,36 +124,43 @@ function RestaurantCartInfo({ restData }) {
   );
 }
 const styles = StyleSheet.create({
-  logoContainer: { flexDirection: "row", justifyContent: "center" },
   image: {
     alignSelf: "center",
     width: "100%",
-    height: 150,
+    height: 60,
     resizeMode: "contain",
     borderRadius: 5,
-    margin: 5,
+    margin: 1,
     marginLeft: 10,
+  },
+  imageItem: {
+    width: 55,
+    height: 55,
+    borderRadius: 5,
+    margin: 5,
   },
 
   restContainer: {
     flexDirection: "column",
     marginLeft: 15,
     marginRight: 15,
+    marginTop: 0,
     backgroundColor: "#f7f7f7",
     shadowColor: "#00000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginBottom: 10,
+    marginBottom: 5,
     borderColor: colors.separator,
     borderRadius: 10,
     justifyContent: "center",
+    marginTop: 20,
   },
 
   restItem: {
-    flexDirection: "row",
-    paddingTop: 10,
+    flexDirection: "column",
+    paddingTop: 5,
     PaddingBottom: 10,
     borderBottomWidth: 1,
     marginLeft: 15,
@@ -220,41 +170,50 @@ const styles = StyleSheet.create({
     width: "auto",
   },
   restItemContainer: { flex: 1 },
-  rowContainer: {
+  content: {
     flexDirection: "row",
+
+    // backgroundColor: "red",
   },
-  vContainer: {
-    flex: 1,
-    flexDirection: "column",
+  appTextContainer: {
+    width: "70%",
+    alignItems: "flex-start",
   },
+  snText: { alignItems: "center", justifyContent: "center", width: 20 },
+  delBtn: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   heading: {
     fontWeight: "900",
-    fontSize: 18,
+    fontSize: 14,
     color: colors.secondary,
+    textAlign: "center",
   },
 
   text: {
-    fontSize: 14,
+    fontSize: 12,
     justifyContent: "center",
+    textAlign: "center",
+    paddingBottom: 10,
   },
-  icon: { paddingTop: 5, marginRight: 5 },
-  reviewBox: {
-    flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#ffffff",
-    padding: 10,
-    borderRadius: 5,
-    width: 200,
-    shadowColor: "#00000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    marginBottom: 20,
-    marginTop: 10,
-    marginRight: 10,
-    marginLeft: 2,
+  vListContainer: { flexDirection: "row", justifyContent: "space-between" },
+  addBtnBox: { position: "absolute", right: 0, top: 80 },
+  addBtn: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.orange,
+    width: 100,
+    borderRadius: 20,
   },
-  reviewFooter: { flexDirection: "row", marginTop: 10 },
+  addBtnText: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: colors.dark,
+    padding: 5,
+  },
 });
 
 export default RestaurantCartInfo;

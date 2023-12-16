@@ -50,12 +50,11 @@ function FoodOptionsScreen({ route, navigation }) {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    console.log(cart);
+    // console.log(cart);
   });
 
   //console.log(item.arguments);
   function onCheck(value) {
-    setComStatus(!value);
     // console.log(value);
     //  setComStatus(false);
   }
@@ -111,7 +110,7 @@ function FoodOptionsScreen({ route, navigation }) {
     };
     const getCarts = [...cart, cartObj];
     setCart(getCarts);
-    console.log(getCarts);
+    // console.log(getCarts);
 
     navigation.navigate(routes.HOME_FOOD_DETAILS, {
       foodId: item.id,

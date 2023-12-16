@@ -180,6 +180,11 @@ function HomeScreen({ navigation }) {
                       price={item.customer_price}
                       distance="1"
                       distanceUnit="KM"
+                      foodCategory={item.food_category}
+                      halalStatus={item.halal_status}
+                      vegStatus={item.veg_status}
+                      starStatus={item.rating}
+                      discount={item.discount_per}
                       onPress={() => {
                         navigation.navigate(routes.HOME_FOOD_DETAILS, {
                           // id: item.id,

@@ -40,14 +40,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightGray,
     borderWidth: 1,
-    borderColor: colors.secondary,
+    borderColor: colors.border,
     borderRadius: 10,
     flexDirection: "row",
     padding: 5,
-    marginVertical: 10,
+    marginBottom: 10,
+    marginTop: 5,
   },
   textInput: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     color: colors.secondary,
     width: "85%",
@@ -59,10 +60,9 @@ const styles = StyleSheet.create({
   lebel: {
     fontSize: 16,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
-    fontWeight: "600",
+    fontWeight: "900",
     paddingTop: 10,
-    paddingLeft: 10,
-    color: colors.secondary,
+    color: colors.medium,
   },
 });
 

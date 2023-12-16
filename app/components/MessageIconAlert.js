@@ -18,7 +18,7 @@ function MessageIconAlert({ Items = 0, ItemData, onPress }) {
         )}
         <MaterialCommunityIcons
           name="email"
-          size={32}
+          size={30}
           color={colors.secondary}
         />
       </TouchableOpacity>
