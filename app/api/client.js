@@ -5,6 +5,7 @@ import settings from "../config/setting";
 const apiClient = create({
   // baseURL: "http://192.168.254.4:9000/api",
   baseURL: settings.apiUrl,
+  // timeout: 30000
 });
 
 apiClient.addAsyncRequestTransform(async (request) => {

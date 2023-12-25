@@ -18,4 +18,6 @@ export default {
   chatme: "#57606f",
   price: "#888888",
   border: "#E2E2E2",
+  statusbarColor: "#222e42",
+  statusbarTextColor: "#ffffff",
 };

@@ -15,8 +15,9 @@ const otpRequest = async (countryCode, mobileNo) => {
     country_id: countryCode.id,
     mobile_no: mobileNo,
   });
+
   return responce;
-  //console.log(responce.data);
+  // console.log(responce);
 };
 
 //const profile = () => client.post("/profile", {});

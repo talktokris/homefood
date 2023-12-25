@@ -53,7 +53,7 @@ function LoginMobileScreen({ navigation }) {
     const result = await authApi.otpRequest(country, mobile);
     // const tokenSet= result.access_token;
     setLoading(false);
-    console.log(result);
+    // console.log(result);
 
     //console.log("==================");
 

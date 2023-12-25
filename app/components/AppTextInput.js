@@ -21,7 +21,7 @@ function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
               name={icon}
               size={20}
               style={styles.icon}
-              color={colors.secondary}
+              color={colors.medium}
             />
           )}
           <TextInput

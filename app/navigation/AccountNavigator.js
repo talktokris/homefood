@@ -13,11 +13,22 @@ import AccountPasswordScreen from "../screen/AccountPasswordScreen";
 import AddressScreen from "../screen/AddressScreen";
 import AddressAddScreen from "../screen/AddressAddScreen";
 import AddressEditScreen from "../screen/AddressEditScreen";
+import HeaderTop from "../components/HeaderTop";
 
 const Stack = createNativeStackNavigator();
 
 const AccountNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      lazy: false,
+      headerShown: true,
+      height: 250,
+      backgroundColor: "#111",
+      headerMode: "screen",
+      animation: "fade",
+      header: (props) => <HeaderTop {...props} />,
+    }}
+  >
     <Stack.Screen name="Account Menu" component={AccountScreen} />
     <Stack.Screen name="Address" component={AddressScreen} />
     <Stack.Screen name="New Address" component={AddressAddScreen} />

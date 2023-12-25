@@ -11,10 +11,24 @@ import CartScreen from "../screen/CartScreen";
 import FoodOptionsScreen from "../screen/FoodOptionsScreen";
 import PlaceOrderScreen from "../screen/PlaceOrderScreen";
 
+import HeaderTop from "../components/HeaderTop";
+
 const Stack = createNativeStackNavigator();
 
 const HomeNavigator = () => (
-  <Stack.Navigator mode="modal">
+  <Stack.Navigator
+    mode="modal"
+    screenOptions={{
+      lazy: false,
+      headerShown: true,
+      height: 250,
+      backgroundColor: "#111",
+      headerMode: "screen",
+      animation: "fade",
+
+      header: (props) => <HeaderTop style="light" {...props} />,
+    }}
+  >
     <Stack.Screen name="Home Food" component={HomeScreen} />
     <Stack.Screen name="Food Menu" component={FoodListingScreen} />
     <Stack.Screen name="Food Details" component={FoodViewScreen} />
@@ -23,5 +37,7 @@ const HomeNavigator = () => (
     <Stack.Screen name="Cart Items" component={CartScreen} />
   </Stack.Navigator>
 );
+
+
 
 export default HomeNavigator;

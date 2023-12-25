@@ -18,7 +18,7 @@ function MessageIconAlert({ Items = 0, ItemData, onPress }) {
         )}
         <MaterialCommunityIcons
           name="email"
-          size={30}
+          size={25}
           color={colors.secondary}
         />
       </TouchableOpacity>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   aletBox: {
     backgroundColor: colors.primary,
-    width: 25,
+    width: 20,
     height: 25,
     borderRadius: 14,
     borderWidth: 3,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 2,
     left: 30,
-    top: -7,
+    top: -2,
   },
 });
 export default MessageIconAlert;

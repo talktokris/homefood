@@ -21,6 +21,7 @@ import menuApi from "../api/menu";
 import FoodGridItem from "../components/FoodGridItem";
 import HomeBannerSlider from "./HomeBannerSlider";
 import HomeGridItem from "./HomeGridItem";
+import HeaderTop from "../components/HeaderTop";
 
 function HomeScreen({ navigation }) {
   const { user, logOut } = useAuth();
@@ -135,19 +136,18 @@ function HomeScreen({ navigation }) {
           // onChange={(e) => handleSearch(e)}
         />
       </View>
+
       <Screen>
         {!isLoading && menuData && (
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* <AppText style={styles.heading}> Recommended Foods</AppText> */}
-
-            <Separater />
-
             {searchStatus ? (
               <View style={styles.homeUpperContainer}>
                 <View style={styles.container}>
+                  <Separater />
                   <View>
                     <AppText style={styles.heading}> Order Now </AppText>
                   </View>
+                  <Separater />
                   <View style={styles.hsliderContainer}>
                     <HomeBannerSlider
                       navigation={navigation}
@@ -162,6 +162,7 @@ function HomeScreen({ navigation }) {
                   <View>
                     <AppText style={styles.heading}> Recommended Foods</AppText>
                   </View>
+                  <Separater />
                   <HomeGridItem gridData={gridData} navigation={navigation} />
                 </View>
 
@@ -242,20 +243,20 @@ const styles = StyleSheet.create({
 
   searchBox: { marginLeft: 15, marginRight: 15 },
   container: {
-    flexDirection: "coloum",
     height: "auto",
   },
 
   heading: {
     fontWeight: "900",
-    fontSize: 19,
-    paddingBottom: 15,
+    fontSize: 16,
+    paddingBottom: 10,
     color: colors.secondary,
-    paddingTop: 15,
+    paddingTop: 10,
+    paddingLeft: 15,
   },
   headingSearch: {
     fontWeight: "900",
-    fontSize: 19,
+    fontSize: 16,
     paddingBottom: 15,
     color: colors.secondary,
     paddingTop: 15,

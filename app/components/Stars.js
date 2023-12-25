@@ -50,9 +50,9 @@ function Stars({
     <View style={styles.container}>
       {starsData.length >= 1 && (
         <>
-          {starsData.map((s) => (
+          {starsData.map((s, i) => (
             <MaterialCommunityIcons
-              style={styles.icon}
+              key={s.id.toString()}
               name={s.name}
               size={size}
               color={colors.primary}

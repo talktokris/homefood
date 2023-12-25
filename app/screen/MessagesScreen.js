@@ -19,32 +19,91 @@ const messages = [
       "D1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
     image: require("../assets/images/av.png"),
     icon: {
-      name: "email",
+      name: "email-outline",
       backgroundColor: "#000",
     },
   },
   {
     id: 2,
     title:
-      "T2 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy",
+      "T2 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ",
     subTitle:
       "D2 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
     image: require("../assets/images/av.png"),
 
     icon: {
-      name: "email",
+      name: "email-outline",
       backgroundColor: "#000",
     },
   },
   {
     id: 3,
     title:
-      "T3 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy",
+      "T3 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ",
     subTitle:
       "D3 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     image: require("../assets/images/av.png"),
     icon: {
-      name: "email",
+      name: "email-outline",
+      backgroundColor: "#000",
+    },
+  },
+  {
+    id: 4,
+    title: "It is a long established fact that a reader will be distracted",
+    subTitle:
+      "D1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+    image: require("../assets/images/av.png"),
+    icon: {
+      name: "email-outline",
+      backgroundColor: "#000",
+    },
+  },
+  {
+    id: 5,
+    title:
+      "T2 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ",
+    subTitle:
+      "D2 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+    image: require("../assets/images/av.png"),
+
+    icon: {
+      name: "email-outline",
+      backgroundColor: "#000",
+    },
+  },
+  {
+    id: 6,
+    title:
+      "T3 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ",
+    subTitle:
+      "D3 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    image: require("../assets/images/av.png"),
+    icon: {
+      name: "email-outline",
+      backgroundColor: "#000",
+    },
+  },
+  {
+    id: 7,
+    title:
+      "T3 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ",
+    subTitle:
+      "D3 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    image: require("../assets/images/av.png"),
+    icon: {
+      name: "email-outline",
+      backgroundColor: "#000",
+    },
+  },
+  {
+    id: 8,
+    title: "It is a long established fact that a reader will be distracted",
+    subTitle:
+      "D1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+    image: require("../assets/images/av.png"),
+    icon: {
+      name: "email-outline",
       backgroundColor: "#000",
     },
   },
@@ -96,11 +155,13 @@ function MessagesScreen({ navigation }) {
             iconComponent={
               <Icon
                 name={item.icon.name}
-                backgroundColor={item.icon.backgroundColor}
+                backgroundColor="#F5F5F5"
+                iconColor={colors.secondary}
+                size={25}
               />
             }
             // onPress={() => console.log("Message Selected:- " + item.id)}
-            onPress={() => navigation.navigate(routes.MESSAGE_VIEW)}
+            onPress={() => navigation.navigate(routes.MESSAGE_VIEW, { item })}
             renderRightActions={() => (
               <View style={{ backgroundColor: "red", height: 70 }}></View>
             )}

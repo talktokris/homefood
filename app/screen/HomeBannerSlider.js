@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "contain",
     borderRadius: 5,
+    backgroundColor: "#cccccc",
   },
 
   heading: {
@@ -89,7 +90,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     justifyContent: "center",
     paddingLeft: 10,
-    marginBottom: 10,
   },
   icon: { paddingTop: 5, marginRight: 5 },
   reviewBox: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: 10,
     marginRight: 10,
     marginLeft: 2,

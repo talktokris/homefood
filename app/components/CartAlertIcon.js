@@ -12,7 +12,11 @@ function CartAlertIcon({ Items = 0, onPress }) {
           <AppText style={styles.text}>{Items}</AppText>
         </View>
       )}
-      <MaterialCommunityIcons name="cart" size={30} color={colors.secondary} />
+      <MaterialCommunityIcons
+        name="cart"
+        size={27}
+        color={colors.statusbarTextColor}
+      />
     </TouchableOpacity>
   );
 }
@@ -32,21 +36,21 @@ const styles = StyleSheet.create({
   text: {
     color: colors.white,
     fontWeight: "900",
-    fontSize: 12,
+    fontSize: 10,
     paddingTop: 2,
     textAlign: "center",
   },
   aletBox: {
     backgroundColor: colors.primary,
-    width: 25,
-    height: 25,
-    borderRadius: 14,
-    borderWidth: 3,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
     borderColor: colors.white,
     position: "absolute",
     zIndex: 2,
-    left: 25,
-    top: -7,
+    left: 20,
+    top: -10,
   },
 });
 export default CartAlertIcon;

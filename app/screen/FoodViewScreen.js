@@ -243,8 +243,9 @@ function FoodViewScreen({ route, navigation }) {
         <Screen>
           <ScrollView showsVerticalScrollIndicator={false}>
             <RestaurantInfo restData={restData} />
-            <Separater />
             <AppText style={styles.heading}> For you </AppText>
+            <Separater />
+
             <View style={styles.searchBox}>
               <AppTextSearch
                 name="words"
@@ -259,7 +260,6 @@ function FoodViewScreen({ route, navigation }) {
               />
               <AppText style={styles.searchHeading}>{resultText}</AppText>
             </View>
-
             <View
               onLayout={onLayout}
               style={[styles.gridContainer, { flex: 1, minHeight: gHeight }]}
@@ -296,11 +296,11 @@ function FoodViewScreen({ route, navigation }) {
   );
 }
 const styles = StyleSheet.create({
-  logoContainer: { flexDirection: "column", justifyContent: "center" },
+  logoContainer: { justifyContent: "center" },
 
   heading: {
     fontWeight: "900",
-    fontSize: 20,
+    fontSize: 16,
     paddingLeft: 25,
     paddingBottom: 10,
     paddingTop: 10,
@@ -327,7 +327,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   restContainer: {
-    flexDirection: "column",
     marginLeft: 15,
     marginRight: 15,
     backgroundColor: "#f7f7f7",
@@ -395,7 +394,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-evenly",
   },
-  searchBox: { marginLeft: 15, marginRight: 15 },
+  searchBox: { marginLeft: 15, marginTop: 10, marginRight: 15 },
   bottomArea: { flexDirection: "row" },
   bottomLeft: { width: "50%", padding: 10 },
   bottomRight: {

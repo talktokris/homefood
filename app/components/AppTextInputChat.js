@@ -36,7 +36,7 @@ function AppTextInputChat({ icon, lebel, width = "100%", ...otherProps }) {
           <TouchableOpacity onPress={() => console.log("Click Send Message")}>
             <MaterialCommunityIcons
               name={icon}
-              size={60}
+              size={40}
               style={styles.icon}
               color={colors.secondary}
             />
@@ -51,26 +51,25 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightGray,
     borderWidth: 1,
-    borderColor: colors.secondary,
+    borderColor: colors.light,
     borderRadius: 10,
     flexDirection: "row",
     padding: 10,
     marginVertical: 10,
-    height: 70,
+    height: 50,
     zIndex: 1,
   },
   textInput: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     color: colors.secondary,
     width: "100%",
   },
   icon: {
-    marginRight: 3,
     padding: Platform.OS === "android" ? 7 : 5,
   },
   lebel: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     fontWeight: "600",
     paddingTop: 10,
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
   btn: {
     position: "absolute",
     right: 5,
-    width: 65,
+    width: 45,
     zIndex: 2,
     top: 10,
   },

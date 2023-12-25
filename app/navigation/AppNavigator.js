@@ -1,5 +1,7 @@
+import { Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Constants from "expo-constants";
 //import * as Notifications from "expo-notifications";
 //import * as Device from "expo-device";
 
@@ -12,6 +14,7 @@ import colors from "../config/colors";
 import TopMenu from "../components/TopMenu";
 import MessageIconAlert from "../components/MessageIconAlert";
 import MessageNavigator from "./MessageNavigator";
+import HeaderTop from "../components/HeaderTop";
 
 //import userUpdate from "../api/userUpdate";
 //import useAuth from "../auth/useAuth";
@@ -25,6 +28,7 @@ Notifications.setNotificationHandler({
   }),
 });
 */
+
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = (color = "blue") => {
@@ -103,26 +107,42 @@ const AppNavigator = (color = "blue") => {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.secondary,
         tabBarLabelStyle: { fontWeight: "600", fontSize: 14 },
+        headerShown: false,
+        tabBarStyle: {
+          height: Platform.OS === "android" ? 60 : 95,
+        },
+        tabBarItemStyle: {
+          marginBottom: 8,
+          paddingTop: 5,
+        },
       }}
     >
       <Tab.Screen
         name="Home"
         component={HomeNavigator}
+        // screenOptions={{ header: () => <HeaderTop /> }}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
-          headerRight: () => <TopMenu />,
-          headerLeft: () => (
-            <MessageIconAlert
-              onPress={() => console.log("Cart Clicked")}
-              Items="0"
-              ItemData=""
-            />
-          ),
+
+          // headerRight: () => <TopMenu />,
+          // headerLeft: () => (
+          //   <MessageIconAlert
+          //     onPress={() => console.log("Cart Clicked")}
+          //     Items="0"
+          //     ItemData=""
+          //   />
+          // ),
+          // header: (props) => <HeaderTop {...props} />,
+
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,
+          },
+          headerTitleStyle: {
+            fontSize: 10,
+            textAlign: "center",
           },
         }}
       />
@@ -138,15 +158,16 @@ const AppNavigator = (color = "blue") => {
               size={size}
             />
           ),
+          //headerShown: false,
 
-          headerRight: () => <TopMenu />,
-          headerLeft: () => (
-            <MessageIconAlert
-              onPress={() => console.log("Cart Clicked")}
-              Items="0"
-              ItemData=""
-            />
-          ),
+          // headerRight: () => <TopMenu />,
+          // headerLeft: () => (
+          //   <MessageIconAlert
+          //     onPress={() => console.log("Cart Clicked")}
+          //     Items="0"
+          //     ItemData=""
+          //   />
+          // ),
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,
@@ -166,14 +187,14 @@ const AppNavigator = (color = "blue") => {
               size={size}
             />
           ),
-          headerRight: () => <TopMenu />,
-          headerLeft: () => (
-            <MessageIconAlert
-              onPress={() => console.log("Cart Clicked")}
-              Items="0"
-              ItemData=""
-            />
-          ),
+          // headerRight: () => <TopMenu />,
+          // headerLeft: () => (
+          //   <MessageIconAlert
+          //     onPress={() => console.log("Cart Clicked")}
+          //     Items="0"
+          //     ItemData=""
+          //   />
+          // ),
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,
@@ -188,14 +209,14 @@ const AppNavigator = (color = "blue") => {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
-          headerRight: () => <TopMenu />,
-          headerLeft: () => (
-            <MessageIconAlert
-              onPress={() => console.log("Cart Clicked")}
-              Items="0"
-              ItemData=""
-            />
-          ),
+          // headerRight: () => <TopMenu />,
+          // headerLeft: () => (
+          //   <MessageIconAlert
+          //     onPress={() => console.log("Cart Clicked")}
+          //     Items="0"
+          //     ItemData=""
+          //   />
+          // ),
           headerTintColor: colors.lightGray,
           headerStyle: {
             backgroundColor: colors.lightGray,

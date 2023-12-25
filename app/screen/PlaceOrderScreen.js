@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
 
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
@@ -24,13 +25,15 @@ import AppText from "../components/AppText";
 
 import AppButton from "../components/AppButton";
 import { ErrorMessage, LinkButton } from "../components/forms";
-import menuApi from "../api/menu";
+import orderApi from "../api/order";
+
 import CartContext from "../auth/cartContext";
 import settings from "../config/setting";
 import AppRadioPayment from "../components/AppRadioPayment";
 import OrderItemList from "../components/OrderItemList";
 import OrderItemListTotal from "../components/OrderItemListTotal";
 import PlaceOrderItem from "../components/PlaceOrderItem";
+import HomeScreen from "./HomeScreen";
 
 const TestData = {
   id: 23,
@@ -86,7 +89,7 @@ const TestData = {
 };
 
 const dataPayment = [
-  { id: 1, title: "Cash On Delivery", status: false },
+  { id: 1, title: "Cash On Delivery", status: true },
   { id: 2, title: "Card Payment", status: false },
   { id: 3, title: "eWallet Payment", status: false },
 ];
@@ -97,6 +100,11 @@ function PlaceOrderScreen({ route, navigation }) {
   const cartData = route.params.data;
 
   const { user, logOut } = useAuth();
+  // console.log(user.results[0].address_list);
+
+  const defaulAddress = user.results[0].default_address;
+  const address_list = user.results[0].address_list;
+  // console.log(user.results[0].default_address);
 
   // const currrentUser = user.id;
   const [subTotal, setSubTotal] = useState(cartData.tPrice);
@@ -104,19 +112,46 @@ function PlaceOrderScreen({ route, navigation }) {
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const [payOptions, setPayOptions] = useState(dataPayment);
-  const [payMethod, setPayMethod] = useState(null);
+  const [orderDataForm, setOrderDataForm] = useState([]);
+
+  const [payMethod, setPayMethod] = useState(1);
+  const [deliveryAddress, setDeliveryAddress] = useState(defaulAddress);
 
   const delivryFee = 5;
   const TaxPercentage = 6;
   const taxPrice = (subTotal * TaxPercentage) / 100;
   const grandTotal = taxPrice + subTotal + delivryFee;
 
-  // console.log(cartData.reduce((n, { tPrice }) => n + tPrice, 0));
-  // const sum = cartData.reduce((accumulator, object) => {
-  //   console.log(accumulator);
-  //   //  return accumulator + object.salary;
-  // }, 0);
+  const userID = 4;
+  const paymentType = 1;
+  const paymentStatus = 0;
+  const paymentId = 0;
 
+  const formFoodData = [];
+  const fDataSet = cartData.mData;
+  fDataSet.forEach((element) => {
+    let foodId = element.food_id;
+    let extra = element.arguments;
+    formFoodData.push({ foodId, extra });
+    // console.log(foodId);
+  });
+
+  const formData = {
+    userId: userID,
+    venderId: cartData.id,
+    totalItems: cartData.mData.length,
+    totalPrice: cartData.tPrice,
+    deliverFee: delivryFee,
+    deliveryAddress: deliveryAddress,
+    paymentType: paymentType,
+    paymentStatus: paymentStatus,
+    paymentId: paymentId,
+    orders: formFoodData,
+  };
+
+  // console.log("Kris go");
+  // console.log(defaulAddress.id);
+  // console.log(formData);
   // console.log(cartData.mData);
   // console.log(JSON.stringify(cartData));
 
@@ -129,10 +164,43 @@ function PlaceOrderScreen({ route, navigation }) {
     getPaymentData[index] = { ...data };
     getPaymentData[index].status = !getPaymentData[index].status;
     setPayOptions(getPaymentData);
-    setPayMethod(data);
+    setPayMethod(data.id);
+    // console.log(data);
 
     // console.log(getPaymentData);
     // console.log(id + "---" + status);
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    const result = await orderApi.storeOrders(
+      userID,
+      formData,
+      payMethod,
+      deliveryAddress.id
+    );
+    // const tokenSet= result.access_token;
+    setLoading(false);
+    // console.log(result.data.success);
+
+    //console.log("==================");
+
+    setLoading(false);
+    //  logIn(result.data.access_token);
+    // console.log(result.data.access_token);
+    if (result.data.success === true) {
+      Alert.alert("Success", "Your order has been placed successfully.", [
+        {
+          text: "Ok",
+          onPress: () => {
+            setCart([]);
+            navigation.popToTop();
+            navigation.navigate("Orders", { screen: "Recent Orders" });
+          },
+        },
+      ]);
+    }
   };
 
   return (
@@ -236,6 +304,7 @@ function PlaceOrderScreen({ route, navigation }) {
               {cartData.mData.map((item, index) => (
                 <PlaceOrderItem
                   sn={index}
+                  key={index.toString()}
                   title={item.fData.title}
                   extra={item.fData.title}
                   price={item.fData.price}
@@ -281,7 +350,11 @@ function PlaceOrderScreen({ route, navigation }) {
 
             <View style={styles.buttonContainer}>
               <OrderItemListTotal text="Total (incl. tax)" price={grandTotal} />
-              <AppButton title="Place Order" color="green" />
+              <AppButton
+                title="Place Order"
+                color="green"
+                onPress={handleSubmit}
+              />
             </View>
           </ScrollView>
         </Screen>

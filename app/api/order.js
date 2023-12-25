@@ -4,18 +4,19 @@ import client from "./client";
 
 //return register
 
-const storeOrders = async (cart, payment_options, delivery_address) => {
+const storeOrders = async (userID, formData, payMethod, deliveryAddress) => {
   const result = await client.post("/client-order-store", {
-    orders: cart,
-    payment_options: payment_options.id,
-    delivery_address: delivery_address.id,
+    user_id: userID,
+    orders: formData,
+    payment_options: payMethod,
+    delivery_address: deliveryAddress,
   });
   // console.log(cart);
   return result;
 };
 
-const pendingOrders = async (radius) => {
-  const result = await client.post("/client-order-pending", { radius });
+const pendingOrders = async () => {
+  const result = await client.post("/client-order-pending");
   //console.log(result.data);
   return result;
 };

@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
     //backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
-    paddingRight: 20,
+    paddingRight: 10,
   },
   text: {
-    padding: 15,
+    padding: 5,
     backgroundColor: "#eee",
     marginTop: 2,
   },

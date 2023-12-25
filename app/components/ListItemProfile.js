@@ -60,23 +60,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
+    width: 60,
+    height: 60,
+    borderRadius: 40,
     marginRight: 10,
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "800",
     color: colors.secondary,
   },
   hp: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: colors.secondary,
   },
   subTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: colors.primary,
   },
 });

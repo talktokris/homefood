@@ -37,12 +37,11 @@ const menuItems = [
     },
     targetScreen: routes.ACCOUNT_MESSAGES,
   },
-*/
+
   {
     title: "Search Radius",
     icon: {
       name: "target",
-      backgroundColor: colors.secondary,
     },
     targetScreen: routes.ACCOUNT_SEARCH_RADIUS,
   },
@@ -50,10 +49,10 @@ const menuItems = [
     title: "Order History",
     icon: {
       name: "view-list",
-      backgroundColor: colors.secondary,
     },
     targetScreen: routes.ACCOUNT_ORDER_HISTORY,
   },
+  */
   {
     title: "Support",
     icon: {
@@ -113,7 +112,9 @@ function AccountScreen({ route, navigation }) {
                 iconComponent={
                   <Icon
                     name={item.icon.name}
-                    backgroundColor={item.icon.backgroundColor}
+                    size={25}
+                    iconColor={colors.secondary}
+                    backgroundColor="#F5F5F5"
                   />
                 }
                 onPress={() => {
@@ -130,9 +131,10 @@ function AccountScreen({ route, navigation }) {
           iconComponent={
             <Icon
               name="logout"
-              size={32}
-              backgroundColor={colors.primary}
-              iconColor="white"
+              size={25}
+              iconColor={colors.secondary}
+              backgroundColor="#F5F5F5"
+              // iconColor={colors.primary}
             />
           }
           onPress={() => logOut()}
@@ -150,9 +152,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     borderColor: colors.white,
     borderWidth: 5,
   },

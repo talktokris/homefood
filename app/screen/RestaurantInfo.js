@@ -88,7 +88,7 @@ function RestaurantInfo({ restData }) {
           <View style={styles.restItem}>
             <View style={[styles.restItemContainer, { flexDirection: "row" }]}>
               <View>
-                <Stars size="16" />
+                <Stars size={16} star={2.5} />
               </View>
               <AppText style={[styles.text, { marginLeft: 10 }]}>
                 4.3 (2K) . Ratings and reviews
@@ -139,41 +139,46 @@ function RestaurantInfo({ restData }) {
             </View>
             <RightArrow />
           </View>
+          {vender.reviews.length >= 1 && (
+            <>
+              <View style={styles.restItem}>
+                <AppText>What people say</AppText>
+              </View>
+              <View style={styles.restItem}>
+                <AppText>What people say</AppText>
+              </View>
+            </>
+          )}
 
-          <View style={[styles.restItem, { flexDirection: "column" }]}>
-            <AppText>What people say</AppText>
-
-            <ScrollView
-              ref={scrollView}
-              onContentSizeChange={() => scrollView.current.scrollToEnd()}
-              horizontal={true}
-            >
-              {vender.reviews.map((r) => (
-                <View style={styles.reviewBox} key={r.id.toString()}>
-                  <AppText style={styles.text} numberOfLines={2}>
-                    {r.comments}
-                  </AppText>
-                  <View style={styles.reviewFooter}>
-                    <AppText
-                      style={[styles.text, { fontSize: 12, fontWeight: "600" }]}
-                    >
-                      {" "}
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={12}
-                        color={colors.orange}
-                      />{" "}
-                      {r.rating}
+          <View style={[styles.restItem, styles.reviewArea]}>
+            <View>
+              <ScrollView
+                ref={scrollView}
+                onContentSizeChange={() => scrollView.current.scrollToEnd()}
+                horizontal={true}
+                style={styles.reviewList}
+              >
+                {vender.reviews.map((r) => (
+                  <View style={styles.reviewBox} key={r.id.toString()}>
+                    <AppText style={styles.text} numberOfLines={2}>
+                      {r.comments}
                     </AppText>
-                    <AppText
-                      style={[styles.text, { fontSize: 12, fontWeight: "600" }]}
-                    >
-                      {"  - " + r.author}
-                    </AppText>
+                    <View style={styles.reviewFooter}>
+                      <AppText style={styles.text}>
+                        {" "}
+                        <MaterialCommunityIcons
+                          name="star"
+                          size={12}
+                          color={colors.orange}
+                        />{" "}
+                        {r.rating}
+                      </AppText>
+                      <AppText style={styles.text}>{"  - " + r.author}</AppText>
+                    </View>
                   </View>
-                </View>
-              ))}
-            </ScrollView>
+                ))}
+              </ScrollView>
+            </View>
           </View>
         </View>
       </Screen>
@@ -193,7 +198,6 @@ const styles = StyleSheet.create({
   },
 
   restContainer: {
-    flexDirection: "column",
     marginLeft: 15,
     marginRight: 15,
     backgroundColor: "#f7f7f7",
@@ -225,7 +229,6 @@ const styles = StyleSheet.create({
   },
   vContainer: {
     flex: 1,
-    flexDirection: "column",
   },
   heading: {
     fontWeight: "900",
@@ -234,13 +237,18 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 14,
+    fontSize: 12,
     justifyContent: "center",
+    fontWeight: "600",
   },
   icon: { paddingTop: 5, marginRight: 5 },
+  reviewArea: {
+    justifyContent: "flex-end",
+  },
+  reviewList: {
+    position: "relative",
+  },
   reviewBox: {
-    flex: 1,
-    flexDirection: "column",
     backgroundColor: "#ffffff",
     padding: 10,
     borderRadius: 5,
