@@ -13,16 +13,16 @@ function AppCheckBox({ color, text, linkText, onPress }) {
         {isChecked ? (
           <MaterialCommunityIcons
             name="checkbox-outline"
-            size={30}
+            size={25}
             style={styles.icon}
-            color={colors.color}
+            color={colors.medium}
           />
         ) : (
           <MaterialCommunityIcons
             name="checkbox-blank-outline"
-            size={30}
+            size={25}
             style={styles.icon}
-            color={colors.color}
+            color={colors.medium}
           />
         )}
         <Text style={styles.text}> {text} </Text>

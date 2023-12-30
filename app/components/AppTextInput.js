@@ -25,7 +25,7 @@ function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
             />
           )}
           <TextInput
-            placeholderTextColor={colors.secondary}
+            placeholderTextColor={styles.placeholder}
             style={styles.textInput}
             {...otherProps}
             ref={refsFocus}
@@ -38,7 +38,7 @@ function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
+    // backgroundColor: colors.lightGray,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 10,
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     width: "85%",
   },
+  placeholder: { color: "#eeeeee" },
   icon: {
     marginRight: 3,
     padding: Platform.OS === "android" ? 7 : 5,

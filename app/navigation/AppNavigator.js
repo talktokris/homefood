@@ -104,8 +104,8 @@ const AppNavigator = (color = "blue") => {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.secondary,
+        tabBarActiveTintColor: colors.bottomNavActiveMenu,
+        tabBarInactiveTintColor: colors.bottomNavMenu,
         tabBarLabelStyle: { fontWeight: "600", fontSize: 14 },
         headerShown: false,
         tabBarStyle: {

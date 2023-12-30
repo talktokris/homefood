@@ -11,49 +11,29 @@ import routes from "../navigation/routes";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import AppText from "../components/AppText";
-
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function MessagesViewScreen({ navigation, route }) {
   const item = route.params.item;
-  /*  
-  const { user, logOut } = useAuth();
-  const currrentUser = user.id;
 
-  const [isLoading, setLoading] = useState(true);
-  const [users, setUsers] = useState(null);
-
-
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getData();
-    });
-    return unsubscribe;
-  }, [navigation]);
-
-  const getData = useCallback(() => {
-    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
-    // useApi(resume.getResumeData, { currrentUser });
-    userUpdate
-      .messageFatch(currrentUser)
-      .then((data) => {
-        setUsers(data);
-        // console.log(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // display error
-        setLoading(false); // stop the loader
-      });
-  }, []);
-  // console.log(users);
-  var key = 1;
-  */
   return (
     <Screen>
-      <View>
-        <AppText style={styles.heading}>{item.title}</AppText>
-        <AppText style={styles.subHeading}>{item.subTitle}</AppText>
+      <View style={styles.messageBox}>
+        <View style={styles.iconTop}>
+          <MaterialCommunityIcons
+            style={styles.icon}
+            name="email-outline"
+            size={25}
+            color="#ccc"
+          />
+          <AppText style={styles.iconText}>{item.humanDate}</AppText>
+        </View>
+        <View style={styles.msgTitleBox}>
+          <AppText style={styles.heading}>{item.title}</AppText>
+        </View>
+        <View style={styles.msgBox}>
+          <AppText style={styles.subHeading}>{item.message}</AppText>
+        </View>
       </View>
     </Screen>
   );
@@ -65,6 +45,20 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 14,
   },
+  messageBox: {
+    marginHorizontal: 20,
+    backgroundColor: "#f7f7f7",
+    shadowColor: "#00000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginTop: 20,
+  },
+  msgTitleBox: { marginTop: 20, backgroundColor: "#eeeeee" },
+  msgBox: {},
+  iconTop: { justifyContent: "center", alignItems: "center" },
+  iconText: { fontSize: 12, color: colors.medium },
 });
 
 export default MessagesViewScreen;

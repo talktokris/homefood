@@ -78,6 +78,7 @@ function AppTextSearch({
           </TouchableOpacity>
         </View>
       </View>
+      <View style={styles.optionsContainer}></View>
     </>
   );
 }
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
     // borderBottomRightRadius: 10,
     // borderTopRightRadius: 10,
   },
+
 });
 
 export default AppTextSearch;

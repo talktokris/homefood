@@ -1,34 +1,31 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import { View, StyleSheet, FlatList, Image, ScrollView } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { View, StyleSheet, ScrollView, RefreshControl } from "react-native";
 
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
 
 import ActivityIndicator from "../components/ActivityIndicator";
-//import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
-import Icon from "../components/Icon";
 import { ErrorMessage, LinkButton } from "../components/forms";
 
 import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
 import settings from "../config/setting";
-import menuApi from "../api/menu";
-import FoodGridItem from "../components/FoodGridItem";
+
 import HomeBannerSlider from "./HomeBannerSlider";
 import HomeGridItem from "./HomeGridItem";
-import HeaderTop from "../components/HeaderTop";
+
+import useApi from "../hooks/useApi";
+import menuApi from "../api/menu";
 
 function HomeScreen({ navigation }) {
   const { user, logOut } = useAuth();
   const currrentUser = user.id;
 
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const [menuData, setMenuData] = useState([]);
   const [gridData, setGridData] = useState([]);
@@ -36,6 +33,40 @@ function HomeScreen({ navigation }) {
   const [searchMenuData, setSearchMenuData] = useState([]);
   const [searchStatus, setSearchStatus] = useState(true);
   const [resultText, setResultText] = useState("");
+
+  const [refreshing, setRefreshing] = useState(false);
+  const getFetchData = useApi(menuApi.fetchAllHome);
+
+  const {
+    data: {
+      top_food: topFoodData = [],
+      slides: sliderData = [],
+      rec_food: recFoodData = [],
+    },
+    error,
+    loading,
+  } = getFetchData;
+
+  useEffect(() => {
+    getFetchData.request();
+  }, []);
+
+  useEffect(() => {
+    setMenuData(topFoodData);
+    setBannersDb(sliderData);
+    setGridData(recFoodData);
+  }, [getFetchData.data, getFetchData.loading]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getFetchData.request();
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  /*
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -71,7 +102,7 @@ function HomeScreen({ navigation }) {
         setLoading(false); // stop the loader
       });
   }, []);
-
+*/
   function makeUri(defID, imageName) {
     let imgUri = settings.imageUrl + "/venders/no_image.jpg";
 
@@ -122,8 +153,7 @@ function HomeScreen({ navigation }) {
 
   return (
     <>
-      <ActivityIndicator visible={isLoading} />
-      <ErrorMessage error={error} visible={eStatus} />
+      <ActivityIndicator visible={loading} />
       <View style={styles.searchBox}>
         <AppTextSearch
           name="words"
@@ -138,8 +168,23 @@ function HomeScreen({ navigation }) {
       </View>
 
       <Screen>
+        {error && (
+          <>
+            <View style={styles.retryView}>
+              <AppText style={{ textAlign: "center" }}>
+                Couldn't retrieve the data.
+              </AppText>
+              <AppButton title="Retry" onPress={getFetchData.request()} />
+            </View>
+          </>
+        )}
         {!isLoading && menuData && (
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             {searchStatus ? (
               <View style={styles.homeUpperContainer}>
                 <View style={styles.container}>

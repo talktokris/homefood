@@ -19,5 +19,7 @@ export default {
   price: "#888888",
   border: "#E2E2E2",
   statusbarColor: "#222e42",
-  statusbarTextColor: "#ffffff",
+  statusbarTextColor: "#d5e1f5",
+  bottomNavMenu: "#374865",
+  bottomNavActiveMenu: "#fb131c",
 };

@@ -3,13 +3,16 @@ import React, {
   useEffect,
   useCallback,
   useContext,
-  useRef,
   useLayoutEffect,
 } from "react";
 
-import { View, StyleSheet, FlatList, Image, Alert } from "react-native";
-
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  Alert,
+} from "react-native";
 
 import Screen from "../components/Screen";
 import Separater from "../components/Separater";
@@ -18,26 +21,19 @@ import ActivityIndicator from "../components/ActivityIndicator";
 //import userUpdate from "../api/userUpdate";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
-import Icon from "../components/Icon";
 
-import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
 import { ErrorMessage, LinkButton } from "../components/forms";
-import menuApi from "../api/menu";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import AppCircleButton from "../components/AppCircleButton";
-import cartStorage from "../auth/cartStorage";
-import CartContext from "../auth/cartContext";
-import MenuSlideShow from "../components/MenuSlideShow";
-import settings from "../config/setting";
 
-import Price from "../components/Price";
-import LocationTime from "../components/LocationTime";
-import Stars from "../components/Stars";
+import CartContext from "../auth/cartContext";
+
 import RestaurantInfo from "./RestaurantInfo";
 import FoodGridItem from "../components/FoodGridItem";
+
+import menuApi from "../api/menu";
+import useApi from "../hooks/useApi";
 
 function FoodViewScreen({ route, navigation }) {
   const [cart, setCart] = useContext(CartContext);
@@ -52,7 +48,7 @@ function FoodViewScreen({ route, navigation }) {
 
   const [isLoading, setLoading] = useState(true);
 
-  const [error, setError] = useState();
+  // const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const [menuData, setMenuData] = useState([]);
   const [memuFilttred, setMemuFilttred] = useState([]);
@@ -69,11 +65,40 @@ function FoodViewScreen({ route, navigation }) {
     }
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+  const getFetchData = useApi(menuApi.fetchSingleMenu);
+
+  const {
+    data: { vender: venderData = [], food: foodData = [] },
+    error,
+    loading,
+  } = getFetchData;
+
+  useEffect(() => {
+    getFetchData.request(fethcID);
+  }, []);
+
+  useEffect(() => {
+    setRestData(venderData);
+    setMenuData(foodData);
+    setMemuFilttred(foodData);
+  }, [getFetchData.data, getFetchData.loading]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getFetchData.request(fethcID);
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   // useEffect(() => {
   //   SetChange(true);
   //   // getData();
   // }, [chanage]);
 
+  /*
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       getData();
@@ -122,7 +147,7 @@ function FoodViewScreen({ route, navigation }) {
         setLoading(false); // stop the loader
       });
   }, []);
-
+*/
   function qtyUpdate() {
     if (cart.length >= 1) {
       const viewData = cart.filter((i) => i.data.id == fethcID);
@@ -140,13 +165,13 @@ function FoodViewScreen({ route, navigation }) {
   }
   */
 
-  const EnterEmail = ({ navigation }) => {
-    useLayoutEffect(() => {
-      navigation.setOptions({
-        headerLeft: () => null,
-      });
-    }, [navigation]);
-  };
+  // const EnterEmail = ({ navigation }) => {
+  //   useLayoutEffect(() => {
+  //     navigation.setOptions({
+  //       headerLeft: () => null,
+  //     });
+  //   }, [navigation]);
+  // };
 
   // const handlePlus = () => {
   //   const newQnt = qnt + 1;
@@ -196,30 +221,13 @@ function FoodViewScreen({ route, navigation }) {
       ]);
       // alert("Cart updated successfully");
     }
-
-    /*
-    const newCartData =
-      items.indexOf(newItem) === -1
-        ? items.push(newItem)
-        : console.log("This item already exists");
-        */
-
-    //  SetChange(false);
-    //  console.log(items);
-
-    // console.log("Cart Id : " + id);
-    // console.log(cartItems);
   };
-  //console.log(menuData.default_image.food_menu_id);
 
   const handleSearch = (searchQuery) => {
-    //let searchQuery = e.nativeEvent.text;
-    // let items = cart;
-    // console.log(searchQuery);
-
     let filtered = menuData.filter((m) =>
       m.food_title.toLowerCase().startsWith(searchQuery.toLowerCase())
     );
+
     if (searchQuery.length >= 1) {
       setMemuFilttred(filtered);
       if (filtered.length == 0) {
@@ -237,61 +245,76 @@ function FoodViewScreen({ route, navigation }) {
 
   return (
     <>
-      <ActivityIndicator visible={isLoading} />
-      <ErrorMessage error={error} visible={eStatus} />
-      {!isLoading && memuFilttred && (
-        <Screen>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <RestaurantInfo restData={restData} />
-            <AppText style={styles.heading}> For you </AppText>
-            <Separater />
-
-            <View style={styles.searchBox}>
-              <AppTextSearch
-                name="words"
-                autoCapitalize="none"
-                autoCorrect={false}
-                icon="magnify"
-                textContentType="jobTitle"
-                placeholder="Search here"
-                onPress={handleSearch}
-                // onChange={(e) => handleSearch(e)}
-                //  onChange={(e) => console.log(e.nativeEvent.text)}
+      <ActivityIndicator visible={loading} />
+      <Screen>
+        {error && (
+          <>
+            <View style={styles.retryView}>
+              <AppText style={{ textAlign: "center" }}>
+                Couldn't retrieve the service provider.
+              </AppText>
+              <AppButton
+                title="Retry"
+                onPress={getFetchData.request(fethcID)}
               />
-              <AppText style={styles.searchHeading}>{resultText}</AppText>
             </View>
-            <View
-              onLayout={onLayout}
-              style={[styles.gridContainer, { flex: 1, minHeight: gHeight }]}
-            >
-              {memuFilttred.map((item) => (
-                <FoodGridItem
-                  key={item.id.toString()}
-                  id={item.id}
-                  venderId={item.user_id}
-                  category={item.food_category}
-                  title={item.food_title}
-                  price={item.customer_price}
-                  oldPrice={item.vender_price}
-                  //image={item.image}
-                  image={item.image_name}
-                  discount={item.discount_per}
-                  onPress={() => {
-                    navigation.navigate(routes.FOOD_OPTIONS, {
-                      item: item,
-                      vender: restData,
-                    });
-                  }}
-                  // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-                  renderRightActions={() => (
-                    <View style={{ backgroundColor: "red", height: 70 }}></View>
-                  )}
-                />
-              ))}
-            </View>
-          </ScrollView>
-        </Screen>
-      )}
+          </>
+        )}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {restData.length >= 1 && <RestaurantInfo restData={restData} />}
+          <AppText style={styles.heading}> For you </AppText>
+          <Separater />
+
+          <View style={styles.searchBox}>
+            <AppTextSearch
+              name="words"
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="magnify"
+              textContentType="jobTitle"
+              placeholder="Search here"
+              onPress={handleSearch}
+              // onChange={(e) => handleSearch(e)}
+              //  onChange={(e) => console.log(e.nativeEvent.text)}
+            />
+            <AppText style={styles.searchHeading}>{resultText}</AppText>
+          </View>
+          <View
+            onLayout={onLayout}
+            style={[styles.gridContainer, { flex: 1, minHeight: gHeight }]}
+          >
+            {memuFilttred.map((item) => (
+              <FoodGridItem
+                key={item.id.toString()}
+                id={item.id}
+                venderId={item.user_id}
+                category={item.food_category}
+                title={item.food_title}
+                price={item.customer_price}
+                oldPrice={item.vender_price}
+                //image={item.image}
+                image={item.image_name}
+                discount={item.discount_per}
+                onPress={() => {
+                  navigation.navigate(routes.FOOD_OPTIONS, {
+                    item: item,
+                    vender: restData,
+                  });
+                }}
+                // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
+                renderRightActions={() => (
+                  <View style={{ backgroundColor: "red", height: 70 }}></View>
+                )}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      </Screen>
     </>
   );
 }
