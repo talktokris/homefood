@@ -8,6 +8,8 @@ import {
   Alert,
   TouchableOpacity,
   ScrollView,
+  Modal,
+  Button,
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -34,6 +36,7 @@ import OrderItemList from "../components/OrderItemList";
 import OrderItemListTotal from "../components/OrderItemListTotal";
 import PlaceOrderItem from "../components/PlaceOrderItem";
 import HomeScreen from "./HomeScreen";
+import ModalOptions from "../components/ModalOptions";
 
 const TestData = {
   id: 23,
@@ -104,6 +107,7 @@ function PlaceOrderScreen({ route, navigation }) {
 
   const defaulAddress = user.results[0].default_address;
   const address_list = user.results[0].address_list;
+  // console.log(address_list);
   // console.log(user.results[0].default_address);
 
   // const currrentUser = user.id;
@@ -116,6 +120,11 @@ function PlaceOrderScreen({ route, navigation }) {
 
   const [payMethod, setPayMethod] = useState(1);
   const [deliveryAddress, setDeliveryAddress] = useState(defaulAddress);
+
+  const { address, city_name, default_status, postal_code, state, street } =
+    deliveryAddress;
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const delivryFee = 5;
   const TaxPercentage = 6;
@@ -203,6 +212,11 @@ function PlaceOrderScreen({ route, navigation }) {
     }
   };
 
+  const onModelSelect = (address) => {
+    setDeliveryAddress(address);
+    setModalVisible(false);
+  };
+
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -225,14 +239,20 @@ function PlaceOrderScreen({ route, navigation }) {
                     color={colors.primary}
                   />
                   <View style={styles.headContainer}>
-                    <AppText style={styles.heading}>
-                      KLIA Terminal 2 - Level Door 5
-                    </AppText>
+                    {address && (
+                      <AppText style={styles.heading}>{address}</AppText>
+                    )}
                     <AppText style={styles.text}>
-                      Jalan Kila 2/2 Labu, 64000, Sepang, Selangor, Malaysia
+                      {street && street} {postal_code && ", " + postal_code}{" "}
+                      {city_name && ", " + city_name} {state && ", " + state},
+                      Malaysia
                     </AppText>
                   </View>
-                  <TouchableOpacity onPress={() => console.log("Change Click")}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(true);
+                    }}
+                  >
                     <AppText
                       style={[styles.priceItem, { fontSize: 13, right: 15 }]}
                     >
@@ -359,6 +379,13 @@ function PlaceOrderScreen({ route, navigation }) {
           </ScrollView>
         </Screen>
       )}
+      <ModalOptions
+        title="Please select delivery address"
+        modalVisible={modalVisible}
+        data={address_list}
+        onSelect={onModelSelect}
+        onClose={() => setModalVisible(false)}
+      />
     </>
   );
 }
@@ -407,9 +434,8 @@ const styles = StyleSheet.create({
   },
   orderItemHeader: { flexDirection: "row", justifyContent: "space-between" },
 
-  text: {
-    fontSize: 12,
-  },
+  text: { fontSize: 12 },
+
   textPd: {
     fontSize: 10,
     paddingBottom: 5,
