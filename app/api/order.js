@@ -4,12 +4,19 @@ import client from "./client";
 
 //return register
 
-const storeOrders = async (userID, formData, payMethod, deliveryAddress) => {
+const storeOrders = async (
+  userID,
+  formData,
+  payMethod,
+  deliveryAddress,
+  deliveryDate
+) => {
   const result = await client.post("/client-order-store", {
     user_id: userID,
     orders: formData,
     payment_options: payMethod,
     delivery_address: deliveryAddress,
+    delivery_date: deliveryDate,
   });
   // console.log(cart);
   return result;

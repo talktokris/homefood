@@ -78,7 +78,6 @@ function AppTextSearch({
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.optionsContainer}></View>
     </>
   );
 }

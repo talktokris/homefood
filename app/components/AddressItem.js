@@ -29,8 +29,8 @@ function AddressItem({
           onPress={() => onEdit(id)}
         >
           <MaterialCommunityIcons
-            name="pencil-circle"
-            size={32}
+            name="pencil-circle-outline"
+            size={25}
             color={colors.secondary}
           />
         </TouchableOpacity>
@@ -74,8 +74,8 @@ function AddressItem({
           onPress={() => onDelete(id)}
         >
           <MaterialCommunityIcons
-            name="trash-can"
-            size={32}
+            name="trash-can-outline"
+            size={25}
             color={colors.primary}
           />
         </TouchableOpacity>
@@ -89,7 +89,7 @@ export default AddressItem;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    padding: 12,
+    padding: 5,
     backgroundColor: colors.light,
     alignItems: "center",
   },
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   title: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
 
@@ -127,13 +127,13 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   subTitle: {
-    fontSize: 16,
+    fontSize: 12,
     color: colors.secondary,
   },
   close: {
     position: "absolute",
     right: 10,
-    top: 15,
+    top: 10,
     cursor: "pointer",
   },
   edit: { position: "absolute", right: 10, bottom: 0, cursor: "pointer" },

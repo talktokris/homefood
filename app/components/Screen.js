@@ -30,7 +30,7 @@ const APPBAR_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
 const styles = StyleSheet.create({
   screens: {
-    paddingTop: Constants.statusBarHeight,
+    // paddingTop: Constants.statusBarHeight,
     flex: 1,
   },
   view: {

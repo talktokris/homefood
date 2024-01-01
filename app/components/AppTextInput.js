@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { View, TextInput, StyleSheet, Platform, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
@@ -7,6 +7,12 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
   const refsFocus = useRef(null);
+
+  function getSpacingStyle() {
+    if (!icon) {
+      return { paddingLeft: 10 };
+    }
+  }
   return (
     <>
       <TouchableWithoutFeedback
@@ -26,7 +32,7 @@ function AppTextInput({ icon, lebel, width = "100%", ...otherProps }) {
           )}
           <TextInput
             placeholderTextColor={styles.placeholder}
-            style={styles.textInput}
+            style={[styles.textInput, getSpacingStyle(icon)]}
             {...otherProps}
             ref={refsFocus}
           />
@@ -59,9 +65,9 @@ const styles = StyleSheet.create({
     padding: Platform.OS === "android" ? 7 : 5,
   },
   lebel: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingTop: 10,
     color: colors.medium,
   },

@@ -84,14 +84,14 @@ function AppPicker({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
+    // backgroundColor: colors.lightGray,
     borderWidth: 1,
-    borderColor: colors.secondary,
+    borderColor: colors.border,
     borderRadius: 10,
     width: "100%",
     flexDirection: "row",
     padding: 4,
-    marginVertical: 5,
+    marginBottom: 10,
   },
   textInput: {
     fontSize: 14,
@@ -101,14 +101,17 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     color: colors.medium,
-    fontSize: 16,
+    fontSize: 14,
+    paddingTop: 2,
+    paddingLeft: 10,
   },
-  placeholder: { color: colors.medium, flex: 1 },
+
+  placeholder: { color: colors.medium, flex: 1, fontSize: 14 },
   icon: {
     marginRight: 10,
   },
   lebel: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: Platform.OS === "android" ? fonts.android : fonts.ios,
     fontWeight: "600",
     paddingTop: 10,

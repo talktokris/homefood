@@ -86,7 +86,7 @@ function OrdersScreen({ navigation }) {
       <ErrorMessage error={error} visible={error} />
 
       <Screen>
-        {error && (
+        {/* {error && (
           <>
             <View style={styles.retryView}>
               <AppText style={{ textAlign: "center" }}>
@@ -95,7 +95,7 @@ function OrdersScreen({ navigation }) {
               <AppButton title="Retry" onPress={getOrders.request()} />
             </View>
           </>
-        )}
+        )} */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={

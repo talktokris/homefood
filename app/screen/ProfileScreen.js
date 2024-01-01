@@ -186,6 +186,7 @@ function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 5,
+    margin: 10,
   },
   imageFrame: {
     justifyContent: "center",

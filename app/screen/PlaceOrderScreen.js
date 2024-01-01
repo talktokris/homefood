@@ -11,6 +11,7 @@ import {
   Modal,
   Button,
 } from "react-native";
+// import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
@@ -37,6 +38,7 @@ import OrderItemListTotal from "../components/OrderItemListTotal";
 import PlaceOrderItem from "../components/PlaceOrderItem";
 import HomeScreen from "./HomeScreen";
 import ModalOptions from "../components/ModalOptions";
+import ModalDatePicker from "../components/ModalDatePicker";
 
 const TestData = {
   id: 23,
@@ -107,6 +109,11 @@ function PlaceOrderScreen({ route, navigation }) {
 
   const defaulAddress = user.results[0].default_address;
   const address_list = user.results[0].address_list;
+
+  // let yourDate = new Date();
+
+  const initalDeliveryDate = new Date().toDateString();
+
   // console.log(address_list);
   // console.log(user.results[0].default_address);
 
@@ -120,11 +127,13 @@ function PlaceOrderScreen({ route, navigation }) {
 
   const [payMethod, setPayMethod] = useState(1);
   const [deliveryAddress, setDeliveryAddress] = useState(defaulAddress);
+  const [deliveryDate, setDeliveryDate] = useState(initalDeliveryDate);
 
   const { address, city_name, default_status, postal_code, state, street } =
     deliveryAddress;
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleDate, setModalVisibleDate] = useState(false);
 
   const delivryFee = 5;
   const TaxPercentage = 6;
@@ -187,7 +196,8 @@ function PlaceOrderScreen({ route, navigation }) {
       userID,
       formData,
       payMethod,
-      deliveryAddress.id
+      deliveryAddress.id,
+      deliveryDate
     );
     // const tokenSet= result.access_token;
     setLoading(false);
@@ -216,6 +226,23 @@ function PlaceOrderScreen({ route, navigation }) {
     setDeliveryAddress(address);
     setModalVisible(false);
   };
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setDeliveryDate(date.toDateString());
+    // console.warn("A date has been picked: ", date);
+    hideDatePicker();
+  };
+  // console.log(deliveryDate);
 
   return (
     <>
@@ -267,22 +294,43 @@ function PlaceOrderScreen({ route, navigation }) {
               <View style={styles.content}>
                 <View style={styles.foodContainer}>
                   <MaterialCommunityIcons
-                    name="bike-fast"
+                    name="calendar-month"
                     size={20}
                     style={styles.iconAdd}
                     color={colors.primary}
                   />
                   <View style={[styles.headContainer, { width: "70%" }]}>
-                    <AppText style={styles.heading}>Delivery</AppText>
-                    <AppText style={styles.text}>Deliver now (25 mins)</AppText>
+                    <AppText style={styles.heading}>Delivery Date</AppText>
+                    <AppText style={styles.text}>{deliveryDate}</AppText>
                   </View>
-                  <TouchableOpacity onPress={() => console.log("Change Click")}>
+                  <TouchableOpacity
+                    onPress={() => setDatePickerVisibility(true)}
+                  >
                     <AppText
                       style={[styles.price, { fontSize: 13, right: 15 }]}
                     >
                       Change options
                     </AppText>
                   </TouchableOpacity>
+                  <ModalDatePicker
+                    isDatePickerVisible={isDatePickerVisible}
+                    handleConfirm={handleConfirm}
+                    hideDatePicker={hideDatePicker}
+                  />
+                </View>
+              </View>
+
+              {/* <View style={[styles.content, styles.calender]}>
+                <View style={styles.foodContainer}>
+                  <MaterialCommunityIcons
+                    name="bike-fast"
+                    size={20}
+                    style={styles.iconAdd}
+                    color={colors.primary}
+                  />
+                  <View style={styles.headContainer}>
+                    <AppText style={styles.text}>Deliver now (25 mins)</AppText>
+                  </View>
                 </View>
               </View>
 
@@ -304,7 +352,7 @@ function PlaceOrderScreen({ route, navigation }) {
                     </AppText>
                   </View>
                 </View>
-              </View>
+              </View> */}
             </View>
 
             <View style={styles.container}>
@@ -380,7 +428,7 @@ function PlaceOrderScreen({ route, navigation }) {
         </Screen>
       )}
       <ModalOptions
-        title="Please select delivery address"
+        title="Select delivery address"
         modalVisible={modalVisible}
         data={address_list}
         onSelect={onModelSelect}
@@ -471,6 +519,9 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlign: "center",
     fontSize: 12,
+  },
+  backdropStyleIOSStyle: {
+    backgroundColor: colors.secondary,
   },
 });
 
