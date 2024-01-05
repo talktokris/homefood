@@ -19,6 +19,8 @@ import Icon from "../components/Icon";
 import useMessage from "../api/message";
 import useApi from "../hooks/useApi";
 import AppText from "../components/AppText";
+import AppButton from "../components/AppButton";
+import RetryComponent from "./RetryComponent";
 
 function MessagesScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -34,13 +36,13 @@ function MessagesScreen({ navigation }) {
     getMessage.request();
   }, []);
 
-  useEffect(() => {
-    // setOrderData(getDataSet);
-  }, [getMessage.data]);
+  // useEffect(() => {
+  //   setOrderData(getDataSet);
+  // }, [getMessage.data]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-   getMessage.request();
+    getMessage.request();
 
     setTimeout(() => {
       setRefreshing(false);
@@ -52,15 +54,12 @@ function MessagesScreen({ navigation }) {
       <ActivityIndicator visible={loading} />
       <Screen style={styles.screen}>
         {error && (
-          <>
-            <View style={styles.retryView}>
-              <AppText style={{ textAlign: "center" }}>
-                Couldn't retrieve the listings.
-              </AppText>
-              <AppButton title="Retry" onPress={getMessage.request} />
-            </View>
-          </>
+          <RetryComponent
+            onPress={() => getOrders.request()}
+            message=" Couldn't retrieve the messages."
+          />
         )}
+
         {messageData.length >= 1 ? (
           <FlatList
             data={messageData}

@@ -14,6 +14,8 @@ import colors from "../config/colors";
 
 import orderApi from "../api/order";
 import useApi from "../hooks/useApi";
+import AppButton from "../components/AppButton";
+import RetryComponent from "./RetryComponent";
 
 function OrdersScreen({ navigation }) {
   const [orderData, setOrderData] = useState([]);
@@ -23,6 +25,7 @@ function OrdersScreen({ navigation }) {
   const {
     data: { data: getDataSet = [] },
     error,
+    result,
     loading,
   } = getOrders;
 
@@ -30,20 +33,26 @@ function OrdersScreen({ navigation }) {
     getOrders.request();
   }, []);
 
-  useEffect(() => {
-    setOrderData(getDataSet);
-  }, [getOrders.data]);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
+  const onRefresh = () => {
     getOrders.request();
+    setRefreshing(true);
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
+  /*
+  const onRefresh = useCallback(() => {
+    getOrders.request();
+    setRefreshing(true);
 
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
   }, []);
 
-  /*
+
  
 
   useEffect(() => {
@@ -80,63 +89,64 @@ function OrdersScreen({ navigation }) {
       });
   }, []);
 */
+  // console.log(result);
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <ErrorMessage error={error} visible={error} />
 
       <Screen>
-        {/* {error && (
-          <>
-            <View style={styles.retryView}>
-              <AppText style={{ textAlign: "center" }}>
-                Couldn't retrieve the orders.
-              </AppText>
-              <AppButton title="Retry" onPress={getOrders.request()} />
-            </View>
-          </>
-        )} */}
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          {orderData.length >= 1 ? (
-            <View>
-              {orderData.map((item) => (
-                <RestaurantOrderInfo
-                  key={item.id.toString()}
-                  id={item.id}
-                  vData={item.vender}
-                  oData={item.orders}
-                  tPrice={item.customer_amount}
-                  onDelete={() => console.log("Delete Clicked")}
-                  onAddItem={(foodId) => {
-                    navigation.navigate(routes.HOME_FOOD_DETAILS, {
-                      // id: item.id,
-                      foodId: foodId,
-                      itemData: item,
-                      venderId: item.id,
-                      type: "list",
-                    });
-                  }}
-                  onChecOut={() => {
-                    // console.log("Hi Checkout " + item.id);
-                    navigation.navigate(routes.PLACE_ORDER, {
-                      venderId: item.id,
-                      data: item,
-                    });
-                  }}
-                />
-              ))}
-            </View>
-          ) : (
-            <View style={styles.noItemBox}>
-              <AppText style={styles.noItemText}>No Orders found</AppText>
-            </View>
-          )}
-        </ScrollView>
+        {error ? (
+          <RetryComponent
+            onPress={() => getOrders.request()}
+            message=" Couldn't retrieve the orders."
+            icon={() => getOrders.request()}
+          />
+        ) : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => getOrders.request()}
+              />
+            }
+          >
+            {getDataSet.length >= 1 ? (
+              <View>
+                {getDataSet.map((item) => (
+                  <RestaurantOrderInfo
+                    key={item.id.toString()}
+                    id={item.id}
+                    vData={item.vender}
+                    oData={item.orders}
+                    tPrice={item.customer_amount}
+                    onDelete={() => console.log("Delete Clicked")}
+                    onAddItem={(foodId) => {
+                      navigation.navigate(routes.HOME_FOOD_DETAILS, {
+                        // id: item.id,
+                        foodId: foodId,
+                        itemData: item,
+                        venderId: item.id,
+                        type: "list",
+                      });
+                    }}
+                    onChecOut={() => {
+                      // console.log("Hi Checkout " + item.id);
+                      navigation.navigate(routes.PLACE_ORDER, {
+                        venderId: item.id,
+                        data: item,
+                      });
+                    }}
+                  />
+                ))}
+              </View>
+            ) : (
+              <View style={styles.noItemBox}>
+                <AppText style={styles.noItemText}>No Orders found</AppText>
+              </View>
+            )}
+          </ScrollView>
+        )}
       </Screen>
     </>
   );

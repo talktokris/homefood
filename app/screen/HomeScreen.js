@@ -9,7 +9,6 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import { ErrorMessage, LinkButton } from "../components/forms";
-
 import FoodItem from "../components/FoodItem";
 import AppTextSearch from "../components/AppTextSearch";
 import AppText from "../components/AppText";
@@ -20,6 +19,8 @@ import HomeGridItem from "./HomeGridItem";
 
 import useApi from "../hooks/useApi";
 import menuApi from "../api/menu";
+import AppButton from "../components/AppButton";
+import RetryComponent from "./RetryComponent";
 
 function HomeScreen({ navigation }) {
   const { user, logOut } = useAuth();
@@ -59,7 +60,7 @@ function HomeScreen({ navigation }) {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    getFetchData.request();
+    // getFetchData.request();
 
     setTimeout(() => {
       setRefreshing(false);
@@ -151,132 +152,148 @@ function HomeScreen({ navigation }) {
     }
   };
 
+  // console.log(user);
+
   return (
     <>
       <ActivityIndicator visible={loading} />
-      <View style={styles.searchBox}>
-        <AppTextSearch
-          name="words"
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="magnify"
-          textContentType="jobTitle"
-          placeholder="Search here"
-          onPress={handleSearch}
-          // onChange={(e) => handleSearch(e)}
-        />
-      </View>
+      <ActivityIndicator visible={isLoading} />
 
       <Screen>
-        {error && (
+        {error ? (
+          <RetryComponent
+            onPress={() => getFetchData.request()}
+            message=" Couldn't retrieve the data."
+          />
+        ) : (
           <>
-            <View style={styles.retryView}>
-              <AppText style={{ textAlign: "center" }}>
-                Couldn't retrieve the data.
-              </AppText>
-              <AppButton title="Retry" onPress={getFetchData.request()} />
+            <View style={styles.searchBox}>
+              <AppTextSearch
+                name="words"
+                autoCapitalize="none"
+                autoCorrect={false}
+                icon="magnify"
+                textContentType="jobTitle"
+                placeholder="Search here"
+                onPress={handleSearch}
+                // onChange={(e) => handleSearch(e)}
+              />
             </View>
-          </>
-        )}
-        {!isLoading && menuData && (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            {searchStatus ? (
-              <View style={styles.homeUpperContainer}>
-                <View style={styles.container}>
-                  <Separater />
-                  <View>
-                    <AppText style={styles.heading}> Order Now </AppText>
+
+            {!isLoading && menuData && (
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={() => getFetchData.request()}
+                  />
+                }
+              >
+                {searchStatus ? (
+                  <View style={styles.homeUpperContainer}>
+                    {bannersDb.length >= 1 && (
+                      <View style={styles.container}>
+                        <Separater />
+                        <View>
+                          <AppText style={styles.heading}> Order Now </AppText>
+                        </View>
+                        <Separater />
+                        <View style={styles.hsliderContainer}>
+                          <HomeBannerSlider
+                            navigation={navigation}
+                            bannerData={bannersDb}
+                          />
+                        </View>
+                      </View>
+                    )}
+
+                    <Separater />
+                    {gridData.length >= 1 && (
+                      <View style={styles.container}>
+                        <View>
+                          <AppText style={styles.heading}>
+                            {" "}
+                            Recommended Foods
+                          </AppText>
+                        </View>
+                        <Separater />
+                        <HomeGridItem
+                          gridData={gridData}
+                          navigation={navigation}
+                        />
+                      </View>
+                    )}
+
+                    <Separater />
+                    <AppText style={styles.heading}> Top Foods Nearby</AppText>
+                    <Separater />
+                    {menuData.length >= 1 && (
+                      <View style={styles.flatListContainer}>
+                        {menuData.map((item) => (
+                          <FoodItem
+                            key={item.id.toString()}
+                            title={item.food_title}
+                            subTitle={item.food_description}
+                            //  image={item.id}
+                            image={makeUri(item.user_id, item.image_name)}
+                            price={item.customer_price}
+                            distance="1"
+                            distanceUnit="KM"
+                            foodCategory={item.food_category}
+                            halalStatus={item.halal_status}
+                            vegStatus={item.veg_status}
+                            starStatus={item.rating}
+                            discount={item.discount_per}
+                            onPress={() => {
+                              navigation.navigate(routes.HOME_FOOD_DETAILS, {
+                                // id: item.id,
+                                foodId: item.id,
+                                itemData: item,
+                                venderId: item.user_id,
+                                type: "list",
+                              });
+                            }}
+                            // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
+                          />
+                        ))}
+                      </View>
+                    )}
                   </View>
-                  <Separater />
-                  <View style={styles.hsliderContainer}>
-                    <HomeBannerSlider
-                      navigation={navigation}
-                      bannerData={bannersDb}
-                    />
+                ) : (
+                  <View style={styles.homeSearchContainer}>
+                    <AppText style={styles.headingSearch}>{resultText}</AppText>
+                    <Separater />
+
+                    <View style={styles.flatListContainer}>
+                      {searchMenuData.map((item) => (
+                        <FoodItem
+                          key={item.id.toString()}
+                          title={item.food_title}
+                          subTitle={item.food_description}
+                          //  image={item.id}
+                          image={makeUri(item.user_id, item.image_name)}
+                          price={item.customer_price}
+                          distance="1"
+                          distanceUnit="KM"
+                          onPress={() => {
+                            navigation.navigate(routes.HOME_FOOD_DETAILS, {
+                              // id: item.id,
+                              foodId: item.id,
+                              itemData: item,
+                              venderId: item.user_id,
+                              type: "list",
+                            });
+                          }}
+                          // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
+                        />
+                      ))}
+                    </View>
                   </View>
-                </View>
-
-                <Separater />
-
-                <View style={styles.container}>
-                  <View>
-                    <AppText style={styles.heading}> Recommended Foods</AppText>
-                  </View>
-                  <Separater />
-                  <HomeGridItem gridData={gridData} navigation={navigation} />
-                </View>
-
-                <Separater />
-                <AppText style={styles.heading}> Top Foods Nearby</AppText>
-                <Separater />
-
-                <View style={styles.flatListContainer}>
-                  {menuData.map((item) => (
-                    <FoodItem
-                      key={item.id.toString()}
-                      title={item.food_title}
-                      subTitle={item.food_description}
-                      //  image={item.id}
-                      image={makeUri(item.user_id, item.image_name)}
-                      price={item.customer_price}
-                      distance="1"
-                      distanceUnit="KM"
-                      foodCategory={item.food_category}
-                      halalStatus={item.halal_status}
-                      vegStatus={item.veg_status}
-                      starStatus={item.rating}
-                      discount={item.discount_per}
-                      onPress={() => {
-                        navigation.navigate(routes.HOME_FOOD_DETAILS, {
-                          // id: item.id,
-                          foodId: item.id,
-                          itemData: item,
-                          venderId: item.user_id,
-                          type: "list",
-                        });
-                      }}
-                      // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-                    />
-                  ))}
-                </View>
-              </View>
-            ) : (
-              <View style={styles.homeSearchContainer}>
-                <AppText style={styles.headingSearch}>{resultText}</AppText>
-                <Separater />
-
-                <View style={styles.flatListContainer}>
-                  {searchMenuData.map((item) => (
-                    <FoodItem
-                      key={item.id.toString()}
-                      title={item.food_title}
-                      subTitle={item.food_description}
-                      //  image={item.id}
-                      image={makeUri(item.user_id, item.image_name)}
-                      price={item.customer_price}
-                      distance="1"
-                      distanceUnit="KM"
-                      onPress={() => {
-                        navigation.navigate(routes.HOME_FOOD_DETAILS, {
-                          // id: item.id,
-                          foodId: item.id,
-                          itemData: item,
-                          venderId: item.user_id,
-                          type: "list",
-                        });
-                      }}
-                      // onPress={() => navigation.navigate(routes.AC_MESAGES_VIEW, item)}
-                    />
-                  ))}
-                </View>
-              </View>
+                )}
+              </ScrollView>
             )}
-          </ScrollView>
+          </>
         )}
       </Screen>
     </>

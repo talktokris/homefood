@@ -33,6 +33,8 @@ const getUser = async () => {
 
   const profile = await userRetrive(token);
   if (!profile.ok) return;
+  // console.log(profile);
+  if (profile.status == 401) return null;
   return token ? profile.data : null;
 };
 

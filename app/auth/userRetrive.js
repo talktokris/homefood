@@ -11,6 +11,9 @@ const userRetrive = async (authToken) => {
     request.headers["Authorization"] = "Bearer " + authToken;
   });
   const responce = await apiClient.post("/profile-info");
+
+  // if (responce.status == 401) return;
+  // console.log(responce.status);
   return responce;
 };
 

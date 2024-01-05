@@ -11,7 +11,9 @@ import CartScreen from "../screen/CartScreen";
 import FoodOptionsScreen from "../screen/FoodOptionsScreen";
 import PlaceOrderScreen from "../screen/PlaceOrderScreen";
 
+
 import HeaderTop from "../components/HeaderTop";
+import RetryScreen from "../screen/RetryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +37,7 @@ const HomeNavigator = () => (
     <Stack.Screen name="Food Options" component={FoodOptionsScreen} />
     <Stack.Screen name="Place Order" component={PlaceOrderScreen} />
     <Stack.Screen name="Cart Items" component={CartScreen} />
+    <Stack.Screen name="Ops Something went wrong" component={RetryScreen} />
   </Stack.Navigator>
 );
 

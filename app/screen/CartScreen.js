@@ -38,6 +38,7 @@ const validationSchema = Yup.object().shape({
     .nullable()
     .label("Delivery Address"),
 });
+/*
 const sampleCartData = [
   {
     arguments: [],
@@ -174,6 +175,7 @@ const cartDataSet = [
     ],
   },
 ];
+*/
 
 function CartScreen({ navigation }) {
   const [cart, setCart] = useContext(CartContext);
@@ -196,6 +198,8 @@ function CartScreen({ navigation }) {
   useEffect(() => {
     formatCartData();
   }, [cart]);
+
+  // console.log(cartData);
 
   // const handleSubmit = async ({ payment_options, delivery_address }) => {
   //   const result = await orderApi.storeOrders(
@@ -254,7 +258,7 @@ function CartScreen({ navigation }) {
     Alert.alert("Delete", "Are you sure you want to delete this item?", [
       {
         text: "Yes",
-        onPress: handleDelete(d, ai),
+        onPress: () => handleDelete(d, ai),
       },
       { text: "No" },
     ]);
@@ -294,7 +298,10 @@ function CartScreen({ navigation }) {
       // console.log(v + " ----------");
       let venderData = "";
       let totalPrice = 0;
-      let productData = cart.filter((item) => item.vData.id === v);
+
+      let productData = cart.filter((item) => item.vData.id == v);
+      // console.log(cart[0].vData);
+      // console.log(productData);
       cart.map((n) => {
         if (n.vender_id === v) {
           venderData = n.vData;
@@ -304,6 +311,8 @@ function CartScreen({ navigation }) {
         }
       });
 
+      // console.log(uniqueVandersData);
+
       uniqueVandersData.push({
         id: v,
         vData: venderData,
@@ -312,15 +321,17 @@ function CartScreen({ navigation }) {
       });
     });
 
-    uniqueVandersData.map((vD) => {
-      // console.log(vD.id);
-      // console.log(vD.vData);
-      // console.log(vD.tPrice);
-      // console.log(vD.mData);
-      // console.log("++++++++++++++");
-    });
+    // uniqueVandersData.map((vD) => {
+    //   // console.log(vD.id);
+    //   // console.log(vD.vData);
+    //   // console.log(vD.tPrice);
+    //   //console.log(vD.mData);
+    //   // console.log("++++++++++++++");
+    // });
 
     setCartData(uniqueVandersData);
+
+    //  console.log(uniqueVandersData);
 
     // console.log(JSON.stringify(uniqueVandersData));
   };
@@ -332,6 +343,9 @@ function CartScreen({ navigation }) {
 
     setCart(newProductData);
   };
+
+  //console.log(cart);
+  // console.log(cartData);
 
   return (
     <>

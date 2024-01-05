@@ -15,8 +15,11 @@ import {
 import colors from "../config/colors";
 import routes from "../navigation/routes";
 import usersApi from "../api/users";
+import authStorage from "../auth/storage";
 import AuthContext from "../auth/context";
+
 import ActivityIndicator from "../components/ActivityIndicator";
+import TokenContext from "../auth/tokenContext";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required().min(2).label("First Name"),
@@ -26,44 +29,18 @@ const validationSchema = Yup.object().shape({
 
 function ProfileScreen({ navigation }) {
   const [user, setUser] = useContext(AuthContext);
+  const [token, setToken] = useContext(TokenContext);
   const [error, setError] = useState();
   const [eStatus, setEstatus] = useState(false);
   const userData = user.results[0];
 
   const [isLoading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getData();
-    });
-    return unsubscribe;
-  }, [navigation]);
-
-  const getData = useCallback(() => {
-    setLoading(true); // Start the loader, So when you start fetching data, you can display loading UI
-    usersApi
-      .userRefresh()
-      .then((data) => {
-        // console.log(data.data);
-        if (data.ok) {
-          setLoading(false);
-          setUser(data.data);
-          if (data.data.results[0].default_address != null) {
-            setDefaultAddress(data.data.results[0].default_address.id);
-          }
-          //  getData();
-        } else {
-          setError(
-            "Unable to get the database. Please check your internet connection"
-          );
-          setEstatus(true);
-        }
-      })
-      .catch((error) => {
-        // display error
-        setLoading(false); // stop the loader
-      });
-  }, []);
+  const restoreUser = async () => {
+    const user = await authStorage.getUser();
+    if (user) setUser(user);
+    // return user;
+  };
 
   const handleSubmit = async ({ first_name, last_name, email }) => {
     // console.log(first_name + "-" + last_name + "+" + email);
@@ -76,7 +53,7 @@ function ProfileScreen({ navigation }) {
     );
 
     setLoading(false);
-    console.log(result.data);
+    // console.log(result.data);
     if (!result.ok) return;
     if (!result.data) {
       setEstatus(true);
@@ -90,10 +67,12 @@ function ProfileScreen({ navigation }) {
     } else if (result.data.success == true) {
       const { data: id, message: messageSend } = result.data;
 
+      restoreUser();
+
       Alert.alert("Success", messageSend, [
         {
           text: "Ok",
-          onPress: () => navigation.navigate(routes.ACCOUNT_PROFILE),
+          onPress: () => navigation.goBack(),
         },
       ]);
     } else {

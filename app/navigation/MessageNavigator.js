@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MessagesScreen from "../screen/MessagesScreen";
 import MessagesViewScreen from "../screen/MessagesViewScreen";
 import HeaderTop from "../components/HeaderTop";
+import RetryScreen from "../screen/RetryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ const MessageNavigator = () => (
   >
     <Stack.Screen name="Messages" component={MessagesScreen} />
     <Stack.Screen name="Message View" component={MessagesViewScreen} />
+    <Stack.Screen name="Ops Something went wrong" component={RetryScreen} />
   </Stack.Navigator>
 );
 

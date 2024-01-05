@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
 //import { useState, createContext, useContext } from "react";
 import AuthContext from "./context";
-import authStorage from "./storage";
+import TokenContext from "./tokenContext";
 
+import authStorage from "./storage";
 import userRetrive from "./userRetrive";
 //import users from "../api/users";
 
@@ -10,18 +11,20 @@ import userRetrive from "./userRetrive";
 
 export default useAuth = () => {
   const [user, setUser] = useContext(AuthContext);
+  const [token, setToken] = useContext(TokenContext);
 
   const logOut = () => {
     setUser(null);
+    setToken(null);
     authStorage.removeToken();
   };
 
   const logIn = async (authToken) => {
-    //  console.log(authToken);
+    // console.log(authToken);
     authStorage.storeToken(authToken);
     // console.log(authToken);
     const profile = await userRetrive(authToken);
-    // console.log(profile);
+    // console.log(profile.data);
     if (!profile.ok) return;
     // console.log(profile.data);
     // const user = jwtDecode(authToken);
@@ -29,14 +32,14 @@ export default useAuth = () => {
   };
 
   const logInAuto = async (authToken) => {
-    console.log(authToken);
+    // console.log(authToken);
     const newToken = authToken.access_token;
 
-    console.log(newToken);
+    // console.log(newToken);
     authStorage.storeToken(newToken);
     // console.log(authToken);
     const profile = await userRetrive(authToken);
-    console.log(profile);
+    // console.log(profile);
     if (!profile.ok) return;
     // console.log(profile);
     // const user = jwtDecode(authToken);

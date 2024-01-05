@@ -14,6 +14,7 @@ import AddressScreen from "../screen/AddressScreen";
 import AddressAddScreen from "../screen/AddressAddScreen";
 import AddressEditScreen from "../screen/AddressEditScreen";
 import HeaderTop from "../components/HeaderTop";
+import RetryScreen from "../screen/RetryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ const AccountNavigator = () => (
     <Stack.Screen name="Order History" component={OrdersHistoryScreen} />
     <Stack.Screen name="Support" component={SupportScreen} />
     <Stack.Screen name="Change Password" component={AccountPasswordScreen} />
+    <Stack.Screen name="Ops Something went wrong" component={RetryScreen} />
   </Stack.Navigator>
 );
 

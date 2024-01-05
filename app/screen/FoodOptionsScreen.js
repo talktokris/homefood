@@ -99,6 +99,7 @@ function FoodOptionsScreen({ route, navigation }) {
       image: item.image_name,
       price: item.customer_price,
     };
+    // console.log(restData);
 
     const cartObj = {
       vender_id: item.user_id,
@@ -110,14 +111,21 @@ function FoodOptionsScreen({ route, navigation }) {
     };
     const getCarts = [...cart, cartObj];
     setCart(getCarts);
+
+    Alert.alert("", "Item added successfully", [
+      {
+        text: "Ok",
+        onPress: () => navigation.goBack(),
+      },
+    ]);
     // console.log(getCarts);
 
-    navigation.navigate(routes.HOME_FOOD_DETAILS, {
-      foodId: item.id,
-      itemData: item,
-      venderId: item.user_id,
-      type: "list",
-    });
+    // navigation.navigate(routes.HOME_FOOD_DETAILS, {
+    //   foodId: item.id,
+    //   itemData: item,
+    //   venderId: item.user_id,
+    //   type: "list",
+    // });
   };
   // console.log(item.arguments);
   // console.log(restData.name);

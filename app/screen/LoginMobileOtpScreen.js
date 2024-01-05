@@ -83,6 +83,7 @@ function LoginMobileOtpScreen({ route, navigation }) {
                 secureTextEntry={false}
                 maxLength={15}
                 editable={false}
+                style={styles.noBg}
               />
               <View style={styles.otp}>
                 <View style={styles.otpBox}>
@@ -90,11 +91,13 @@ function LoginMobileOtpScreen({ route, navigation }) {
                     name="otp"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    icon="cellphone"
-                    placeholder=" _  _  _  _  _  _"
+                    icon="keyboard-close"
+                    placeholder="______                     "
                     textContentType="oneTimeCode"
                     secureTextEntry={false}
                     maxLength={6}
+                    keyboardType="numeric"
+                    style={styles.otpCode}
                   />
                 </View>
                 <View style={styles.otpButtonBox}>
@@ -166,6 +169,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
+  otpCode: { letterSpacing: 10 },
+  noBg: {},
 });
 
 export default LoginMobileOtpScreen;

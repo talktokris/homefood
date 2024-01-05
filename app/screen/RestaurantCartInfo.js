@@ -49,7 +49,7 @@ function RestaurantCartInfo({
       imgUri = settings.imageUrl + "/venders/" + defID + "/" + imageName;
     return imgUri;
   }
-  // console.log(mData);
+  //  console.log(mData);
   // console.log(mData[0].fData.image);
 
   return (

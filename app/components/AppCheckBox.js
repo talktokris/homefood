@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
 function AppCheckBox({ color, text, linkText, onPress }) {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   return (
     <TouchableOpacity onPress={() => setIsChecked(!isChecked) || onPress}>
