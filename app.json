@@ -2,7 +2,7 @@
   "expo": {
     "name": "Home Food",
     "slug": "home-food-app",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,12 +21,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.homefoodbykris.homefood",
-      "buildNumber": "2.1.0",
+      "buildNumber": "2.2.0",
       "userInterfaceStyle": "light"
     },
     "android": {
       "package": "com.homefoodbykris.homefood",
-      "versionCode": 21,
+      "versionCode": 22,
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
