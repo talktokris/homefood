@@ -24,7 +24,7 @@ import RetryScreen from "./app/screen/RetryScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // const [token, setToken] = useContext(TokenContext);
+  //  const [token, setToken] = useContext(TokenContext);
   const [token, setToken] = useState();
   const [user, setUser] = useState();
   const [cart, setCart] = useState([]);
@@ -47,7 +47,9 @@ export default function App() {
     if (readToken) setToken(readToken);
     // console.log("token 1: " + token);
     const user = await authStorage.getUser();
+    // console.log(user);
     if (user) setUser(user);
+
     // return user;
   };
 
@@ -111,10 +113,10 @@ export default function App() {
             theme={navigationTheme}
             onReady={onLayoutRootView}
           >
-            {user ? <AppNavigator /> : RenderComponent()}
+            {/* {user ? <AppNavigator /> : RenderComponent()} */}
 
             {/* {activeToken ? conditionalRender : <AuthNavigator />} */}
-            {/*  {user ? <AppNavigator /> : <AuthNavigator />} */}
+            {user ? <AppNavigator /> : <AuthNavigator />}
             {/* <AppNavigator /> */}
           </NavigationContainer>
         </CartContext.Provider>

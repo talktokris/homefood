@@ -15,7 +15,7 @@ import colors from "../config/colors";
 import orderApi from "../api/order";
 import useApi from "../hooks/useApi";
 import AppButton from "../components/AppButton";
-import RetryComponent from "./RetryComponent";
+import RetryComponent from "../components/RetryComponent";
 
 function OrdersScreen({ navigation }) {
   const [orderData, setOrderData] = useState([]);
@@ -99,7 +99,6 @@ function OrdersScreen({ navigation }) {
           <RetryComponent
             onPress={() => getOrders.request()}
             message=" Couldn't retrieve the orders."
-            icon={() => getOrders.request()}
           />
         ) : (
           <ScrollView

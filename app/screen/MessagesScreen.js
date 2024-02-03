@@ -20,7 +20,7 @@ import useMessage from "../api/message";
 import useApi from "../hooks/useApi";
 import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
-import RetryComponent from "./RetryComponent";
+import RetryComponent from "../components/RetryComponent";
 
 function MessagesScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);

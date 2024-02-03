@@ -55,7 +55,7 @@ function FoodGridItem({
           <View style={styles.buttonView}>
             <AppCircleButton icon="plus-circle" onPress={onPress} />
           </View>
-          <AppText style={styles.title} AppPickerMultiLine={2}>
+          <AppText style={styles.title} numberOfLines={2}>
             {" "}
             {title}
           </AppText>
