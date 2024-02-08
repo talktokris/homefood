@@ -20,7 +20,7 @@ const fetchAllHome = async () => {
 
 const fetchSingleMenu = async (id) => {
   // console.log(id);
-  const responce = await client.post("/vender-menu-fetch-single", {
+  const responce = await client.post("/client-menu-fetch-single", {
     id: id,
   });
   return responce;

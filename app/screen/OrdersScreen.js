@@ -89,7 +89,7 @@ function OrdersScreen({ navigation }) {
       });
   }, []);
 */
-  // console.log(result);
+  // console.log(getDataSet);
   return (
     <>
       <ActivityIndicator visible={loading} />
@@ -116,6 +116,7 @@ function OrdersScreen({ navigation }) {
                   <RestaurantOrderInfo
                     key={item.id.toString()}
                     id={item.id}
+                    data={item}
                     vData={item.vender}
                     oData={item.orders}
                     tPrice={item.customer_amount}

@@ -43,7 +43,7 @@ function ModalDatePicker({
       mode="date"
       onConfirm={handleConfirm}
       onCancel={hideDatePicker}
-      pickerStyleIOS={{ backgroundColor: colors.secondary }}
+      pickerStyleIOS={{ backgroundColor: colors.lightGray }}
       // pickerContainerStyleIOS={{
       //   backgroundColor: colors.secondary,
       // }}

@@ -33,6 +33,7 @@ import OrderItemRecent from "../components/OrderItemRecent";
 
 function RestaurantOrderInfo({
   id,
+  data,
   vData,
   tPrice,
   oData,
@@ -65,6 +66,12 @@ function RestaurantOrderInfo({
               <AppText style={[styles.text, { marginLeft: 0 }]}>
                 {vData.location} <Stars />
               </AppText>
+              <View style={styles.salesStatus}>
+                <AppText style={styles.salesStatusLebel}>Status : </AppText>
+                <AppText style={styles.salesStatusMsg}>
+                  {data.order_string_value.sting_value}
+                </AppText>
+              </View>
             </View>
 
             <View
@@ -84,6 +91,7 @@ function RestaurantOrderInfo({
             {oData.map((ci, i) => (
               <OrderItemRecent
                 sn={i + 1}
+                data={ci}
                 id={ci.menu.id}
                 key={ci.menu.id + i.toString()}
                 venderId={vData.id}
@@ -175,6 +183,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     paddingBottom: 10,
+  },
+  salesStatus: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  salesStatusLebel: {
+    fontSize: 12,
+    justifyContent: "center",
+    textAlign: "center",
+    paddingBottom: 10,
+    paddingRight: 5,
+  },
+  salesStatusMsg: {
+    fontSize: 12,
+    justifyContent: "center",
+    textAlign: "center",
+    paddingBottom: 10,
+    color: colors.primary,
+    fontWeight: "900",
   },
   vListContainer: { flexDirection: "row", justifyContent: "space-between" },
 });

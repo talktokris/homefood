@@ -18,6 +18,7 @@ import CatHalal from "../components/CatHalal";
 
 function OrderItemRecent({
   id,
+  data,
   sn,
   venderId,
   title,
@@ -49,7 +50,8 @@ function OrderItemRecent({
     return unique;
   }
   // console.log(extra.length);
-  // console.log(exPrice);
+  // console.log(data.order_status_string.sting_value);
+  // data.order_status_string.sting_value;
 
   const setData = () => {
     let headArray = [];
@@ -75,7 +77,7 @@ function OrderItemRecent({
     setExtraData(newArray);
   };
 
-  //  console.log(extraData);
+  // console.log(data.menu.food_category);
   return (
     <>
       <View style={styles.content}>
@@ -93,15 +95,21 @@ function OrderItemRecent({
           </AppText>
 
           <View style={styles.vListContainer}>
-            <VegStatus status="0" />
-            <CatHalal halalStatus="Non Halal" foodCategory="Asian Food" />
+            <VegStatus status={data.menu.veg_status} />
+            <CatHalal
+              halalStatus={data.menu.halal_status_string.sting_value}
+              foodCategory={data.menu.food_category}
+            />
           </View>
           <View style={styles.vListContainer}>
             <Price price={price} />
 
             <View style={styles.status}>
               <AppText style={styles.statusLebel}>Status : </AppText>
-              <AppText style={styles.statusValue}> Pending</AppText>
+              <AppText style={styles.statusValue}>
+                {" "}
+                {data.order_status_string.sting_value}
+              </AppText>
             </View>
           </View>
         </View>

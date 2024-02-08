@@ -200,6 +200,8 @@ function PlaceOrderScreen({ route, navigation }) {
       deliveryDate
     );
     // const tokenSet= result.access_token;
+
+    // console.log(result.data);
     setLoading(false);
     // console.log(result.data.success);
 

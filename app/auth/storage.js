@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 //import jwtDecode from "jwt-decode";
 import userRetrive from "./userRetrive";
 
-const key = "authToken";
+const key = "authTokenClient";
 
 const storeToken = async (authToken) => {
   try {
