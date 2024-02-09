@@ -67,7 +67,9 @@ function RestaurantOrderInfo({
                 {vData.location} <Stars />
               </AppText>
               <View style={styles.salesStatus}>
-                <AppText style={styles.salesStatusLebel}>Status : </AppText>
+                <AppText style={styles.salesStatusLebel}>
+                  Order Status :{" "}
+                </AppText>
                 <AppText style={styles.salesStatusMsg}>
                   {data.order_string_value.sting_value}
                 </AppText>
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     paddingBottom: 10,
-    color: colors.primary,
+    color: colors.green,
     fontWeight: "900",
   },
   vListContainer: { flexDirection: "row", justifyContent: "space-between" },

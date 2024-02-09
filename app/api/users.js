@@ -29,7 +29,7 @@ const userProfileUpdate = async (first_name, last_name, email) => {
     last_name,
     email,
   });
-  //console.log(result.data);
+  // console.log(result.data);
   return result;
 };
 

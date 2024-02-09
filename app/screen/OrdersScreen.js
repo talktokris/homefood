@@ -19,6 +19,8 @@ import RetryComponent from "../components/RetryComponent";
 
 function OrdersScreen({ navigation }) {
   const [orderData, setOrderData] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const getOrders = useApi(orderApi.pendingOrders);
 
@@ -30,7 +32,39 @@ function OrdersScreen({ navigation }) {
   } = getOrders;
 
   useEffect(() => {
-    getOrders.request();
+    const responseData = navigation.addListener("focus", () => {
+      getOrders.request();
+    });
+    return responseData;
+  }, [navigation]);
+
+  useEffect(() => {
+    // setBusy(getOrders.loading);
+    // console.log(JSON.stringify(getOrders.data.data[0].id));
+    setBusy(getOrders.loading);
+    setErrorStatus(getOrders.error);
+    setOrderData(getDataSet);
+  }, [getOrders.data]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      autoUpdateData();
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const autoUpdateData = useCallback(() => {
+    orderApi
+      .pendingOrders()
+      .then((response) => {
+        if (response.ok) {
+          const newData = response.data.data;
+          setOrderData(newData);
+        }
+      })
+      .catch((error) => {});
   }, []);
 
   const onRefresh = () => {
@@ -42,60 +76,13 @@ function OrdersScreen({ navigation }) {
     }, 2000);
   };
 
-  /*
-  const onRefresh = useCallback(() => {
-    getOrders.request();
-    setRefreshing(true);
-
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
-
-
- 
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getData();
-    });
-    return unsubscribe;
-  }, [navigation]);
-
-  const getData = useCallback(() => {
-    setLoading(true);
-    setEstatus(false); // Start the loader, So when you start fetching data, you can display loading UI
-    // useApi(resume.getResumeData, { currrentUser });
-    orderApi
-      .pendingOrders()
-      .then((data) => {
-        if (data.ok) {
-          //  setMenuData(data);
-          setLoading(false);
-          setEstatus(false);
-          setOrderData(data.data.data);
-
-          // console.log(data.data.data);
-        } else {
-          setError(
-            "Unable to get the database. Please check your internet connection"
-          );
-          setEstatus(true);
-        }
-      })
-      .catch((error) => {
-        // display error
-        setLoading(false); // stop the loader
-      });
-  }, []);
-*/
   // console.log(getDataSet);
   return (
     <>
-      <ActivityIndicator visible={loading} />
+      <ActivityIndicator visible={busy} />
 
       <Screen>
-        {error ? (
+        {errorStatus ? (
           <RetryComponent
             onPress={() => getOrders.request()}
             message=" Couldn't retrieve the orders."
@@ -110,9 +97,9 @@ function OrdersScreen({ navigation }) {
               />
             }
           >
-            {getDataSet.length >= 1 ? (
+            {orderData.length >= 1 ? (
               <View>
-                {getDataSet.map((item) => (
+                {orderData.map((item) => (
                   <RestaurantOrderInfo
                     key={item.id.toString()}
                     id={item.id}

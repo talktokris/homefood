@@ -185,11 +185,71 @@ function CartScreen({ navigation }) {
   const [isLoading, setLoading] = useState(false);
   const [cartData, setCartData] = useState([]);
 
+  const [profileStatus, setProfileStatus] = useState(false);
+
   const userData = user.results[0];
-  //console.log(userData.default_address.id);
+  // console.log(userData.default_address);
+  const addressStatus = userData.default_address;
+  // console.log(userData.first_name);
+  // console.log(userData.last_name);
+  // console.log(userData.email);
+
+  function checkProfileStatus() {
+    const { default_address, first_name, last_name, email } = userData;
+
+    if (first_name == null) {
+      Alert.alert("Profile Alert", "Please setup your first name", [
+        {
+          text: "Ok",
+          onPress: () => {
+            navigation.popToTop();
+            navigation.navigate("Account", { screen: "Profile" });
+          },
+        },
+      ]);
+    } else if (last_name == null) {
+      Alert.alert("Profile Alert", "Please setup your last name", [
+        {
+          text: "Ok",
+          onPress: () => {
+            navigation.popToTop();
+            navigation.navigate("Account", { screen: "Profile" });
+          },
+        },
+      ]);
+    } else if (email == null) {
+      Alert.alert("Profile Alert", "Please setup your email address", [
+        {
+          text: "Ok",
+          onPress: () => {
+            navigation.popToTop();
+            navigation.navigate("Account", { screen: "Profile" });
+          },
+        },
+      ]);
+    } else if (default_address == null) {
+      Alert.alert("Profile Alert", "Please setup your delivery address", [
+        {
+          text: "Ok",
+          onPress: () => {
+            navigation.popToTop();
+            navigation.navigate("Account", { screen: "Address" });
+          },
+        },
+      ]);
+    } else {
+      setProfileStatus(true);
+    }
+
+    // console.log(default_address);
+    // console.log(userData.last_name);
+    // console.log(userData.email);
+  }
+
+  // console.log(userData.default_address.id);
 
   function seletedAddress(data) {
-    d.id == userData.default_address.id;
+    data.id == userData.default_address.id;
   }
   const stateSelectedItem = userData.address_list.find(
     (c) => c.id == userData.default_address.id
@@ -197,6 +257,7 @@ function CartScreen({ navigation }) {
 
   useEffect(() => {
     formatCartData();
+    checkProfileStatus();
   }, [cart]);
 
   // console.log(cartData);
@@ -375,10 +436,23 @@ function CartScreen({ navigation }) {
                   }}
                   onChecOut={() => {
                     // console.log("Hi Checkout " + item.id);
-                    navigation.navigate(routes.PLACE_ORDER, {
-                      venderId: item.id,
-                      data: item,
-                    });
+                    if (profileStatus) {
+                      navigation.navigate(routes.PLACE_ORDER, {
+                        venderId: item.id,
+                        data: item,
+                      });
+                    } else {
+                      Alert.alert(
+                        "Profile Alert",
+                        "Please complite your first name",
+                        [
+                          {
+                            text: "Ok",
+                            onPress: () => navigation.goBack(),
+                          },
+                        ]
+                      );
+                    }
                   }}
                 />
               ))}

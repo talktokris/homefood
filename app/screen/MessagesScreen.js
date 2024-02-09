@@ -23,6 +23,9 @@ import AppButton from "../components/AppButton";
 import RetryComponent from "../components/RetryComponent";
 
 function MessagesScreen({ navigation }) {
+  const [msgData, setMsgData] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const getMessage = useApi(useMessage.fetchMessage);
 
@@ -33,12 +36,42 @@ function MessagesScreen({ navigation }) {
   } = getMessage;
 
   useEffect(() => {
-    getMessage.request();
+    const responseData = navigation.addListener("focus", () => {
+      getMessage.request();
+    });
+    return responseData;
+  }, [navigation]);
+
+  useEffect(() => {
+    // setBusy(getOrders.loading);
+    // console.log(JSON.stringify(getOrders.data.data[0].id));
+    setBusy(getMessage.loading);
+    setErrorStatus(getMessage.error);
+    setMsgData(messageData);
+  }, [getMessage.data]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      autoUpdateData();
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
-  // useEffect(() => {
-  //   setOrderData(getDataSet);
-  // }, [getMessage.data]);
+  const autoUpdateData = useCallback(() => {
+    useMessage
+      .fetchMessage()
+      .then((response) => {
+        if (response.ok) {
+          const newData = response.data.data;
+          setMsgData(newData);
+          // console.log(response.data);
+          // setOrderData(newData);
+        }
+      })
+      .catch((error) => {});
+  }, []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -51,18 +84,18 @@ function MessagesScreen({ navigation }) {
 
   return (
     <>
-      <ActivityIndicator visible={loading} />
+      <ActivityIndicator visible={busy} />
       <Screen style={styles.screen}>
-        {error && (
+        {errorStatus && (
           <RetryComponent
             onPress={() => getOrders.request()}
             message=" Couldn't retrieve the messages."
           />
         )}
 
-        {messageData.length >= 1 ? (
+        {msgData.length >= 1 ? (
           <FlatList
-            data={messageData}
+            data={msgData}
             keyExtractor={(message) => message.id.toString()}
             renderItem={({ item }) => (
               <MessageItem
