@@ -407,8 +407,8 @@ function PlaceOrderScreen({ route, navigation }) {
               <View style={styles.optionsContainer}>
                 {payOptions.map((m) => (
                   <AppRadioPayment
-                    key={m.id.toString()}
                     id={m.id}
+                    key={m.id.toString()}
                     text={m.title}
                     status={m.status}
                     data={m}

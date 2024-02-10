@@ -48,10 +48,44 @@ function FoodOptionsScreen({ route, navigation }) {
 
   const [totalPrice, setTotalPrice] = useState(item.customer_price);
   const [items, setItems] = useState([]);
+  const [optionData, setOptionData] = useState([]);
+
+  function choiseObjectSet() {
+    const choiseDataFilter = options.filter((item) => item.data == 1);
+    if (choiseDataFilter.length >= 1) {
+      let sn = 1;
+      // let list = choiseDataFilter[0].list;
+
+      let optionsChoiseData = [];
+      choiseDataFilter.forEach((element) => {
+        let optionsChoise = [];
+        element.list.forEach((item) => {
+          let option = {
+            id: sn,
+            head: element.id,
+            title: item.description,
+            status: false,
+            price: item.price,
+          };
+          optionsChoise.push(option);
+
+          sn++;
+        });
+        // setting first option true
+        optionsChoise[0].status = true;
+        let choiseDataSet = { head: element.id, optionsData: optionsChoise };
+        optionsChoiseData.push(choiseDataSet);
+      });
+      setOptionData(optionsChoiseData);
+
+      // console.log(optionsChoiseData);
+    }
+  }
 
   useEffect(() => {
+    choiseObjectSet();
     // console.log(cart);
-  });
+  }, []);
 
   //console.log(item.arguments);
   function onCheck(value) {
@@ -127,9 +161,55 @@ function FoodOptionsScreen({ route, navigation }) {
     //   type: "list",
     // });
   };
+
+  const onCheckPress = (data) => {
+    // console.log(data);
+    // full array  cloning
+    const getOptionDataFull = [...optionData];
+
+    // filttering curent options
+    const getOptionData = getOptionDataFull.filter(
+      (item) => item.head === data.head
+    );
+    // finding main Array Index c
+    const mainIndex = getOptionDataFull.indexOf(getOptionData[0]);
+
+    // over ridding all status value to false
+    getOptionData[0].optionsData.forEach((element, index) => {
+      getOptionData[0].optionsData[index].status = false;
+    });
+
+    // finding index of clicked option
+    const index = getOptionData[0].optionsData.indexOf(data);
+
+    // changind status to oposite
+
+    getOptionData[0].optionsData[index] = { ...data };
+    getOptionData[0].optionsData[index].status =
+      !getOptionData[0].optionsData[index].status;
+
+    // full array  cloning
+    const cloneFullArrayData = [...optionData];
+    cloneFullArrayData[mainIndex].optionsData = getOptionData[0].optionsData;
+
+    setOptionData(cloneFullArrayData);
+    // setPayOptions(getPaymentData);
+    // setPayMethod(data.id);
+    // console.log(data);
+    // console.log(getPaymentData);
+    // console.log(id + "---" + status);
+  };
+
   // console.log(item.arguments);
   // console.log(restData.name);
+  function getSingleOption(headId) {
+    let newData = optionData.filter((fi) => fi.head == headId);
+    // console.log(newData[0].optionsData);
+    return newData[0].optionsData;
 
+    // return optionData.filter((fi) => fi.head == headId);
+  }
+  // getSingleOption(headId)
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -212,17 +292,22 @@ function FoodOptionsScreen({ route, navigation }) {
                   </View>
 
                   <View style={styles.optionsContainer}>
-                    {op.list.map((m) => (
-                      <AppRadioCustom
-                        key={m.id.toString()}
-                        text={m.description}
-                        price={m.price}
-                        data={m}
-                        onPress={addItem}
+                    {optionData.length >= 1 &&
+                      getSingleOption(op.id).map((m, index) => (
+                        <AppRadioCustom
+                          id={m.id}
+                          key={index.toString()}
+                          text={m.title}
+                          status={m.status}
+                          price={m.price}
+                          data={m}
+                          // onPress={addItem}
 
-                        // onCheck={onCheck}
-                      />
-                    ))}
+                          onPress={onCheckPress}
+
+                          // onCheck={onCheck}
+                        />
+                      ))}
                   </View>
                 </View>
               ) : (

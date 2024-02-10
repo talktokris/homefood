@@ -36,6 +36,7 @@ function FoodGridItem({
       imgUri = settings.imageUrl + "/venders/" + defID + "/" + imageName;
     return imgUri;
   }
+
   return (
     <>
       <View style={styles.container} key={id.toString()}>
@@ -46,12 +47,10 @@ function FoodGridItem({
             </View>
           )}
 
-          {image && (
-            <Image
-              style={styles.image}
-              source={{ uri: makeUri(venderId, image) }}
-            />
-          )}
+          <Image
+            style={styles.image}
+            source={{ uri: makeUri(venderId, image) }}
+          />
           <View style={styles.buttonView}>
             <AppCircleButton icon="plus-circle" onPress={onPress} />
           </View>

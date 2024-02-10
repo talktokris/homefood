@@ -5,16 +5,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import AppText from "./AppText";
 
-function AppRadioCustom({ text, price, data, onPress, color }) {
-  const [isChecked, setIsChecked] = useState(false);
+function AppRadioCustom({ id, text, status, price, data, onPress, color }) {
+  // const [isChecked, setIsChecked] = useState(false);
+
+  // console.log(data);
 
   return (
-    <TouchableOpacity
-      onPress={() => setIsChecked(!isChecked) || onPress(data, isChecked)}
-    >
+    <TouchableOpacity onPress={() => onPress(data)}>
       <View style={styles.container}>
         <View style={styles.checkBoxArea}>
-          {isChecked ? (
+          {status ? (
             <MaterialCommunityIcons
               name="radiobox-marked"
               size={15}
@@ -32,7 +32,9 @@ function AppRadioCustom({ text, price, data, onPress, color }) {
           <Text style={styles.text}> {text} </Text>
         </View>
         <View style={styles.checkPrice}>
-          {/* {price && <AppText style={styles.textPrice}> +{price}</AppText>} */}
+          {price >= 0.1 && (
+            <AppText style={styles.textPrice}> +{price}</AppText>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
   textPrice: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.medium,
+    color: colors.orangeDark,
     textAlign: "right",
     paddingRight: 20,
   },

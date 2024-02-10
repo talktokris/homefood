@@ -17,14 +17,14 @@ function AppCheckBoxCustom({ text, price, data, onPress, color }) {
           {isChecked ? (
             <MaterialCommunityIcons
               name="checkbox-outline"
-              size={20}
+              size={15}
               style={styles.icon}
               color={colors.primary}
             />
           ) : (
             <MaterialCommunityIcons
               name="checkbox-blank-outline"
-              size={20}
+              size={15}
               style={styles.icon}
               color={colors.medium}
             />
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: 7,
-    paddingBottom: 7,
+    paddingTop: 2,
+    paddingBottom: 2,
     borderTopWidth: 2,
     borderColor: "#ffffff",
   },

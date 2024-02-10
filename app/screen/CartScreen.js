@@ -246,15 +246,6 @@ function CartScreen({ navigation }) {
     // console.log(userData.email);
   }
 
-  // console.log(userData.default_address.id);
-
-  function seletedAddress(data) {
-    data.id == userData.default_address.id;
-  }
-  const stateSelectedItem = userData.address_list.find(
-    (c) => c.id == userData.default_address.id
-  );
-
   useEffect(() => {
     formatCartData();
     checkProfileStatus();

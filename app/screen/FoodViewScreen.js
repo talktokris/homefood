@@ -286,7 +286,7 @@ function FoodViewScreen({ route, navigation }) {
           </View>
           <View
             onLayout={onLayout}
-            style={[styles.gridContainer, { flex: 1, minHeight: gHeight }]}
+            style={[styles.gridContainer, { flex: 1, minHeight: 250 }]}
           >
             {memuFilttred.map((item) => (
               <FoodGridItem
