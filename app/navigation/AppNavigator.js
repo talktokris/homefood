@@ -15,6 +15,7 @@ import TopMenu from "../components/TopMenu";
 import MessageIconAlert from "../components/MessageIconAlert";
 import MessageNavigator from "./MessageNavigator";
 import HeaderTop from "../components/HeaderTop";
+import MsgAlertIcon from "../components/MsgAlertIcon";
 
 //import userUpdate from "../api/userUpdate";
 //import useAuth from "../auth/useAuth";
@@ -181,11 +182,12 @@ const AppNavigator = (color = "blue") => {
         component={MessageNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="message-reply-text-outline"
-              color={color}
-              size={size}
-            />
+            <MsgAlertIcon color={color} size={size} />
+            // <MaterialCommunityIcons
+            //   name="message-reply-text-outline"
+            //   color={color}
+            //   size={size}
+            // />
           ),
           // headerRight: () => <TopMenu />,
           // headerLeft: () => (

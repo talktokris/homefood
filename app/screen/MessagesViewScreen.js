@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import { View, StyleSheet, FlatList } from "react-native";
 import MessageItem from "../components/MessageItem";
@@ -10,22 +10,54 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
+
 import AppText from "../components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import useMessage from "../api/message";
+
 function MessagesViewScreen({ navigation, route }) {
   const item = route.params.item;
+  // console.log(item.seen);
+
+  useEffect(() => {
+    autoUpdateData();
+  }, []);
+
+  const autoUpdateData = useCallback(() => {
+    useMessage
+      .messageReadUpdate(item.id)
+      .then((response) => {
+        if (response.ok) {
+          // console.log(response.data);
+          // console.log(item.id);
+          //   setMsgCount(response.data.data);
+          // console.log(response.data);
+        }
+      })
+      .catch((error) => {});
+  }, []);
 
   return (
     <Screen>
       <View style={styles.messageBox}>
         <View style={styles.iconTop}>
-          <MaterialCommunityIcons
-            style={styles.icon}
-            name="email-outline"
-            size={25}
-            color="#ccc"
-          />
+          {item.seen ? (
+            <MaterialCommunityIcons
+              style={styles.icon}
+              name="email-open"
+              size={25}
+              color={colors.statusbarTextColor}
+            />
+          ) : (
+            <MaterialCommunityIcons
+              style={styles.icon}
+              name="email"
+              size={25}
+              color={colors.orangeDark}
+            />
+          )}
+
           <AppText style={styles.iconText}>{item.humanDate}</AppText>
         </View>
         <View style={styles.msgTitleBox}>

@@ -102,6 +102,7 @@ function MessagesScreen({ navigation }) {
                 title={item.title}
                 subTitle={item.message}
                 date={item.humanDate}
+                readStatus={item.seen}
                 iconComponent={
                   <Icon
                     name="email-outline"
