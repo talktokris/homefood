@@ -6,8 +6,8 @@ import client from "./client";
 
 const fetchMessage = async () => {
   const responce = await client.post("/client-message");
+  // console.log(responce.data);
   return responce;
-  // console.log(responce.ok);
 };
 
 

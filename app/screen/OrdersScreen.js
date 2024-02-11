@@ -33,13 +33,14 @@ function OrdersScreen({ navigation }) {
 
   useEffect(() => {
     const responseData = navigation.addListener("focus", () => {
+      setBusy(true);
+
       getOrders.request();
     });
     return responseData;
   }, [navigation]);
 
   useEffect(() => {
-    // setBusy(getOrders.loading);
     // console.log(JSON.stringify(getOrders.data.data[0].id));
     setBusy(getOrders.loading);
     setErrorStatus(getOrders.error);

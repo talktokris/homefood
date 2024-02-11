@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   aletBox: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.orangeDark,
     width: 20,
     height: 20,
     borderRadius: 10,

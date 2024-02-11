@@ -27,6 +27,7 @@ function MessagesScreen({ navigation }) {
   const [busy, setBusy] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
   const getMessage = useApi(useMessage.fetchMessage);
 
   const {
@@ -37,6 +38,8 @@ function MessagesScreen({ navigation }) {
 
   useEffect(() => {
     const responseData = navigation.addListener("focus", () => {
+      setBusy(true);
+
       getMessage.request();
     });
     return responseData;
@@ -47,13 +50,15 @@ function MessagesScreen({ navigation }) {
     // console.log(JSON.stringify(getOrders.data.data[0].id));
     setBusy(getMessage.loading);
     setErrorStatus(getMessage.error);
-    setMsgData(messageData);
+    if (messageData != null) {
+      setMsgData(messageData);
+    }
   }, [getMessage.data]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       autoUpdateData();
-    }, 5000);
+    }, 8000);
     return () => {
       clearInterval(interval);
     };
@@ -88,7 +93,7 @@ function MessagesScreen({ navigation }) {
       <Screen style={styles.screen}>
         {errorStatus && (
           <RetryComponent
-            onPress={() => getOrders.request()}
+            onPress={() => getMessage.request()}
             message=" Couldn't retrieve the messages."
           />
         )}
