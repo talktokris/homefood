@@ -204,8 +204,13 @@ function FoodOptionsScreen({ route, navigation }) {
   // console.log(restData.name);
   function getSingleOption(headId) {
     let newData = optionData.filter((fi) => fi.head == headId);
+    // console.log(newData);
     // console.log(newData[0].optionsData);
-    return newData[0].optionsData;
+    if (newData.length >= 1) {
+      return newData[0].optionsData;
+    } else {
+      return newData;
+    }
 
     // return optionData.filter((fi) => fi.head == headId);
   }

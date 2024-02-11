@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet, TouchableHighlight } from "react-native";
 import colors from "../config/colors";
 import AppText from "./AppText";
@@ -13,7 +13,6 @@ function ListItem({
   image,
   onPress,
 }) {
-  // console.log(readStatus);
   return (
     <TouchableHighlight underlayColor={colors.lightGray} onPress={onPress}>
       <>
@@ -25,7 +24,7 @@ function ListItem({
         <View style={styles.container}>
           {/* {iconComponent} */}
           {/* {image && <Image style={styles.image} source={{ uri: image }} />} */}
-          {readStatus ? (
+          {readStatus == 1 ? (
             <MaterialCommunityIcons
               name="email-open"
               size={27}

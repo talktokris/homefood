@@ -58,7 +58,9 @@ function MessagesScreen({ navigation }) {
   useEffect(() => {
     const interval = setInterval(() => {
       autoUpdateData();
-    }, 8000);
+      // console.log("hi" + interval);
+    }, 3000);
+
     return () => {
       clearInterval(interval);
     };
